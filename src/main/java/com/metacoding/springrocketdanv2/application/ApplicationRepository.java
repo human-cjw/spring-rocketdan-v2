@@ -130,4 +130,18 @@ public class ApplicationRepository {
                 .setParameter("resumeId", resumeId)
                 .getResultList();
     }
+
+    public void deleteApplicationsByJobId(Integer jobId) {
+        String q = "DELETE FROM Application a WHERE a.job.id = :jobId AND a.resume IS NOT NULL";
+        em.createQuery(q)
+                .setParameter("jobId", jobId)
+                .executeUpdate();
+    }
+
+    public List<Application> findApplicationsByJobIdWhereResumeNotNull(Integer jobId) {
+        String q = "SELECT a FROM Application a WHERE a.job.id = :jobId AND a.resume IS NOT NULL ORDER BY a.id DESC";
+        return em.createQuery(q, Application.class)
+                .setParameter("jobId", jobId)
+                .getResultList();
+    }
 }

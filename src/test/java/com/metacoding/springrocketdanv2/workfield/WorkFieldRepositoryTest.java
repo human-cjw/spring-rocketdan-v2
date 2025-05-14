@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 
 @Import(WorkFieldRepository.class)
 @DataJpaTest
-public class WorkfieldRepositoryTest {
+public class WorkFieldRepositoryTest {
     @Autowired
     private WorkFieldRepository workFieldRepository;
 }

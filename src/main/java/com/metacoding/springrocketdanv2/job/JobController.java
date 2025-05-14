@@ -19,7 +19,7 @@ import java.util.List;
 public class JobController {
     private final JobService jobService;
     private final HttpSession session;
-    private final JobBookmarkService jobBookmarkService;
+
 
     @GetMapping("/")
     public String list(Model models, JobResponse.DTO dto) {

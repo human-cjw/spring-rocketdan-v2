@@ -45,4 +45,9 @@ public class JobBookmarkRepository {
     public JobBookmark findById(Integer id) {
         return em.find(JobBookmark.class, id);
     }
+
+    public void deleteJobBookmarksByJobId(Integer jobId) {
+        String q = "DELETE FROM JobBookmark jb WHERE jb.job.id = :jobId";
+        em.createQuery(q).setParameter("jobId", jobId).executeUpdate();
+    }
 }
