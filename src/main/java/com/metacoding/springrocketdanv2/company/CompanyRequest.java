@@ -1,5 +1,6 @@
 package com.metacoding.springrocketdanv2.company;
 
+import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStack;
 import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.user.User;
 import com.metacoding.springrocketdanv2.user.UserResponse;
@@ -88,7 +89,7 @@ public class CompanyRequest {
                     .build();
 
             for (TechStack techStack : techStackList) {
-                TechStack cts = new TechStack(company, techStack);
+                CompanyTechStack cts = new CompanyTechStack(company, techStack);
                 company.getTechStackList().add(cts);
             }
 

@@ -1,10 +1,10 @@
 package com.metacoding.springrocketdanv2.job;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
-import com.metacoding.springrocketdanv2.jobBookmark.JobBookmark;
-import com.metacoding.springrocketdanv2.jobBookmark.JobBookmarkRepository;
-import com.metacoding.springrocketdanv2.jobTechStack.JobTechStack;
-import com.metacoding.springrocketdanv2.jobTechStack.JobTechStackResponse;
+import com.metacoding.springrocketdanv2.job.bookmark.JobBookmark;
+import com.metacoding.springrocketdanv2.job.bookmark.JobBookmarkRepository;
+import com.metacoding.springrocketdanv2.job.techstack.JobTechStack;
+import com.metacoding.springrocketdanv2.job.techstack.JobTechStackResponse;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroupRepository;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;

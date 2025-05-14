@@ -12,7 +12,7 @@ public class TechStackRepository {
     private final EntityManager em;
 
     public List<TechStack> findAll() {
-        String q = "SELECT t FROM TechStack t";
+        String q = "SELECT t FROM CompanyTechStack t";
         return em.createQuery(q, TechStack.class).getResultList();
     }
 
@@ -23,7 +23,7 @@ public class TechStackRepository {
     }
 
     public TechStack findByName(String name) {
-        String sql = "SELECT t FROM TechStack t WHERE t.name = :name";
+        String sql = "SELECT t FROM CompanyTechStack t WHERE t.name = :name";
         List<TechStack> result = em.createQuery(sql, TechStack.class)
                 .setParameter("name", name)
                 .getResultList();

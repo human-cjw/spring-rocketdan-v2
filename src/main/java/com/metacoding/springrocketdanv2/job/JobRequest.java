@@ -1,7 +1,7 @@
 package com.metacoding.springrocketdanv2.job;
 
 import com.metacoding.springrocketdanv2.company.Company;
-import com.metacoding.springrocketdanv2.jobTechStack.JobTechStack;
+import com.metacoding.springrocketdanv2.job.techstack.JobTechStack;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import com.metacoding.springrocketdanv2.techstack.TechStack;
