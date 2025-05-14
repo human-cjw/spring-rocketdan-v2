@@ -1,0 +1,111 @@
+/* 메인 컨테이너 */
+.weapp-container-person-list {
+    display: flex;
+    max-width: 1320px;
+    margin: 48px auto;
+    gap: 24px;
+}
+
+.weapp-main-wrapper-person-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* 사이드바 */
+.weapp-sidebar-person-list {
+    width: 25%;
+}
+
+.weapp-search-box-person-list {
+    background-color: white;
+    padding: 24px;
+    min-height: 0%;
+    border-radius: 10px;
+}
+
+.weapp-search-box-person-list h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 24px;
+}
+
+.weapp-search-box-person-list input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 페이지네이션 */
+.weapp-pagination-person-list {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.weapp-pagination-person-list button {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.weapp-pagination-person-list button:hover {
+    background-color: gray;
+}
+
+/* 프로필 그리드 */
+.weapp-profile-grid-person-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 32px;
+    background: white;
+    border-radius: 8px;
+}
+
+.weapp-profile-card-person-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    position: relative;
+}
+
+.weapp-company-logo-person-list {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 16px;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.weapp-company-name-person-list {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.weapp-company-desc-person-list {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.weapp-bookmark-icon-person-list {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #3366ff;
+    font-size: 18px;
+    cursor: pointer;
+}

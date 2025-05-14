@@ -1,0 +1,64 @@
+.weapp-container-job-save {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 48px 24px;
+    min-height: 100vh;
+}
+
+.weapp-form-wrapper-job-save {
+    padding: 24px;
+    border-radius: 10px;
+    width: 50%;
+}
+
+.weapp-form-title-job-save {
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: bold;
+    color: #333;
+}
+
+.weapp-form-job-save {
+    display: flex;
+    flex-direction: column;
+}
+
+.weapp-form label-job-save {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 4px;
+    margin-top: 14px;
+}
+
+.weapp-form input-job-save {
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.weapp-submit-btn-job-save {
+    width: 25%;
+    padding: 12px;
+    background-color: white;
+    border: 1px solid #8888ff;
+    color: #6666dd;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.weapp-submit-btn-wrapper-job-save {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.weapp-submit-btn:hover-job-save {
+    background-color: #6666dd;
+    color: white;
+}
+
+.weapp-form-check-job-save {
+    margin-bottom: 8px;
+}

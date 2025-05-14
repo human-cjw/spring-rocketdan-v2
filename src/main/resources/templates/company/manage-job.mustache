@@ -1,0 +1,69 @@
+{{> layout/header }}
+
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row">
+            <!-- 오른쪽 내용 -->
+            <div class="">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <p class="fs-6 fw-bold mb-0">아키타입 리서치의 채용 공고</p>
+                    <a href="/job/save-form" class="btn btn-primary">공고 등록</a>
+                </div>
+
+                <!-- 흰 네모박스 -->
+                <div class="border rounded bg-white p-5 text-start" style="height: auto;">
+
+                    {{#model}}
+                        <div class="list-group" style="margin: 1rem;">
+                            <a href="/company/job/{{id}}" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="weapp-company">
+                                            <div class="fs-5 fw-bold" style="margin: 1rem;">
+                                                {{title}}
+                                            </div>
+                                            <div class="fs-6 fw-nomal" style="margin: 1rem;">
+                                                {{jobGroupName}}
+                                            </div>
+                                            <div class="text-muted" style="margin: 1rem;">
+                                                {{careerLevel}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end" style="padding: 1rem;">
+                                        <div>{{createdAt}}</div>
+
+                                        <!-- 공고 삭제 버튼 -->
+                                        <form method="post" action="/company/job/{{id}}/delete"
+                                              style="margin-top: 10px;">
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('정말 이 공고를 삭제하시겠습니까?');">
+                                                삭제
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {{/model}}
+
+                    <!-- 페이징 -->
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled"><a class="page-link">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+
+                </div>
+                <!-- 흰 네모박스 끝 -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{{> layout/footer }}

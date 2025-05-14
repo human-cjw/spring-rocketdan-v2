@@ -1,0 +1,19 @@
+.weapp-date {
+    width: 170px;
+<<<<<<< HEAD
+}
+=======
+}
+
+.weapp-row {
+    width: 1320px;
+
+    display: flex;
+    justify-content: center;
+}
+
+.weapp-container {
+    display: flex;
+    justify-content: center;
+}
+>>>>>>> master

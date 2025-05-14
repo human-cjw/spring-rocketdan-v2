@@ -1,0 +1,43 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Noto Sans KR", sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+.weapp-max-350 {
+    max-width: 350px;
+}
+
+.weapp-fs-7 {
+    font-size: 0.9rem;
+}
+
+.weapp-fs-8 {
+    font-size: 0.8rem;
+}
+
+.weapp-cursor-pointer {
+    cursor: pointer;
+}
+
+.weapp-hover-primary:hover {
+    color: #0d6efd;
+}
+
+.weapp-flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.weapp-footer-height-150 {
+    height: 150px;
+}

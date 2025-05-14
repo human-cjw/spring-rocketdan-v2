@@ -1,0 +1,45 @@
+{{> layout/header }}
+
+<div class="bg-light py-5">
+    <div class="weapp-container">
+        <div class="weapp-out-appli-process">
+            <div class="weapp-outer-box-appli-process">
+                <div class="weapp-t1-appli-process">입사지원 현황</div>
+                <div class="weapp-rb-appli-process">
+                    {{#model.states}}
+                        <div class="form-check weapp-f2-appli-process">
+                            <label class="form-check-label {{#isChecked}}fw-bold{{/isChecked}}" for="radio1">
+                                <input
+                                        type="radio"
+                                        class="form-check-input"
+                                        id="radio1"
+                                        name="optradio"
+                                        {{#isChecked}}checked{{/isChecked}} disabled
+                                />
+                                <div class="weapp-t2-appli-process">
+                                    {{status}}
+                                </div>
+                            </label>
+                        </div>
+                    {{/model.states}}
+                </div>
+                <div class="weapp-h3-appli-process mb-5">
+                    <div class="weapp-h3-1-appli-process">
+                        {{model.nameKr}} ({{model.nameEn}})
+                    </div>
+                    <div class="weapp-h3-2-appli-process">
+                        <div>
+                            <a href="/job/{{model.jobId}}"
+                               class="weapp-h3-2-2-appli-process text-white text-decoration-none fw-bold link-light link-underline-light link-opacity-75-hover">
+                                <i class="fa-solid fa-arrow-up-right-from-square">
+                                </i>
+                                {{model.jobTitle}} - {{model.jobCareerLevel}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{{> layout/footer }}

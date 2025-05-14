@@ -1,0 +1,163 @@
+.weapp-out-job-detail {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.weapp-outer-box-job-detail {
+    display: grid;
+    grid-template-columns: auto auto;
+    width: 1320px;
+}
+
+.weapp-inner-box1-job-detail {
+    display: grid;
+    grid-template-columns: 3fr 7fr;
+    text-align: left;
+    font-size: 12px;
+}
+
+.weapp-inner-box2-job-detail {
+    display: grid;
+    grid-template-columns: 2fr 6fr 2fr;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    width: 300px;
+    height: 70px;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+.weapp-right-box-job-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    box-sizing: border-box;
+
+    justify-content: start;
+}
+
+.weapp-l-1-job-detail {
+    display: flex;
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.weapp-l-2-job-detail {
+    font-size: 30px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.weapp-l-3-job-detail {
+    color: rgb(122, 122, 122);
+    padding-bottom: 30px;
+    font-size: 15px;
+}
+
+.weapp-l-4-job-detail {
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.weapp-r-1-job-detail {
+    display: flex;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    /* color: aliceblue; */
+    /* background-color: rgb(68, 68, 231); */
+    text-align: center;
+    width: 100%;
+    height: 40px;
+    font-size: 15px;
+}
+
+.weapp-book-job-detail {
+    border: 1px solid #c4c4c4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 160px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 15px;
+    gap: 20px;
+    cursor: pointer;
+}
+
+.weapp-book-out-job-detail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.weapp-r-recru-job-detail {
+    padding-top: 20px;
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.weapp-tuter-job-detail {
+    color: rgb(72, 75, 78);
+    font-size: 10px;
+}
+
+.weapp-message-job-detail {
+    font-size: 13px;
+    border-radius: 10px;
+    border: 1px solid #c4c4c4;
+    width: 60px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+.weapp-left-box-job-detail {
+    padding-right: 80px;
+    padding-left: 150px;
+}
+
+.weapp-sum-job-detail {
+    display: grid;
+    margin-right: 150px;
+}
+
+.weapp-img1-job-detail {
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+}
+
+.weapp-img1-1-job-detail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.weapp-img2-job-detail {
+    width: 30px;
+    height: 30px;
+}
+
+.weapp-img2-1-job-detail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}

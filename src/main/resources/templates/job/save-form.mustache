@@ -1,0 +1,94 @@
+{{> layout/header }}
+
+<div class="py-5">
+    <div class="weapp-reset-company-save">
+        <div class="weapp-container-company-save">
+            <div class="weapp-form-wrapper-company-save">
+                <h2 class="weapp-form-title-company-save">공고 등록</h2>
+                <hr/>
+                <form action="/job/save" method="post" class="weapp-form-company-save">
+                    <input type="hidden" name="status" value="OPEN"/>
+
+                    <label>공고 제목</label>
+                    <input type="text" name="title" placeholder="공고 제목 입력" value="새로운 공고 입니다"/>
+
+                    <label>공고 내용</label>
+                    <textarea class="form-control" rows="5" id="comment" name="description">새로운 공고 내용입니다</textarea>
+                    <br/>
+
+                    <label>근무지</label>
+                    <input type="text" name="location" placeholder="근무지 입력" value="부산광역시 진구 중앙대로"/>
+
+                    <label for="employmentType" class="form-label">고용형태</label>
+                    <select class="form-select" id="employmentType" name="employmentType">
+                        <option value="">선택</option>
+                        <option value="정규직">정규직</option>
+                        <option value="계약직">계약직</option>
+                        <option value="인턴">인턴</option>
+                        <option value="프리랜서">프리랜서</option>
+                    </select>
+                    <br/>
+
+                    <label>마감일</label>
+                    <input type="date" name="deadline"/>
+
+                    <label for="jobGroup" class="form-label">지원직무</label>
+                    <select class="form-select" id="jobGroup" name="jobGroupId">
+                        <option value="">선택</option>
+                        {{#model.jobgroups}}
+                            <option value="{{id}}">{{name}}</option>
+                        {{/model.jobgroups}}
+                    </select>
+                    <br/>
+
+                    <label>기술 스택</label>
+                    <div>
+                        {{#model.techstacks}}
+                            <label>
+                                <input type="checkbox" name="techStackIds" value="{{id}}"/>
+                                {{name}}
+                            </label>
+                        {{/model.techstacks}}
+                    </div>
+
+                    <label for="careerLevel" class="form-label">경력</label>
+                    <select class="form-select" id="careerLevel" name="careerLevel">
+                        <option value="">선택</option>
+                        <option value="신입">신입</option>
+                        <option value="경력">경력</option>
+                    </select>
+                    <br/>
+
+                    <label for="workField" class="form-label">업무 분야</label>
+                    <select class="form-select" id="workField" name="workFieldId">
+                        <option value="">선택</option>
+                        {{#model.workFields}}
+                            <option value="{{id}}">{{name}}</option>
+                        {{/model.workFields}}
+                    </select>
+                    <br/>
+
+                    <label for="salaryRange" class="form-label">연봉</label>
+                    <select class="form-select" id="salaryRange" name="salaryRangeId">
+                        <option value="">선택</option>
+                        {{#model.salaryranges}}
+                            <option value="{{id}}">{{label}}</option>
+                        {{/model.salaryranges}}
+                    </select>
+                    <br/>
+
+                    <div class="submit-btn-wrapper-company-save">
+                        <button
+                                type="submit"
+                                class="weapp-submit-btn-company-save btn btn-primary"
+                        >
+                            등록
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{> layout/footer }}

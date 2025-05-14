@@ -1,0 +1,42 @@
+{{> layout/header }}
+<div class="bg-light py-5">
+    <main class="container">
+        {{#model}}
+            <div class="card p-3 mt-4 mb-4 shadow-sm">
+                <div class="d-flex" style="justify-content: space-between">
+                    <div class="d-flex align-items-center mb-3">
+                        <img
+                                src="https://image.rocketpunch.com/images/user/user.png?s=200x200&t=cover"
+                                class="rounded-circle me-2"
+                                width="40"
+                                height="40"
+                        />
+                        <div>익명</div>
+                    </div>
+                    <form action="/board/delete" method="post" class="text-end d-flex gap-2"
+                          style="margin-bottom: 1rem">
+                        <input type="hidden" name="id" value="{{id}}">
+
+                        <button class="btn btn-danger flex-shrink-0"
+                        >삭제
+                        </button>
+                    </form>
+                </div>
+                <form action="/board/{{id}}/update" method="post">
+                    <input class="h3 form-control" name="title" value="{{title}}">
+                    <textarea
+                            name="content"
+                            class="form-control mb-3 mr-3"
+                            rows="5"
+                    >{{content}}</textarea>
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-primary">수정하기</button>
+                    </div>
+                </form>
+                <hr/>
+            </div>
+        {{/model}}
+    </main>
+</div>
+
+{{> layout/footer }}

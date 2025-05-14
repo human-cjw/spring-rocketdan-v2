@@ -1,0 +1,44 @@
+{{> layout/header }}
+
+<div class="bg-light py-5">
+    <div class="weapp-out-apply-done">
+        <div class="weapp-outer-box-apply-done">
+            <div>
+                <div class="weapp-h1-apply-done">지원 완료!</div>
+                <div class="weapp-h2-apply-done">
+                    <div>
+                        <div class="weapp-t1-apply-done">
+                            {{model.title}}
+                        </div>
+                        <br/>
+                        <div class="weapp-t2-apply-done">
+                            <span>{{model.deadline}} 마감</span>
+                            <span> </span>
+                            <span>{{model.employmentType}}</span>
+                            <span>, </span>
+                            <span>{{model.careerLevel}}</span>
+                            {{#model.updatedAt}}
+                                <span>{{model.updatedAt}}</span>
+                            {{/model.updatedAt}}
+                        </div>
+                        <br/><br/>
+                        <div class="weapp-t3-apply-done">주요 업무</div>
+                        <br/>
+                        <p class="fs-6">{{model.description}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="weapp-line-out-apply-done">
+                <hr class="weapp-line-apply-done"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="weapp-out2-apply-done">
+        <a href="/user/application" class="weapp-h3-1-apply-done">
+            <button class="btn btn-primary">확인</button>
+        </a>
+    </div>
+</div>
+
+{{> layout/footer }}

@@ -1,0 +1,75 @@
+{{> layout/header }}
+
+<div class="py-5">
+    <div class="weapp-out-join">
+        <div class="weapp-outer-box-join">
+            <div>
+                <img
+                        src="https://static.rocketpunch.com/images/main/onboarding/create.svg"
+                        width="430"
+                        height="388"
+                        alt="Create illustration"
+                />
+            </div>
+            <div class="weapp-login-join">
+                <div class="weapp-tit-join">
+                    <div class="weapp-t1-join">
+                        일로 연결되는 사람들,<br/>
+                    </div>
+                    <div class="weapp-t2-join">로켓펀치</div>
+                </div>
+                <form action="/join" method="post" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden"
+                           class="form-control"
+                           name="userType"
+                           value="user"
+                    />
+                    <label for="inputPassword4" class="form-label"
+                    >아이디</label>
+                    <div class="col">
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="inputEmail4"
+                                name="username"
+                        />
+                    </div>
+                    <label for="inputPassword4" class="form-label"
+                    >이메일</label
+                    >
+                    <div class="col">
+                        <input
+                                type="email"
+                                class="form-control"
+                                id="inputPassword4"
+                                name="email"
+                        />
+                    </div>
+                    <label for="inputPassword4" class="form-label"
+                    >비밀번호</label
+                    >
+                    <div class="col">
+                        <input
+                                type="password"
+                                class="form-control"
+                                id="inputPassword4"
+                                name="password"
+                        />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary weapp-jo-join">
+                        회원가입
+                    </button>
+                </form>
+
+
+                <hr class="weapp-line-join"/>
+                <div class="weapp-t3-join">
+                    만 14세 미만은 가입할 수 없습니다.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{> layout/footer }}

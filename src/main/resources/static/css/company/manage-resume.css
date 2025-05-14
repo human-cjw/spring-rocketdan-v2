@@ -1,0 +1,19 @@
+.weapp-prj {
+    padding: 10px;
+}
+
+.weapp-pimg {
+    width: 132px;
+    height: 158px;
+}
+
+.weapp-h1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 20px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+}

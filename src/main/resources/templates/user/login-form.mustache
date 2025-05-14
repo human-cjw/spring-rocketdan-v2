@@ -1,0 +1,53 @@
+{{> layout/header }}
+
+<div class="py-5">
+    <div class="weapp-out-login">
+        <div class="weapp-outer-box-login">
+            <div>
+                <img
+                        src="https://static.rocketpunch.com/images/main/onboarding/woman.svg"
+                        width="430"
+                        height="388"
+                        alt="Create illustration"
+                />
+            </div>
+            <div class="weapp-login">
+                <div class="weapp-tit-login">
+                    <div class="weapp-t1-login">
+                        일로 연결되는 사람들,<br/>
+                    </div>
+                    <div class="weapp-t2-login">로켓단</div>
+
+                </div>
+                <form action="/login" method="post" enctype="application/x-www-form-urlencoded">
+                    <input
+                            class="form-control"
+                            type="text"
+                            placeholder="아이디"
+                            aria-label="default input example"
+                            name="username"
+                    />
+                    <br/>
+                    <input
+                            class="form-control"
+                            type="password"
+                            placeholder="비밀번호"
+                            aria-label="default input example"
+                            name="password"
+                    />
+                    <br/>
+                    <button type="submit" class="btn btn-primary">
+                        로그인
+                    </button>
+                </form>
+                <hr class="weapp-line-login"/>
+                <div class="weapp-t3-login">
+                    회원이 아니신가요?
+                    <a href="/join-form" class="link-primary link">회원가입</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{> layout/footer }}

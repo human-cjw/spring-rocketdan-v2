@@ -1,0 +1,86 @@
+{{> layout/header }}
+
+<div class="bg-light py-5">
+    <div class="container-xxl d-flex justify-content-center">
+        <div class="row flex-grow-1 px-5">
+            <!-- 왼쪽 사이드바 -->
+            <div class="col-sm-3 p-4">
+                <div class="d-flex gap-3 align-items-center py-4">
+                    <div class="weapp-img-wrapper">
+                        {{#logoImageUrl}}
+                            <img src="{{logoImageUrl}}" alt="로고 이미지">
+                        {{/logoImageUrl}}
+                        {{^logoImageUrl}}
+                            <img src="https://image.rocketpunch.com/images/user/user.png?s=35x35&t=cover">
+                        {{/logoImageUrl}}
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-5">{{sessionUser.username}}</div>
+                    </div>
+                </div>
+                <div class="bg-primary rounded p-3 text-white d-flex">
+                    <div class="d-flex gap-3 align-items-center">
+                        <i class="fa-solid fa-bookmark"></i>
+                        <span>채용공고 북마크</span>
+                    </div>
+                    <div class="ms-auto fs-5">{{model.size}}</div>
+                </div>
+            </div>
+
+            <!-- 오른쪽 컨텐츠 -->
+            <div class="col container mt-3">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <div class="nav-link active">북마크 {{model.size}}</div>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    {{#model}}
+                        <div class="container border my-3 p-3"><br>
+                            <div class="border-bottom">
+                                <div class="d-flex justify-content-between">
+                                    <h4>{{title}}</h4>
+                                    <button onclick="deleteBookmark({{id}})" class="btn btn-primary">삭제</button>
+                                </div>
+                                <p>{{careerLevel}}</p>
+                                <p>
+                                    {{#techstackList}}
+                                        <span class="badge bg-light text-dark border me-1">{{.}}</span>
+                                    {{/techstackList}}
+                                </p>
+                                <p>{{employmentType}} {{createdAt}}</p>
+                            </div>
+                            <div class="py-2 d-flex gap-2 align-items-center">
+                                <div class="weapp-img-wrapper">
+                                    {{#logoImageUrl}}
+                                        <img src="{{logoImageUrl}}" alt="로고 이미지">
+                                    {{/logoImageUrl}}
+                                    {{^logoImageUrl}}
+                                        <img src="https://image.rocketpunch.com/company/208652/codemine_logo_1742298531.png?s=100x100&t=inside">
+                                    {{/logoImageUrl}}
+                                </div>
+                                <div>{{companyName}}</div>
+                            </div>
+                        </div>
+                    {{/model}}
+
+                    {{^model}}
+                        <div class="text-center text-muted py-5">북마크한 채용공고가 없습니다.</div>
+                    {{/model}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function deleteBookmark(bookmarkId) {
+        if (confirm("삭제하시겠습니까?")) {
+            let response = await fetch(`/user/bookmark/${bookmarkId}/delete`);
+            location.reload();
+        }
+    }
+</script>
+
+{{> layout/footer }}

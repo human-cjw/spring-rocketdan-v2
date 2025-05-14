@@ -1,0 +1,82 @@
+{{> layout/header }}
+
+<div class="bg-light py-5">
+    <div class="weapp-application-container-acceptance">
+        <div class="weapp-application-header-acceptance">
+            {{model.username}} 님의 지원서
+        </div>
+        <div class="weapp-application-content-acceptance">
+
+            <!-- 기본 정보 -->
+            <div class="weapp-info-section-acceptance">
+                <div class="weapp-section-title-acceptance">기본 정보</div>
+                <div class="weapp-info-row-acceptance">
+                    <div class="weapp-info-label-acceptance">이메일</div>
+                    <div class="weapp-info-value-acceptance">{{model.phone}}</div>
+                </div>
+            </div>
+
+            <!-- 학력 -->
+            <div class="weapp-info-section-acceptance">
+                <div class="weapp-section-title-acceptance">학력</div>
+                <div class="weapp-info-row-acceptance">
+                    <div class="weapp-info-label-acceptance">학교</div>
+                    <div class="weapp-info-value-acceptance">{{model.education}}</div>
+                </div>
+                <div class="weapp-info-row-acceptance">
+                    <div class="weapp-info-label-acceptance">전공</div>
+                    <div class="weapp-info-value-acceptance">{{model.major}}</div>
+                </div>
+            </div>
+
+            <!-- 경력 -->
+            <div class="weapp-info-section-acceptance">
+                <div class="weapp-section-title-acceptance">경력</div>
+                {{#model.careerCompanyNames}}
+                    <div class="weapp-info-row-acceptance">
+                        <div class="weapp-info-label-acceptance">회사</div>
+                        <div class="weapp-info-value-acceptance">{{.}}</div>
+                    </div>
+                {{/model.careerCompanyNames}}
+                {{^model.careerCompanyNames}}
+                    <div class="weapp-info-value-acceptance text-muted">경력이 없습니다</div>
+                {{/model.careerCompanyNames}}
+            </div>
+
+            <!-- 기술 스택 -->
+            <div class="weapp-info-section-acceptance">
+                <div class="weapp-section-title-acceptance">기술 스택</div>
+                <div class="weapp-info-row-acceptance">
+                    <div class="weapp-tech-tags-acceptance">
+                        {{#model.techStackNames}}<span>{{.}}</span>{{/model.techStackNames}}
+                        {{^model.techStackNames}}<span>없음</span>{{/model.techStackNames}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 포트폴리오 -->
+            <div class="weapp-info-section-acceptance">
+                <div class="weapp-section-title-acceptance">기타</div>
+                <div class="weapp-info-row-acceptance">
+                    <div class="weapp-info-label-acceptance">포트폴리오</div>
+                    <div class="weapp-info-value-acceptance">
+                        <a href="{{model.portfolioUrl}}" target="_blank">{{model.portfolioUrl}}</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 합격 / 불합격 버튼 -->
+        <div class="weapp-application-footer-acceptance mt-4 text-center">
+            <form method="post" action="/company/application/{{model.applicationId}}/accept" style="display:inline;">
+                <button class="btn btn-success px-4">합격</button>
+            </form>
+            <form method="post" action="/company/application/{{model.applicationId}}/reject" style="display:inline;">
+                <button class="btn btn-danger px-4">불합격</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{> layout/footer }}

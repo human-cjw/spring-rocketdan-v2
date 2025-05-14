@@ -1,0 +1,265 @@
+{{> layout/header }}
+
+<div class="bg-light py-5">
+    <!-- id 1번 DB !-->
+    <div class="container py-3">
+        <div class="d-flex" style="justify-content: space-between">
+            <h3 class="mb-4 fw-bold">이력서 수정</h3>
+        </div>
+
+        <form method="POST" action="/resume/{{model.id}}/update">
+            <!-- 기본 정보 칸 시작 -->
+            <div class="bg-white rounded p-4 shadow-sm mb-4">
+                <h5 class="fw-bold mb-3">기본 정보</h5>
+
+                <div class="m-3 mb-1">
+                    <div class="mb-2">
+                        <div class="fs-6">제목 변경</div>
+                        <input class="form-control mb-4" type="text" name="title"
+                               value="{{model.title}}"/>
+                    </div>
+                </div>
+
+                <div class="m-3 mb-1">
+                    <div class="mb-2">
+                        <div class="fs-6">포트폴리오</div>
+                        <input class="form-control" type="text" name="portfolioUrl" value="{{model.portfolioUrl}}"/>
+                    </div>
+
+                    <div>
+                        <div class="fs-6">휴대전화번호</div>
+                        <div class="mt-1">
+                            <input class="form-control" type="text" name="phone" value="{{model.phone}}"/>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div>
+                        <h6>간단한 자기 소개</h6>
+                    </div>
+                    <textarea class="form-control" name="summary">{{model.summary}}</textarea>
+                </div>
+
+            </div>
+            <!-- 기본 정보 칸 끝 -->
+
+            <!-- 성별 & 생년월일 시작 -->
+            <div class="bg-white rounded p-4 shadow-sm mb-4">
+                <div>
+                    <h5 class="fw-bold mb-3">성별 & 생년월일</h5>
+                    <div class="d-flex align-items-center gap-3 m-3 mb-1">
+                        <!-- 성별 선택 칸 시작 -->
+                        {{#model.genderTypes}}
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="radio" name="gender" value="{{value}}"
+                                           {{#isSelected}}checked{{/isSelected}}/> {{value}}
+                                </label>
+                            </div>
+                        {{/model.genderTypes}}
+                        <!-- 성별 선택 칸 끝 -->
+
+                        <!-- 생년월일 입력 칸 시작 -->
+                        <div>
+                            <div class="input-group">
+                                <input class="form-control" type="date" name="birthdate"
+                                       value="{{model.birthdate}}"/>
+                            </div>
+                        </div>
+                        <!-- 생년월일 입력 칸 끝 -->
+                    </div>
+                </div>
+            </div>
+            <!-- 성별 & 생년월일 끝 -->
+
+            <!-- 경력 -->
+            <div class="bg-white rounded p-4 shadow-sm mb-4">
+                <div>
+                    <h5 class="fw-bold mb-3">경력</h5>
+                    <div class="d-flex align-items-center gap-3 m-3 mb-1">
+                        <!-- 신입 + 경력 옵션 선택 칸 시작 -->
+                        {{#model.careerLevelTypes}}
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="radio" name="careerLevel" value="{{value}}"
+                                           {{#isSelected}}checked{{/isSelected}}/> {{value}}
+                                </label>
+                            </div>
+                        {{/model.careerLevelTypes}}
+                        <!-- 신입 + 경력 옵션 선택 칸 끝 -->
+                    </div>
+                </div>
+            </div>
+            <!-- 경력 끝 -->
+
+            <!-- 경력 사항 칸 -->
+            <div class="bg-white rounded p-4 shadow-sm mb-4">
+
+                <h5 class="fw-bold mb-3">경력 사항</h5>
+
+                <!-- 여기에 커리어가 추가된다 -->
+                <div id="career-container">
+                    {{#model.careers}}
+                        <div class="card m-3 mb-3 p-3">
+                            <div class="mb-2">
+                                <label class="form-label">회사명</label>
+                                <input class="form-control" type="text" name="careerCompanyName"
+                                       value="{{companyName}}"/>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">입사일</label>
+                                <input class="form-control" type="date" name="careerStartDate"
+                                       value="{{startDate}}"/>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">퇴사일</label>
+                                <input class="form-control" type="date" name="careerEndDate"
+                                       value="{{endDate}}"/>
+                            </div>
+                        </div>
+                    {{/model.careers}}
+                </div>
+
+            </div>
+            <!-- 커리어 칸 끝 -->
+
+            <!-- 학력 칸 -->
+            <div class="bg-white rounded p-4 shadow-sm mb-4">
+                <div>
+                    <h5 class="fw-bold mb-3">학력</h5>
+                    <div class="d-flex m-3 mb-1" style="justify-content: start; gap: 0.5rem">
+                        <!-- 학교 이름 칸 시작 -->
+                        <div class="align-items-center">
+                            <label class="mb-2">학교*</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="education"
+                                       value="{{model.education}}"/>
+                            </div>
+                        </div>
+                        <!-- 학교 이름 칸 끝 -->
+
+                        <!-- 전공 선택 칸 시작 -->
+                        <div class="align-items-center">
+                            <label class="mb-2">전공*</label>
+                            <div class="input-group">
+                                <input type="text" name="major" class="form-control" value="{{model.major}}"/>
+                            </div>
+                        </div>
+                        <!-- 전공 선택 칸 끝 -->
+
+                        <!-- 재학 기간 시작 -->
+                        <div class="align-items-center">
+                            <label class="mb-2">재학 기간*</label>
+                            <div class="d-flex" style="align-items: center">
+                                <div class="input-group">
+                                    <input type="date" name="enrollmentDate" class="form-control"
+                                           value="{{model.enrollmentDate}}"/>
+                                </div>
+                                <div class="px-3">-</div>
+                                <input type="date" name="graduationDate" class="form-control"
+                                       value="{{model.graduationDate}}"/>
+                            </div>
+                        </div>
+                        <!-- 재학 기간 끝 -->
+
+                        <!-- 현 학교 상태 시작 -->
+                        <div class="align-items-center">
+                            <label class="mb-2">상태*</label>
+                            <select class="form-select" name="graduationType">
+                                {{#model.graduationTypes}}
+                                    <option value="{{value}}" {{#isSelected}}selected{{/isSelected}}>{{value}}</option>
+                                {{/model.graduationTypes}}
+                            </select>
+                        </div>
+                        <!-- 현 학교 상태 끝 -->
+                    </div>
+                </div>
+            </div>
+            <!-- 학력 칸 끝 -->
+
+            <!-- 자격증 칸 -->
+        <div id="certification-section" class="bg-white rounded p-4 shadow-sm mb-4">
+            <h5 class="fw-bold mb-3">자격증</h5>
+            {{#model.certifications}}
+                <!-- 여기에 자격증 항목이 추가된다 -->
+                <div id="certification-container">
+                    <div class="card m-3 mb-3 p-3">
+                        <div class="mb-2">
+                            <label class="form-label">자격증 이름</label>
+                            <input class="form-control" type="text" name="certificationName"
+                                   value="{{name}}"/>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">발급 기관</label>
+                            <input class="form-control" type="text" name="certificationIssuer"
+                                   value="{{issuer}}"/>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">취득일</label>
+                            <input class="form-control" type="date" name="certificationIssuedDate"
+                                   value="{{issuedDate}}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/model.certifications}}
+            <!-- 자격증 칸 끝 -->
+
+            <div class="bg-white rounded p-4 shadow-sm mb-4">
+                <label for="jobGroup" class="form-label">지원직무</label>
+                <select class="form-select" id="jobGroup" name="jobGroupId">
+                    {{#model.jobGroupUpdateDTOs}}
+                        <option value="{{id}}" {{#isSelected}}selected{{/isSelected}}>{{name}}</option>
+                    {{/model.jobGroupUpdateDTOs}}
+                </select>
+            </div>
+
+            <div class="bg-white rounded p-4 shadow-sm mb-4"><label for="salaryRange" class="form-label">희망연봉</label>
+                <select class="form-select" id="salaryRange" name="salaryRangeId">
+                    {{#model.salaryRangeUpdateDTOs}}
+                        <option value="{{id}}" {{#isSelected}}selected{{/isSelected}}>{{name}}</option>
+                    {{/model.salaryRangeUpdateDTOs}}
+                </select>
+            </div>
+
+            <!-- 기술 스택 칸 시작 -->
+            <div class="bg-white rounded p-4 shadow-sm mb-4">
+                <div>
+                    <h5 class="fw-bold mb-3">기술 스택</h5>
+                </div>
+                <div class="card m-3 mb-3 p-3">
+                    <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+                        <div class="d-flex flex-wrap gap-2 align-items-center" id="tech-stack-container">
+                            {{#model.TechStacks}}
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="techStackIds" value="{{id}}"
+                                           id="tech-{{id}}" {{#isChecked}}checked{{/isChecked}}>
+                                    <label class="form-check-label" for="tech-{{id}}">{{name}}</label>
+                                </div>
+                            {{/model.TechStacks}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- 기술 스택 칸 끝 -->
+            <div class="d-flex justify-content-between gap-1">
+                <div>
+                    <div class="form-check mb-3 {{#model.isDefault}}d-none{{/model.isDefault}}">
+                        <input class="form-check-input" type="checkbox" name="isDefault" value="true"
+                               id="isDefaultCheckbox" {{#model.isDefault}}checked{{/model.isDefault}}>
+                        <label class="form-check-label" for="isDefaultCheckbox">
+                            기본 이력서로 설정
+                        </label>
+                    </div>
+                </div>
+                <button type="submit"
+                        class="btn btn-outline-primary btn-sm d-inline-flex align-items-center justify-content-center"
+                        style="height: 32px; padding: 0 12px; font-size: 0.875rem; line-height: 1.5;">
+                    수정완료
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{> layout/footer }}

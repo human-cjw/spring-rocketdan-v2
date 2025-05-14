@@ -1,0 +1,111 @@
+{{> layout/header }}
+
+<div class="bg-light py-5">
+    <main class="container">
+        <div class="card p-3 mt-4 mb-4 shadow-sm">
+            <form action="/board/save" method="post">
+                <div class="d-flex" style="justify-content: space-between">
+                    <div class="d-flex align-items-center mb-3">
+                        <img
+                                src="https://image.rocketpunch.com/images/user/user.png?s=200x200&t=cover"
+                                class="rounded-circle me-2"
+                                width="40"
+                                height="40"
+                        />
+                        <div>익명</div>
+                    </div>
+
+                    <div class="text-end d-flex gap-2"
+                         style="margin-bottom: 1rem">
+                        <input type="hidden" name="boardId" value=""/>
+                        <input type="password" class="form-control" placeholder="Enter password" name="password"
+                               required>
+
+                        <button class="btn btn-warning flex-shrink-0"
+                        >등록
+                        </button>
+
+                    </div>
+                </div>
+
+
+                <input type="text" name="title" class="form-control" placeholder="제목을 입력하세요">
+                <textarea name="content"
+                          class="form-control mb-3 mr-3"
+                          rows="5"
+                          placeholder="내용을 입력해 주세요."
+                ></textarea>
+            </form>
+            <hr/>
+        </div>
+
+        {{#models}}
+            <div class="card p-3 mt-4 mb-4 shadow-sm">
+                <div class="d-flex" style="justify-content: space-between">
+                    <div class="d-flex align-items-center mb-3">
+                        <img
+                                src="https://image.rocketpunch.com/images/user/user.png?s=200x200&t=cover"
+                                class="rounded-circle me-2"
+                                width="40"
+                                height="40"
+                        />
+                        <div>익명</div>
+                    </div>
+                    <form method="post" class="text-end d-flex gap-2"
+                          style="margin-bottom: 1rem" onsubmit="verifyPassword(event)">
+                        <input type="hidden" id="id" name="id" value="{{boardId}}"/>
+                        <input type="password" id="password" class="form-control" placeholder="Enter password"
+                               name="password"
+                               required>
+
+                        <button type="submit" class="btn btn-warning flex-shrink-0"
+                        >수정
+                        </button>
+
+                    </form>
+                </div>
+                <form>
+                    <h3 class="h3">{{title}}</h3>
+                    <textarea name="content"
+                              class="form-control mb-3 mr-3"
+                              rows="5"
+                              readonly
+                    >{{content}}</textarea>
+                </form>
+                <hr/>
+            </div>
+        {{/models}}
+    </main>
+
+    <script>
+        async function verifyPassword(event) {
+            event.preventDefault();
+
+            var password = document.getElementById("password").value; // 사용자가 입력한 비밀번호
+            var postId = document.getElementById("id").value; // 게시물 ID
+
+            // 서버에 비밀번호 확인 요청
+            try {
+                const response = await fetch(`/board/update/${postId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `password=${encodeURIComponent(password)}`
+                });
+
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    window.location.href = "/board/update-form/" + postId; // 비밀번호가 맞으면 수정 페이지로 리다이렉트
+                } else {
+                    alert(data.message); // 비밀번호가 틀리면 알림 띄우기
+                }
+            } catch (error) {
+                alert("서버와 연결할 수 없습니다.");
+            }
+        }
+    </script>
+</div>
+
+{{> layout/footer }}

@@ -1,0 +1,91 @@
+{{> layout/header }}
+
+<div class="py-5">
+    <div class="weapp-reset-company-save">
+        <div class="weapp-container-company-save">
+            <div class="weapp-form-wrapper-company-save">
+                <h2 class="weapp-form-title-company-save">공고 수정</h2>
+                <hr/>
+                <form action="/job/{{model.id}}/update" method="post" class="weapp-form-company-save">
+                    <input type="hidden" name="status" value="{{model.status}}"/>
+
+                    <label>공고 제목</label>
+                    <input type="text" name="title" placeholder="공고 제목 입력" value="{{model.title}}"/>
+
+                    <label>공고 내용</label>
+                    <textarea class="form-control" rows="5" id="comment"
+                              name="description">{{model.description}}</textarea>
+                    <br/>
+
+                    <label>근무지</label>
+                    <input type="text" name="location" placeholder="근무지 입력" value="{{model.location}}"/>
+
+                    <label for="employmentType" class="form-label">고용형태</label>
+                    <select class="form-select" id="employmentType" name="employmentType">
+                        {{#model.employmentTypes}}
+                            <option value="{{value}}" {{#isSelected}}selected{{/isSelected}}>{{name}}</option>
+                        {{/model.employmentTypes}}
+                    </select>
+                    <br/>
+
+                    <label>마감일</label>
+                    <input type="date" name="deadline" value="{{model.deadline}}"/>
+
+                    <label for="jobGroup" class="form-label">지원직무</label>
+                    <select class="form-select" id="jobGroup" name="jobGroupId">
+                        {{#model.jobGroupUpdateDTOs}}
+                            <option value="{{id}}" {{#isSelected}}selected{{/isSelected}}>{{name}}</option>
+                        {{/model.jobGroupUpdateDTOs}}
+                    </select>
+                    <br/>
+
+                    <label>기술 스택</label>
+                    <div>
+                        {{#model.jobTechStackUpdateDTOs}}
+                            <label>
+                                <input type="checkbox" name="techStackIds" value="{{id}}"
+                                       {{#isChecked}}checked{{/isChecked}}/>
+                                {{name}}
+                            </label>
+                        {{/model.jobTechStackUpdateDTOs}}
+                    </div>
+
+                    <label for="careerLevel" class="form-label">경력</label>
+                    <select class="form-select" id="careerLevel" name="careerLevel">
+                        {{#model.careerLevels}}
+                            <option value="{{value}}" {{#isSelected}}selected{{/isSelected}}>{{name}}</option>
+                        {{/model.careerLevels}}
+                    </select>
+                    <br/>
+
+                    <label for="workField" class="form-label">업무 분야</label>
+                    <select class="form-select" id="workField" name="workFieldId">
+                        {{#model.workFieldUpdateDTOs}}
+                            <option value="{{id}}" {{#isSelected}}selected{{/isSelected}}>{{name}}</option>
+                        {{/model.workFieldUpdateDTOs}}
+                    </select>
+                    <br/>
+
+                    <label for="salaryRange" class="form-label">연봉</label>
+                    <select class="form-select" id="salaryRange" name="salaryRangeId">
+                        {{#model.salaryRangeUpdateDTOs}}
+                            <option value="{{id}}" {{#isSelected}}selected{{/isSelected}}>{{name}}</option>
+                        {{/model.salaryRangeUpdateDTOs}}
+                    </select>
+                    <br/>
+
+                    <div class="submit-btn-wrapper-company-save">
+                        <button
+                                type="submit"
+                                class="weapp-submit-btn-company-save btn btn-primary"
+                        >
+                            수정
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{> layout/footer }}

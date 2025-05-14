@@ -1,0 +1,55 @@
+{{> layout/header }}
+
+<div class="bg-light py-5">
+    <div class="weapp-proposal-container-person-propose">
+        <form class="weapp-form-person-propose">
+            <div class="weapp-proposal-header-person-propose">채용 지원 제안</div>
+
+            <div class="weapp-form-group-person-propose">
+                <label for="message"
+                >제안 메시지
+                    <span class="text-danger">*</span></label
+                >
+                <textarea
+                        id="message"
+                        class="weapp-textarea-person-propose"
+                        placeholder="박지은 님에게 제안하는 이유를 간단하게 적어주세요."
+                ></textarea>
+            </div>
+
+            <div class="weapp-form-group-person-propose">
+                <label>연봉</label>
+                <div class="weapp-salary-group-person-propose">
+                    <select class="weapp-select-person-propose">
+                        <option value="KRW">KRW</option>
+                        <option value="USD">USD</option>
+                    </select>
+                    <input
+                            type="number"
+                            class="weapp-input-number-person-propose"
+                            placeholder="최소"
+                    />
+                    만원
+                    <span> - </span>
+                    <input
+                            type="number"
+                            class="weapp-input-number-person-propose"
+                            placeholder="최대"
+                    />
+                    만원
+                    <label class="weapp-checkbox-label-person-propose">
+                        <input type="checkbox"/>
+                        협의 가능
+                    </label>
+                </div>
+            </div>
+            <div class="weapp-submit-btn-wrapper-person-propose">
+                <button type="submit" class="btn btn-primary">
+                    제안
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{> layout/footer }}

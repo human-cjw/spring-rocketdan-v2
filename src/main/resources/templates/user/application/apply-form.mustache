@@ -1,0 +1,42 @@
+{{> layout/header }}
+
+<div class="bg-white py-5">
+    <div class="weapp-out-apply">
+        <div class="weapp-outer-box-apply">
+            <div class="weapp-h2-apply">
+                {{model.jobTitle}}
+            </div>
+            <div class="weapp-h3-apply bg-primary">
+                <div class="weapp-h3-1-apply">{{model.username}}</div>
+                <div class="weapp-h3-2-apply">
+                    <div class="weapp-h3-2-1-apply">➀</div>
+                    <div class="weapp-h3-2-2-apply">이력서 선택 &nbsp;—</div>
+                    <div class="weapp-h3-2-1-apply">➁</div>
+                    <div class="weapp-h3-2-2-apply">기업요청정보</div>
+                </div>
+            </div>
+            <form action="/user/job/{{model.jobId}}/apply/save" method="post" class="weapp-choice-apply">
+                {{#model.resumes}}
+                    <div class="weapp-h4-apply">
+                        <label>
+                            <input type="radio" name="resumeId"
+                                   {{#isChecked}}checked{{/isChecked}} value="{{resumeId}}"/>
+                            {{title}}
+                        </label>
+                    </div>
+                {{/model.resumes}}
+
+                <input type="hidden" name="status" value="접수"/>
+                <input type="hidden" name="companyId" value="{{model.companyId}}"/>
+                <hr/>
+                <div class="weapp-last-apply">
+                    <button class="weapp-but2-apply btn btn-primary">
+                        지원하기
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{> layout/footer }}

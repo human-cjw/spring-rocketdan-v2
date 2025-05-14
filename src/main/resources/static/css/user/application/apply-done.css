@@ -1,0 +1,78 @@
+.weapp-out-apply-done {
+    display: grid;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.weapp-outer-box-apply-done {
+    display: grid;
+    width: 1320px;
+    padding-left: 300px;
+    padding-right: 300px;
+    gap: 10px;
+}
+
+.weapp-h1-apply-done {
+    font-size: 25px;
+    font-weight: 550;
+    margin-bottom: 35px;
+    padding-left: 20px;
+}
+
+.weapp-h2-apply-done {
+    width: 100%;
+    padding: 30px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.weapp-h3-apply-done {
+    border-radius: 10px;
+    border: 1px solid #c4c4c4;
+    font-size: 15px;
+    background-color: #ffffff;
+    width: 100px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.weapp-h3-1-apply-done {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 80px;
+    padding-top: 30px;
+}
+
+.weapp-out2-apply-done {
+    display: grid;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.weapp-line-apply-done {
+    margin: 0;
+}
+
+.weapp-t1-apply-done {
+    font-weight: 800;
+    font-size: 35px;
+}
+
+.weapp-t2-apply-done {
+    color: #6e6e6e;
+}
+
+.weapp-t3-apply-done {
+    font-weight: 900;
+    font-size: 20px;
+}
+
+.weapp-line-out-apply-done {
+    padding-top: 30px;
+}
