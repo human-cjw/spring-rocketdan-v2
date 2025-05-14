@@ -1,7 +1,7 @@
 package com.metacoding.springrocketdanv2.resume;
 
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
-import com.metacoding.springrocketdanv2.resumeTechStack.ResumeTechStack;
+import com.metacoding.springrocketdanv2.resume.techstack.TechStack;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import com.metacoding.springrocketdanv2.user.User;
 import jakarta.persistence.*;
@@ -58,7 +58,7 @@ public class Resume {
     // orphanRemoval = true -> 부모 엔티티와 관계가 끊어진 자식 요소는 삭제됨
     // cascade = CascadeType.ALL -> 부모 엔티티를 수정하면 자식 요소도 수정됨
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ResumeTechStack> resumeTechStacks = new ArrayList<>();
+    private List<TechStack> resumeTechStacks = new ArrayList<>();
 
     @Builder
     public Resume(Integer id, String title, String summary, String gender, String careerLevel, String education, String birthdate, String major, String graduationType, String phone, String portfolioUrl, String enrollmentDate, String graduationDate, Boolean isDefault, Timestamp createdAt, User user, SalaryRange salaryRange, JobGroup jobGroup) {
@@ -82,7 +82,7 @@ public class Resume {
         this.jobGroup = jobGroup;
     }
 
-    public void update(ResumeRequest.UpdateDTO requestDTO, List<ResumeTechStack> resumeTechStacks) {
+    public void update(ResumeRequest.UpdateDTO requestDTO, List<TechStack> resumeTechStacks) {
         this.title = requestDTO.getTitle();
         this.summary = requestDTO.getSummary();
         this.portfolioUrl = requestDTO.getPortfolioUrl();
@@ -100,7 +100,7 @@ public class Resume {
         this.jobGroup = JobGroup.builder().id(requestDTO.getJobGroupId()).build();
         this.resumeTechStacks.clear();
 
-        for (ResumeTechStack resumeTechStack : resumeTechStacks) {
+        for (TechStack resumeTechStack : resumeTechStacks) {
             this.resumeTechStacks.add(resumeTechStack);
         }
     }

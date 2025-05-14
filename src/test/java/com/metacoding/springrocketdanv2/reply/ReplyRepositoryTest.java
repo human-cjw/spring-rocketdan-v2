@@ -9,4 +9,5 @@ import org.springframework.context.annotation.Import;
 public class ReplyRepositoryTest {
     @Autowired
     private ReplyRepository replyRepository;
+
 }

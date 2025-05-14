@@ -1,7 +1,7 @@
 package com.metacoding.springrocketdanv2.job;
 
 import com.metacoding.springrocketdanv2.company.Company;
-import com.metacoding.springrocketdanv2.jobTechStack.JobTechStack;
+import com.metacoding.springrocketdanv2.job.techstack.TechStack;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import com.metacoding.springrocketdanv2.workfield.WorkField;
@@ -58,7 +58,7 @@ public class Job {
     // orphanRemoval = true -> 부모 엔티티와 관계가 끊어진 자식 요소는 삭제됨
     // cascade = CascadeType.ALL -> 부모 엔티티를 수정하면 자식 요소도 수정됨
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<JobTechStack> jobTechStacks = new ArrayList<>();
+    private List<TechStack> jobTechStacks = new ArrayList<>();
 
     @Builder
     public Job(Integer id, String title, String description, String location, String employmentType, String deadline, String status, String careerLevel, Timestamp createdAt, Timestamp updatedAt, Company company, SalaryRange salaryRange, WorkField workField, JobGroup jobGroup) {
@@ -89,7 +89,7 @@ public class Job {
             SalaryRange salaryRange,
             WorkField workField,
             JobGroup jobGroup,
-            List<JobTechStack> jobTechStacks
+            List<TechStack> jobTechStacks
     ) {
         this.title = title;
         this.description = description;
@@ -103,7 +103,7 @@ public class Job {
         this.jobGroup = jobGroup;
         this.jobTechStacks.clear();
 
-        for (JobTechStack jobTechStack : jobTechStacks) {
+        for (TechStack jobTechStack : jobTechStacks) {
             this.jobTechStacks.add(jobTechStack);
         }
     }
