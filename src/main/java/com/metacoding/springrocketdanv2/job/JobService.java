@@ -5,18 +5,18 @@ import com.metacoding.springrocketdanv2.jobBookmark.JobBookmark;
 import com.metacoding.springrocketdanv2.jobBookmark.JobBookmarkRepository;
 import com.metacoding.springrocketdanv2.jobTechStack.JobTechStack;
 import com.metacoding.springrocketdanv2.jobTechStack.JobTechStackResponse;
-import com.metacoding.springrocketdanv2.jobgroup.Jobgroup;
-import com.metacoding.springrocketdanv2.jobgroup.JobgroupRepository;
-import com.metacoding.springrocketdanv2.jobgroup.JobgroupResponse;
-import com.metacoding.springrocketdanv2.salaryrange.Salaryrange;
-import com.metacoding.springrocketdanv2.salaryrange.SalaryrangeRepository;
-import com.metacoding.springrocketdanv2.salaryrange.SalaryrangeResponse;
-import com.metacoding.springrocketdanv2.techstack.Techstack;
-import com.metacoding.springrocketdanv2.techstack.TechstackRepository;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroupRepository;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeRepository;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
+import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import com.metacoding.springrocketdanv2.user.UserResponse;
-import com.metacoding.springrocketdanv2.workfield.Workfield;
-import com.metacoding.springrocketdanv2.workfield.WorkfieldRepository;
-import com.metacoding.springrocketdanv2.workfield.WorkfieldResponse;
+import com.metacoding.springrocketdanv2.workfield.WorkField;
+import com.metacoding.springrocketdanv2.workfield.WorkFieldRepository;
+import com.metacoding.springrocketdanv2.workfield.WorkFieldResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,10 +28,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobService {
     private final JobRepository jobRepository;
-    private final TechstackRepository techStackRepository;
-    private final WorkfieldRepository workFieldRepository;
-    private final SalaryrangeRepository salaryRangeRepository;
-    private final JobgroupRepository jobGroupRepository;
+    private final TechStackRepository techStackRepository;
+    private final WorkFieldRepository workFieldRepository;
+    private final SalaryRangeRepository salaryRangeRepository;
+    private final JobGroupRepository jobGroupRepository;
     private final JobBookmarkRepository jobBookmarkRepository;
 
     public List<JobResponse.DTO> 글목록보기() {
@@ -56,9 +56,9 @@ public class JobService {
         if (job == null) throw new RuntimeException(jobId + "번 공고가 없습니다.");
 
         // 기본 DTO 구성
-        Salaryrange salaryRange = job.getSalaryRange();
-        SalaryrangeResponse.SalaryRangeDTO salaryRangeDTO = (salaryRange != null)
-                ? new SalaryrangeResponse.SalaryRangeDTO(salaryRange.getMinSalary(), salaryRange.getMaxSalary())
+        SalaryRange salaryRange = job.getSalaryRange();
+        SalaryRangeResponse.SalaryRangeDTO salaryRangeDTO = (salaryRange != null)
+                ? new SalaryRangeResponse.SalaryRangeDTO(salaryRange.getMinSalary(), salaryRange.getMaxSalary())
                 : null;
 
         JobResponse.DetailDTO dto = new JobResponse.DetailDTO(
@@ -89,15 +89,15 @@ public class JobService {
     }
 
     public JobResponse.JobSaveDTO 등록보기() {
-        List<Techstack> techstacks = techStackRepository.findAll();
-        List<Workfield> workFields = workFieldRepository.findAll();
-        List<Salaryrange> salaryranges = salaryRangeRepository.findAll();
-        List<Jobgroup> jobgroups = jobGroupRepository.findAll();
+        List<TechStack> techStacks = techStackRepository.findAll();
+        List<WorkField> workFields = workFieldRepository.findAll();
+        List<SalaryRange> salaryRanges = salaryRangeRepository.findAll();
+        List<JobGroup> jobGroups = jobGroupRepository.findAll();
         return new JobResponse.JobSaveDTO(
-                techstacks,
+                techStacks,
                 workFields,
-                salaryranges,
-                jobgroups
+                salaryRanges,
+                jobGroups
         );
     }
 
@@ -109,10 +109,10 @@ public class JobService {
 
 
     public JobResponse.JobUpdateDTO 수정보기(Integer jobId) {
-        List<Techstack> techstacks = techStackRepository.findAll();
-        List<Workfield> workFields = workFieldRepository.findAll();
-        List<Salaryrange> salaryranges = salaryRangeRepository.findAll();
-        List<Jobgroup> jobgroups = jobGroupRepository.findAll();
+        List<TechStack> techStacks = techStackRepository.findAll();
+        List<WorkField> workFields = workFieldRepository.findAll();
+        List<SalaryRange> salaryRanges = salaryRangeRepository.findAll();
+        List<JobGroup> jobGroups = jobGroupRepository.findAll();
         Job job = jobRepository.findByIdJoinJobTechStackJoinTechStack(jobId);
 
         // 선택된 상태를 표시하기 위한 List
@@ -139,7 +139,7 @@ public class JobService {
 
         // 선택된 상태를 표시하기 위한 List
         List<JobTechStackResponse.JobTechStackUpdateDTO> jobTechStackUpdateDTOs = new ArrayList<>();
-        for (Techstack techStack : techstacks) {
+        for (TechStack techStack : techStacks) {
             jobTechStackUpdateDTOs.add(
                     new JobTechStackResponse.JobTechStackUpdateDTO(
                             techStack.getId(),
@@ -150,10 +150,10 @@ public class JobService {
         }
 
         // 선택된 상태를 표시하기 위한 List
-        List<WorkfieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs = new ArrayList<>();
-        for (Workfield workField : workFields) {
+        List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs = new ArrayList<>();
+        for (WorkField workField : workFields) {
             workFieldUpdateDTOs.add(
-                    new WorkfieldResponse.WorkFieldUpdateDTO(
+                    new WorkFieldResponse.WorkFieldUpdateDTO(
                             workField.getId(),
                             workField.getName(),
                             job.getWorkField().getId().equals(workField.getId())
@@ -162,10 +162,10 @@ public class JobService {
         }
 
         // 선택된 상태를 표시하기 위한 List
-        List<SalaryrangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs = new ArrayList<>();
-        for (Salaryrange salaryRange : salaryranges) {
+        List<SalaryRangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs = new ArrayList<>();
+        for (SalaryRange salaryRange : salaryRanges) {
             salaryRangeUpdateDTOs.add(
-                    new SalaryrangeResponse.SalaryRangeUpdateDTO(
+                    new SalaryRangeResponse.SalaryRangeUpdateDTO(
                             salaryRange.getId(),
                             salaryRange.getLabel(),
                             job.getSalaryRange().getId().equals(salaryRange.getId())
@@ -174,10 +174,10 @@ public class JobService {
         }
 
         // 선택된 상태를 표시하기 위한 List
-        List<JobgroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs = new ArrayList<>();
-        for (Jobgroup jobGroup : jobgroups) {
+        List<JobGroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs = new ArrayList<>();
+        for (JobGroup jobGroup : jobGroups) {
             jobGroupUpdateDTOs.add(
-                    new JobgroupResponse.JobGroupUpdateDTO(
+                    new JobGroupResponse.JobGroupUpdateDTO(
                             jobGroup.getId(),
                             jobGroup.getName(),
                             job.getJobGroup().getId().equals(jobGroup.getId())
@@ -211,13 +211,13 @@ public class JobService {
         if (jobPS == null) {
             throw new ExceptionApi400("잘못된 요청입니다");
         }
-        Salaryrange salaryRange = Salaryrange.builder().id(reqDTO.getSalaryRangeId()).build();
-        Workfield workField = Workfield.builder().id(reqDTO.getWorkFieldId()).build();
-        Jobgroup jobGroup = Jobgroup.builder().id(reqDTO.getJobGroupId()).build();
+        SalaryRange salaryRange = SalaryRange.builder().id(reqDTO.getSalaryRangeId()).build();
+        WorkField workField = WorkField.builder().id(reqDTO.getWorkFieldId()).build();
+        JobGroup jobGroup = JobGroup.builder().id(reqDTO.getJobGroupId()).build();
 
         List<JobTechStack> jobTechStacks = new ArrayList<>();
         for (Integer techStackId : reqDTO.getTechStackIds()) {
-            Techstack techStack = Techstack.builder().id(techStackId).build();
+            TechStack techStack = TechStack.builder().id(techStackId).build();
             jobTechStacks.add(
                     JobTechStack.builder()
                             .job(jobPS)

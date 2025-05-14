@@ -1,9 +1,9 @@
 package com.metacoding.springrocketdanv2.resume;
 
-import com.metacoding.springrocketdanv2.jobgroup.Jobgroup;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.resumeTechStack.ResumeTechStack;
-import com.metacoding.springrocketdanv2.salaryrange.Salaryrange;
-import com.metacoding.springrocketdanv2.techstack.Techstack;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.user.User;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -262,8 +262,8 @@ public class ResumeRequest {
                     .graduationDate(graduationDate)
                     .careerLevel(careerLevel)
                     .isDefault(isDefault)
-                    .salaryRange(Salaryrange.builder().id(salaryRangeId).build())
-                    .jobGroup(Jobgroup.builder().id(jobGroupId).build())
+                    .salaryRange(SalaryRange.builder().id(salaryRangeId).build())
+                    .jobGroup(JobGroup.builder().id(jobGroupId).build())
                     .build();
 
             resume.getResumeTechStacks().clear();
@@ -271,7 +271,7 @@ public class ResumeRequest {
                 resume.getResumeTechStacks().add(
                         ResumeTechStack.builder()
                                 .resume(resume)
-                                .techStack(Techstack.builder()
+                                .techStack(TechStack.builder()
                                         .id(techStackId)
                                         .build()
                                 ).build()

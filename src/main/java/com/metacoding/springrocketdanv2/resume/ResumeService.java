@@ -7,19 +7,19 @@ import com.metacoding.springrocketdanv2.career.Career;
 import com.metacoding.springrocketdanv2.career.CareerRepository;
 import com.metacoding.springrocketdanv2.certification.Certification;
 import com.metacoding.springrocketdanv2.certification.CertificationRepository;
-import com.metacoding.springrocketdanv2.jobgroup.Jobgroup;
-import com.metacoding.springrocketdanv2.jobgroup.JobgroupRepository;
-import com.metacoding.springrocketdanv2.jobgroup.JobgroupResponse;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroupRepository;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
 import com.metacoding.springrocketdanv2.resumeBookmark.ResumeBookmark;
 import com.metacoding.springrocketdanv2.resumeBookmark.ResumeBookmarkRepository;
 import com.metacoding.springrocketdanv2.resumeTechStack.ResumeTechStack;
 import com.metacoding.springrocketdanv2.resumeTechStack.ResumeTechStackRepository;
 import com.metacoding.springrocketdanv2.resumeTechStack.ResumeTechStackResponse;
-import com.metacoding.springrocketdanv2.salaryrange.Salaryrange;
-import com.metacoding.springrocketdanv2.salaryrange.SalaryrangeRepository;
-import com.metacoding.springrocketdanv2.salaryrange.SalaryrangeResponse;
-import com.metacoding.springrocketdanv2.techstack.Techstack;
-import com.metacoding.springrocketdanv2.techstack.TechstackRepository;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeRepository;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
+import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +35,9 @@ public class ResumeService {
     private final CertificationRepository certificationRepository;
     private final ResumeTechStackRepository resumeTechStackRepository;
     private final CareerRepository careerRepository;
-    private final TechstackRepository techStackRepository;
-    private final SalaryrangeRepository salaryRangeRepository;
-    private final JobgroupRepository jobGroupRepository;
+    private final TechStackRepository techStackRepository;
+    private final SalaryRangeRepository salaryRangeRepository;
+    private final JobGroupRepository jobGroupRepository;
     private final ApplicationRepository applicationRepository;
     private final ResumeBookmarkRepository resumeBookmarkRepository;
 
@@ -47,14 +47,14 @@ public class ResumeService {
         List<Certification> certifications = certificationRepository.findCertificationsByResumeId(resumeId);
         List<ResumeTechStack> resumeTechStackList = resumeTechStackRepository.findAllByResumeId(resumeId);
         List<Career> careers = careerRepository.findCareersByResumeId(resumeId);
-        List<Techstack> techstacks = techStackRepository.findAll();
+        List<TechStack> techStacks = techStackRepository.findAll();
         List<Integer> resumeTechStackIds = new ArrayList<>();
         for (ResumeTechStack rts : resumeTechStackList) {
             resumeTechStackIds.add(rts.getTechStack().getId());
         }
 
         List<ResumeTechStackResponse.ResumeTechStackResponseDTO> resumeTechStackResponseDTOS = new ArrayList<>();
-        for (Techstack techStack : techstacks) {
+        for (TechStack techStack : techStacks) {
             resumeTechStackResponseDTOS.add(new ResumeTechStackResponse.ResumeTechStackResponseDTO(
                     techStack.getId(),
                     techStack.getName(),
@@ -63,9 +63,9 @@ public class ResumeService {
 
         // ResumeTechStack -> TechStack 변환
 
-        List<Techstack> resumeTechstacks = new ArrayList<>();
+        List<TechStack> resumeTechStacks = new ArrayList<>();
         for (ResumeTechStack rts : resumeTechStackList) {
-            resumeTechstacks.add(rts.getTechStack());
+            resumeTechStacks.add(rts.getTechStack());
         }
 
         List<ResumeResponse.GraduationTypeDTO> graduationTypeDTOs = List.of(
@@ -88,7 +88,7 @@ public class ResumeService {
         return new ResumeResponse.DetailDTO(
                 resume,
                 certifications,
-                resumeTechstacks,
+                resumeTechStacks,
                 resume.getUser().getEmail(),
                 resume.getUser().getUsername(),
                 careers,
@@ -102,21 +102,21 @@ public class ResumeService {
 
 
     public ResumeResponse.UpdateDTO 이력서수정보기(Integer resumeId) {
-        List<Salaryrange> salaryranges = salaryRangeRepository.findAll();
-        List<Jobgroup> jobgroups = jobGroupRepository.findAll();
+        List<SalaryRange> salaryRanges = salaryRangeRepository.findAll();
+        List<JobGroup> jobGroups = jobGroupRepository.findAll();
         Resume resume = resumeRepository.findById(resumeId);
         List<Certification> certifications = certificationRepository.findCertificationsByResumeId(resumeId);
         List<ResumeTechStack> resumeTechStackList = resumeTechStackRepository.findAllByResumeId(resumeId);
         List<Career> careers = careerRepository.findCareersByResumeId(resumeId);
 
-        List<Techstack> techstacks = techStackRepository.findAll();
+        List<TechStack> techStacks = techStackRepository.findAll();
         List<Integer> resumeTechStackIds = new ArrayList<>();
         for (ResumeTechStack rts : resumeTechStackList) {
             resumeTechStackIds.add(rts.getTechStack().getId());
         }
 
         List<ResumeTechStackResponse.ResumeTechStackResponseDTO> resumeTechStackResponseDTOS = new ArrayList<>();
-        for (Techstack techStack : techstacks) {
+        for (TechStack techStack : techStacks) {
             resumeTechStackResponseDTOS.add(new ResumeTechStackResponse.ResumeTechStackResponseDTO(
                     techStack.getId(),
                     techStack.getName(),
@@ -125,9 +125,9 @@ public class ResumeService {
 
         // ResumeTechStack -> TechStack 변환
 
-        List<Techstack> resumeTechstacks = new ArrayList<>();
+        List<TechStack> resumeTechStacks = new ArrayList<>();
         for (ResumeTechStack rts : resumeTechStackList) {
-            resumeTechstacks.add(rts.getTechStack());
+            resumeTechStacks.add(rts.getTechStack());
         }
 
         List<ResumeResponse.GraduationTypeDTO> graduationTypeDTOs = List.of(
@@ -147,10 +147,10 @@ public class ResumeService {
                 new ResumeResponse.GenderTypeDTO("여", "여".equals(resume.getGender()))
         );
 
-        List<SalaryrangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs = new ArrayList<>();
-        for (Salaryrange salaryRange : salaryranges) {
+        List<SalaryRangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs = new ArrayList<>();
+        for (SalaryRange salaryRange : salaryRanges) {
             salaryRangeUpdateDTOs.add(
-                    new SalaryrangeResponse.SalaryRangeUpdateDTO(
+                    new SalaryRangeResponse.SalaryRangeUpdateDTO(
                             salaryRange.getId(),
                             salaryRange.getLabel(),
                             resume.getSalaryRange().getId().equals(salaryRange.getId())
@@ -158,10 +158,10 @@ public class ResumeService {
             );
         }
 
-        List<JobgroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs = new ArrayList<>();
-        for (Jobgroup jobGroup : jobgroups) {
+        List<JobGroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs = new ArrayList<>();
+        for (JobGroup jobGroup : jobGroups) {
             jobGroupUpdateDTOs.add(
-                    new JobgroupResponse.JobGroupUpdateDTO(
+                    new JobGroupResponse.JobGroupUpdateDTO(
                             jobGroup.getId(),
                             jobGroup.getName(),
                             resume.getJobGroup().getId().equals(jobGroup.getId())
@@ -172,7 +172,7 @@ public class ResumeService {
         return new ResumeResponse.UpdateDTO(
                 resume,
                 certifications,
-                resumeTechstacks,
+                resumeTechStacks,
                 resume.getUser().getEmail(),
                 resume.getUser().getUsername(),
                 careers,
@@ -207,7 +207,7 @@ public class ResumeService {
 
         List<ResumeTechStack> resumeTechStacks = new ArrayList<>();
         for (Integer techStackId : requestDTO.getTechStackIds()) {
-            Techstack techStack = Techstack.builder().id(techStackId).build();
+            TechStack techStack = TechStack.builder().id(techStackId).build();
             resumeTechStacks.add(
                     ResumeTechStack.builder()
                             .resume(resumePS)
@@ -300,11 +300,11 @@ public class ResumeService {
     }
 
     public ResumeResponse.SaveDTO 이력서등록보기() {
-        List<Techstack> techstacks = techStackRepository.findAll();
-        List<Salaryrange> salaryranges = salaryRangeRepository.findAll();
-        List<Jobgroup> jobgroups = jobGroupRepository.findAll();
+        List<TechStack> techStacks = techStackRepository.findAll();
+        List<SalaryRange> salaryRanges = salaryRangeRepository.findAll();
+        List<JobGroup> jobGroups = jobGroupRepository.findAll();
 
-        return new ResumeResponse.SaveDTO(techstacks, salaryranges, jobgroups);
+        return new ResumeResponse.SaveDTO(techStacks, salaryRanges, jobGroups);
     }
 
     @Transactional

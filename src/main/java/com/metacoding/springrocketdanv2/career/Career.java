@@ -1,6 +1,6 @@
 package com.metacoding.springrocketdanv2.career;
 
-import com.metacoding.springrocketdanv2.jobgroup.Jobgroup;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.resume.Resume;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -33,7 +33,7 @@ public class Career {
     private Resume resume;
 
     @Builder
-    public Career(Integer id, String companyName, String startDate, String endDate, Timestamp createdAt, Jobgroup jobGroup, Resume resume) {
+    public Career(Integer id, String companyName, String startDate, String endDate, Timestamp createdAt, JobGroup jobGroup, Resume resume) {
         this.id = id;
         this.companyName = companyName;
         this.startDate = startDate;

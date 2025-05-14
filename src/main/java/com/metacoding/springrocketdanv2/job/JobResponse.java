@@ -2,14 +2,14 @@ package com.metacoding.springrocketdanv2.job;
 
 import com.metacoding.springrocketdanv2.jobTechStack.JobTechStack;
 import com.metacoding.springrocketdanv2.jobTechStack.JobTechStackResponse;
-import com.metacoding.springrocketdanv2.jobgroup.Jobgroup;
-import com.metacoding.springrocketdanv2.jobgroup.JobgroupResponse;
-import com.metacoding.springrocketdanv2.salaryrange.Salaryrange;
-import com.metacoding.springrocketdanv2.salaryrange.SalaryrangeResponse;
-import com.metacoding.springrocketdanv2.techstack.Techstack;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.user.UserResponse;
-import com.metacoding.springrocketdanv2.workfield.Workfield;
-import com.metacoding.springrocketdanv2.workfield.WorkfieldResponse;
+import com.metacoding.springrocketdanv2.workfield.WorkField;
+import com.metacoding.springrocketdanv2.workfield.WorkFieldResponse;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -51,7 +51,7 @@ public class JobResponse {
         public DetailDTO(String title, String deadline, String careerLevel,
                          Timestamp createdAt, String description, String location,
                          String employmentType, String workField, String nameKr,
-                         Salaryrange salaryRange, Integer companyId, Integer jobId,
+                         SalaryRange salaryRange, Integer companyId, Integer jobId,
                          String contactManager, String companyPhone, List<JobTechStack> jobTechStacks, UserResponse.SessionUserDTO sessionUserDTO) {
             this.title = title;
             this.deadline = deadline;
@@ -85,7 +85,7 @@ public class JobResponse {
             private String minSalary;
             private String maxSalary;
 
-            public SalaryRangeDTO(Salaryrange salaryRange) {
+            public SalaryRangeDTO(SalaryRange salaryRange) {
                 this.label = salaryRange.getLabel();
                 this.minSalary = salaryRange.getMinSalary().toString();
                 this.maxSalary = salaryRange.getMaxSalary().toString();
@@ -95,21 +95,21 @@ public class JobResponse {
 
     @Data
     public static class JobSaveDTO {
-        private List<Techstack> techstacks;
-        private List<Workfield> workFields;
-        private List<Salaryrange> salaryranges;
-        private List<Jobgroup> jobgroups;
+        private List<TechStack> techStacks;
+        private List<WorkField> workFields;
+        private List<SalaryRange> salaryRanges;
+        private List<JobGroup> jobGroups;
 
         public JobSaveDTO(
-                List<Techstack> techstacks,
-                List<Workfield> workFields,
-                List<Salaryrange> salaryranges,
-                List<Jobgroup> jobgroups
+                List<TechStack> techStacks,
+                List<WorkField> workFields,
+                List<SalaryRange> salaryRanges,
+                List<JobGroup> jobGroups
         ) {
-            this.techstacks = techstacks;
+            this.techStacks = techStacks;
             this.workFields = workFields;
-            this.salaryranges = salaryranges;
-            this.jobgroups = jobgroups;
+            this.salaryRanges = salaryRanges;
+            this.jobGroups = jobGroups;
         }
     }
 
@@ -125,9 +125,9 @@ public class JobResponse {
         private List<CareerLevel> careerLevels;
         private List<EmploymentType> employmentTypes;
         private List<JobTechStackResponse.JobTechStackUpdateDTO> jobTechStackUpdateDTOs;
-        private List<WorkfieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs;
-        private List<SalaryrangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs;
-        private List<JobgroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs;
+        private List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs;
+        private List<SalaryRangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs;
+        private List<JobGroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs;
 
         public JobUpdateDTO(
                 Integer id,
@@ -139,9 +139,9 @@ public class JobResponse {
                 List<CareerLevel> careerLevels,
                 List<EmploymentType> employmentTypes,
                 List<JobTechStackResponse.JobTechStackUpdateDTO> jobTechStackUpdateDTOs,
-                List<WorkfieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs,
-                List<SalaryrangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs,
-                List<JobgroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs
+                List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs,
+                List<SalaryRangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs,
+                List<JobGroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs
         ) {
             this.id = id;
             this.title = title;
