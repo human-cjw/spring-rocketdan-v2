@@ -19,7 +19,7 @@ import java.util.List;
 public class JobController {
     private final JobService jobService;
     private final HttpSession session;
-    private final JobBookmarkService jobBookmarkService;
+//    private final JobBookmarkService jobBookmarkService;
 
     @GetMapping("/")
     public String list(Model models, JobResponse.DTO dto) {
@@ -62,8 +62,8 @@ public class JobController {
     @GetMapping("/job/{jobId}/update-form")
     public String updateForm(@PathVariable("jobId") Integer jobId,
                              HttpServletRequest request) {
-        JobResponse.JobUpdateDTO respDTO = jobService.수정보기(jobId);
-        request.setAttribute("model", respDTO);
+//        JobResponse.JobUpdateDTO respDTO = jobService.수정보기(jobId);
+//        request.setAttribute("model", respDTO);
         return "job/update-form";
     }
 

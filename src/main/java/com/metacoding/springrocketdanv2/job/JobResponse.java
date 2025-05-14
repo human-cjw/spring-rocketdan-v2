@@ -9,7 +9,6 @@ import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
 import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.user.UserResponse;
 import com.metacoding.springrocketdanv2.workfield.WorkField;
-import com.metacoding.springrocketdanv2.workfield.WorkFieldResponse;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -125,7 +124,7 @@ public class JobResponse {
         private List<CareerLevel> careerLevels;
         private List<EmploymentType> employmentTypes;
         private List<JobTechStackResponse.JobTechStackUpdateDTO> jobTechStackUpdateDTOs;
-        private List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs;
+        //        private List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs;
         private List<SalaryRangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs;
         private List<JobGroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs;
 
@@ -139,7 +138,7 @@ public class JobResponse {
                 List<CareerLevel> careerLevels,
                 List<EmploymentType> employmentTypes,
                 List<JobTechStackResponse.JobTechStackUpdateDTO> jobTechStackUpdateDTOs,
-                List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs,
+//                List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs,
                 List<SalaryRangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs,
                 List<JobGroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs
         ) {
@@ -152,7 +151,7 @@ public class JobResponse {
             this.careerLevels = careerLevels;
             this.employmentTypes = employmentTypes;
             this.jobTechStackUpdateDTOs = jobTechStackUpdateDTOs;
-            this.workFieldUpdateDTOs = workFieldUpdateDTOs;
+//            this.workFieldUpdateDTOs = workFieldUpdateDTOs;
             this.salaryRangeUpdateDTOs = salaryRangeUpdateDTOs;
             this.jobGroupUpdateDTOs = jobGroupUpdateDTOs;
         }

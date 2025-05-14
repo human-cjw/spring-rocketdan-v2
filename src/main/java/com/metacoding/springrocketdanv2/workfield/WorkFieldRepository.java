@@ -11,14 +11,6 @@ import java.util.List;
 public class WorkFieldRepository {
     private final EntityManager em;
 
-    public WorkField findByName(String name) {
-        String q = "SELECT w FROM WorkField w WHERE w.name = :name";
-        List<WorkField> result = em.createQuery(q, WorkField.class)
-                .setParameter("name", name)
-                .getResultList();
-        return result.isEmpty() ? null : result.get(0);
-    }
-
     public List<WorkField> findAll() {
         String q = "SELECT w FROM WorkField w";
         return em.createQuery(q, WorkField.class).getResultList();
