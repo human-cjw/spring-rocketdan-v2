@@ -2,10 +2,10 @@ package com.metacoding.springrocketdanv2.job;
 
 import com.metacoding.springrocketdanv2.company.Company;
 import com.metacoding.springrocketdanv2.jobTechStack.JobTechStack;
-import com.metacoding.springrocketdanv2.jobgroup.Jobgroup;
-import com.metacoding.springrocketdanv2.salaryrange.Salaryrange;
-import com.metacoding.springrocketdanv2.techstack.Techstack;
-import com.metacoding.springrocketdanv2.workfield.Workfield;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
+import com.metacoding.springrocketdanv2.workfield.WorkField;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -88,16 +88,16 @@ public class JobRequest {
                     .deadline(deadline)
                     .status(status)
                     .careerLevel(careerLevel)
-                    .jobGroup(Jobgroup.builder()
+                    .jobGroup(JobGroup.builder()
                             .id(jobGroupId)
                             .build())
                     .company(Company.builder()
                             .id(companyId)
                             .build())
-                    .workField(Workfield.builder()
+                    .workField(WorkField.builder()
                             .id(workFieldId)
                             .build())
-                    .salaryRange(Salaryrange.builder()
+                    .salaryRange(SalaryRange.builder()
                             .id(salaryRangeId)
                             .build())
                     .build();
@@ -106,7 +106,7 @@ public class JobRequest {
                 job.getJobTechStacks().add(
                         JobTechStack.builder()
                                 .job(job)
-                                .techStack(Techstack.builder()
+                                .techStack(TechStack.builder()
                                         .id(techStackId)
                                         .build()
                                 ).build()

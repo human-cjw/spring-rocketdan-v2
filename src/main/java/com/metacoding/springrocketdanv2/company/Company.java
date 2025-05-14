@@ -2,7 +2,7 @@ package com.metacoding.springrocketdanv2.company;
 
 import com.metacoding.springrocketdanv2.company.techstack.Techstack;
 import com.metacoding.springrocketdanv2.user.User;
-import com.metacoding.springrocketdanv2.workfield.Workfield;
+import com.metacoding.springrocketdanv2.workfield.WorkField;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class Company {
 
     // 업무분야 FK
     @ManyToOne(fetch = FetchType.LAZY)
-    private Workfield workField;
+    private WorkField workField;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.PERSIST)
     private List<Techstack> techStackList = new ArrayList<>();
@@ -59,7 +59,7 @@ public class Company {
                    String email, String phone, String address, String introduction,
                    String oneLineIntro, String homepageUrl, String logoImageUrl,
                    String infoImageUrl, String contactManager, String startDate,
-                   User user, Workfield workField) {
+                   User user, WorkField workField) {
         this.id = id;
         this.nameKr = nameKr;
         this.nameEn = nameEn;
@@ -79,7 +79,7 @@ public class Company {
         this.workField = workField;
     }
 
-    public void update(CompanyRequest.UpdateDTO dto, Workfield workField) {
+    public void update(CompanyRequest.UpdateDTO dto, WorkField workField) {
         this.nameKr = dto.getNameKr();
         this.nameEn = dto.getNameEn();
         this.oneLineIntro = dto.getOneLineIntro();

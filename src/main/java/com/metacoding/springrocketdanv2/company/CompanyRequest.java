@@ -1,9 +1,10 @@
 package com.metacoding.springrocketdanv2.company;
 
-import com.metacoding.springrocketdanv2.company.techstack.Techstack;
+import com.metacoding.springrocketdanv2.companyTechStack.CompanyTechStack;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.user.User;
 import com.metacoding.springrocketdanv2.user.UserResponse;
-import com.metacoding.springrocketdanv2.workfield.Workfield;
+import com.metacoding.springrocketdanv2.workfield.WorkField;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -68,7 +69,7 @@ public class CompanyRequest {
         @Size(max = 50, message = "업무 분야는 50자 이내여야 합니다.")
         private String workFieldName;
 
-        public Company toEntity(UserResponse.SessionUserDTO sessionUserDTO, Workfield workField, List<Techstack> techstackList) {
+        public Company toEntity(UserResponse.SessionUserDTO sessionUserDTO, WorkField workField, List<TechStack> techStackList) {
             Company company = Company.builder()
                     .nameKr(nameKr)
                     .nameEn(nameEn)
@@ -87,7 +88,7 @@ public class CompanyRequest {
                     .ceo(ceo)
                     .build();
 
-            for (Techstack techStack : techstackList) {
+            for (TechStack techStack : techStackList) {
                 CompanyTechStack cts = new CompanyTechStack(company, techStack);
                 company.getCompanyTechStackList().add(cts);
             }

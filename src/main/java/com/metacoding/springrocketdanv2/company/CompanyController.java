@@ -1,8 +1,8 @@
 package com.metacoding.springrocketdanv2.company;
 
-import com.metacoding.springrocketdanv2.techstack.TechstackRepository;
+import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import com.metacoding.springrocketdanv2.user.UserResponse;
-import com.metacoding.springrocketdanv2.workfield.WorkfieldRepository;
+import com.metacoding.springrocketdanv2.workfield.WorkFieldRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -20,8 +20,8 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyService companyService;
-    private final WorkfieldRepository workFieldRepository;
-    private final TechstackRepository techStackRepository;
+    private final WorkFieldRepository workFieldRepository;
+    private final TechStackRepository techStackRepository;
 
 
     @GetMapping("/company/{companyId}")

@@ -2,8 +2,8 @@ package com.metacoding.springrocketdanv2.company;
 
 import com.metacoding.springrocketdanv2.career.Career;
 import com.metacoding.springrocketdanv2.resume.Resume;
-import com.metacoding.springrocketdanv2.techstack.Techstack;
-import com.metacoding.springrocketdanv2.workfield.Workfield;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
+import com.metacoding.springrocketdanv2.workfield.WorkField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -18,12 +18,12 @@ public class CompanyResponse {
 
     @Data
     public static class CompanySaveFormDTO {
-        private List<Workfield> workFields;
-        private List<Techstack> techstacks;
+        private List<WorkField> workFields;
+        private List<TechStack> techStacks;
 
-        public CompanySaveFormDTO(List<Workfield> workFields, List<Techstack> techstacks) {
+        public CompanySaveFormDTO(List<WorkField> workFields, List<TechStack> techStacks) {
             this.workFields = workFields;
-            this.techstacks = techstacks;
+            this.techStacks = techStacks;
         }
     }
 
@@ -166,7 +166,7 @@ public class CompanyResponse {
         private List<String> careerCompanyNames; // 커리어 회사명 리스트
         private List<String> techStackNames; // 기술스택 이름 리스트
 
-        public CompanyacceptanceDTO(Resume resume, List<Career> careers, List<Techstack> techstacks, Integer applicationId) {
+        public CompanyacceptanceDTO(Resume resume, List<Career> careers, List<TechStack> techStacks, Integer applicationId) {
             this.applicationId = applicationId;
             this.username = resume.getUser().getUsername();
             this.resumeTitle = resume.getTitle();
@@ -186,8 +186,8 @@ public class CompanyResponse {
                     .collect(Collectors.toList());
 
             // 기술스택 이름만 뽑아오기
-            this.techStackNames = techstacks.stream()
-                    .map(Techstack::getName)
+            this.techStackNames = techStacks.stream()
+                    .map(TechStack::getName)
                     .collect(Collectors.toList());
         }
     }

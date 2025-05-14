@@ -12,12 +12,12 @@ import com.metacoding.springrocketdanv2.job.JobRepository;
 import com.metacoding.springrocketdanv2.resume.Resume;
 import com.metacoding.springrocketdanv2.resume.ResumeRepository;
 import com.metacoding.springrocketdanv2.resumeTechStack.ResumeTechStackRepository;
-import com.metacoding.springrocketdanv2.techstack.Techstack;
-import com.metacoding.springrocketdanv2.techstack.TechstackRepository;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
+import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import com.metacoding.springrocketdanv2.user.User;
 import com.metacoding.springrocketdanv2.user.UserResponse;
-import com.metacoding.springrocketdanv2.workfield.Workfield;
-import com.metacoding.springrocketdanv2.workfield.WorkfieldRepository;
+import com.metacoding.springrocketdanv2.workfield.WorkField;
+import com.metacoding.springrocketdanv2.workfield.WorkFieldRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +34,9 @@ import java.util.stream.Collectors;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
-    private final WorkfieldRepository workFieldRepository;
+    private final WorkFieldRepository workFieldRepository;
     private final CompanyTechStackRepository companyTechStackRepository;
-    private final TechstackRepository techStackRepository;
+    private final TechStackRepository techStackRepository;
     private final ApplicationRepository applicationRepository;
     private final ResumeRepository resumeRepository;
     private final JobRepository jobRepository;
@@ -51,9 +51,9 @@ public class CompanyService {
     public CompanyResponse.CompanyResponseDTO 기업상세(Integer companyId) {
         Company company = companyRepository.findById(companyId);
 
-        List<Techstack> techstacks = companyTechStackRepository.findByCompanyId(companyId);
-        List<String> techStackNames = techstacks.stream()
-                .map(Techstack::getName)
+        List<TechStack> techStacks = companyTechStackRepository.findByCompanyId(companyId);
+        List<String> techStackNames = techStacks.stream()
+                .map(TechStack::getName)
                 .collect(Collectors.toList());
 
         boolean isOwner = false;
@@ -89,24 +89,24 @@ public class CompanyService {
     @Transactional
     public UserResponse.SessionUserDTO 기업등록(CompanyRequest.CompanySaveDTO requestDTO, UserResponse.SessionUserDTO sessionUser) {
         // 산업분야 조회 또는 저장
-        Workfield workField = workFieldRepository.findByName(requestDTO.getWorkFieldName());
+        WorkField workField = workFieldRepository.findByName(requestDTO.getWorkFieldName());
         if (workField == null) {
-            workField = workFieldRepository.save(Workfield.builder().name(requestDTO.getWorkFieldName()).build());
+            workField = workFieldRepository.save(WorkField.builder().name(requestDTO.getWorkFieldName()).build());
         }
 
         // 기술 스택 조회
-        List<Techstack> techstackList = new ArrayList<>();
+        List<TechStack> techStackList = new ArrayList<>();
         if (requestDTO.getTechStack() != null) {
             for (String name : requestDTO.getTechStack()) {
-                Techstack ts = techStackRepository.findByName(name);
+                TechStack ts = techStackRepository.findByName(name);
                 if (ts != null) {
-                    techstackList.add(ts);
+                    techStackList.add(ts);
                 }
             }
         }
 
         // 회사 + 연관 기술 스택 cascade 저장
-        Company company = requestDTO.toEntity(sessionUser, workField, techstackList);
+        Company company = requestDTO.toEntity(sessionUser, workField, techStackList);
         Company companyPS = companyRepository.save(company);
 
         // 세션에서 넘어온 User가 아니라, DB에서 영속 객체를 다시 가져옴
@@ -135,25 +135,25 @@ public class CompanyService {
         Company company = companyRepository.findByUserId(userId);
 
         // 기술 스택 전체 조회 + 선택 여부 매핑
-        List<Techstack> allTechstacks = techStackRepository.findAll();
-        List<Techstack> selectedTechstacks = companyTechStackRepository.findByCompanyId(company.getId());
+        List<TechStack> allTechStacks = techStackRepository.findAll();
+        List<TechStack> selectedTechStacks = companyTechStackRepository.findByCompanyId(company.getId());
 
-        List<String> selectedNames = selectedTechstacks.stream()
-                .map(Techstack::getName)
+        List<String> selectedNames = selectedTechStacks.stream()
+                .map(TechStack::getName)
                 .collect(Collectors.toList());
 
         List<CompanyResponse.TechStackDTO> techStackDTOs = new ArrayList<>();
-        for (Techstack ts : allTechstacks) {
+        for (TechStack ts : allTechStacks) {
             boolean isChecked = selectedNames.contains(ts.getName());
             techStackDTOs.add(new CompanyResponse.TechStackDTO(ts.getName(), isChecked));
         }
 
         // 산업 분야 전체 조회 + 선택 여부 매핑
-        List<Workfield> allWorkFields = workFieldRepository.findAll();
+        List<WorkField> allWorkFields = workFieldRepository.findAll();
         Integer selectedWorkFieldId = company.getWorkField().getId();
 
         List<CompanyResponse.WorkFieldDTO> workFieldDTOs = new ArrayList<>();
-        for (Workfield wf : allWorkFields) {
+        for (WorkField wf : allWorkFields) {
             boolean isChecked = wf.getId().equals(selectedWorkFieldId);
             workFieldDTOs.add(new CompanyResponse.WorkFieldDTO(wf.getId(), wf.getName(), isChecked));
         }
@@ -189,7 +189,7 @@ public class CompanyService {
         }
 
         // workFieldId로 조회
-        Workfield workField = workFieldRepository.findById(dto.getWorkFieldId());
+        WorkField workField = workFieldRepository.findById(dto.getWorkFieldId());
         if (workField == null) {
             throw new RuntimeException("선택한 산업 분야가 존재하지 않습니다.");
         }
@@ -202,7 +202,7 @@ public class CompanyService {
         List<String> techStackList = dto.getTechStack();
         if (techStackList != null) {
             for (String techName : techStackList) {
-                Techstack techStack = techStackRepository.findByName(techName);
+                TechStack techStack = techStackRepository.findByName(techName);
                 if (techStack != null) {
                     CompanyTechStack cts = new CompanyTechStack(company, techStack);
                     companyTechStackRepository.save(cts);
@@ -274,10 +274,10 @@ public class CompanyService {
         List<Career> careers = careerRepository.findCareersByResumeId(resume.getId());
 
         // 5. 이력서 기술스택 조회
-        List<Techstack> techstacks = resumeTechStackRepository.findAllByResumeIdWithTechStack(resume.getId());
+        List<TechStack> techStacks = resumeTechStackRepository.findAllByResumeIdWithTechStack(resume.getId());
 
         // 6. DTO 조립
-        return new CompanyResponse.CompanyacceptanceDTO(resume, careers, techstacks, applicationId);
+        return new CompanyResponse.CompanyacceptanceDTO(resume, careers, techStacks, applicationId);
     }
 
     @Transactional
@@ -310,9 +310,9 @@ public class CompanyService {
     }
 
     public CompanyResponse.CompanySaveFormDTO 등록보기() {
-        List<Workfield> workFields = workFieldRepository.findAll();
-        List<Techstack> techstacks = techStackRepository.findAll();
+        List<WorkField> workFields = workFieldRepository.findAll();
+        List<TechStack> techStacks = techStackRepository.findAll();
 
-        return new CompanyResponse.CompanySaveFormDTO(workFields, techstacks);
+        return new CompanyResponse.CompanySaveFormDTO(workFields, techStacks);
     }
 }

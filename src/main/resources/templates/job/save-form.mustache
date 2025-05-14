@@ -35,20 +35,20 @@
                     <label for="jobGroup" class="form-label">지원직무</label>
                     <select class="form-select" id="jobGroup" name="jobGroupId">
                         <option value="">선택</option>
-                        {{#model.jobgroups}}
+                        {{#model.jobGroups}}
                             <option value="{{id}}">{{name}}</option>
-                        {{/model.jobgroups}}
+                        {{/model.jobGroups}}
                     </select>
                     <br/>
 
                     <label>기술 스택</label>
                     <div>
-                        {{#model.techstacks}}
+                        {{#model.techStacks}}
                             <label>
                                 <input type="checkbox" name="techStackIds" value="{{id}}"/>
                                 {{name}}
                             </label>
-                        {{/model.techstacks}}
+                        {{/model.techStacks}}
                     </div>
 
                     <label for="careerLevel" class="form-label">경력</label>
@@ -71,9 +71,9 @@
                     <label for="salaryRange" class="form-label">연봉</label>
                     <select class="form-select" id="salaryRange" name="salaryRangeId">
                         <option value="">선택</option>
-                        {{#model.salaryranges}}
+                        {{#model.salaryRanges}}
                             <option value="{{id}}">{{label}}</option>
-                        {{/model.salaryranges}}
+                        {{/model.salaryRanges}}
                     </select>
                     <br/>
 
