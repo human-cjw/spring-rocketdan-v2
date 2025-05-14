@@ -47,11 +47,11 @@ public class BoardService {
 
     @Transactional
     public BoardResponse.DTO 글수정하기(BoardRequest.UpdateDTO reqDTO, Integer boardId) {
-        Board boardOP = boardRepository.findById(boardId)
+        Board boardPS = boardRepository.findById(boardId)
                 .orElseThrow(() -> new ExceptionApi400("잘못된 요청입니다"));
 
-        boardOP.update(reqDTO.getTitle(), reqDTO.getContent());
-        return new BoardResponse.DTO(boardOP);
+        boardPS.update(reqDTO.getTitle(), reqDTO.getContent());
+        return new BoardResponse.DTO(boardPS);
     }
 
     @Transactional
