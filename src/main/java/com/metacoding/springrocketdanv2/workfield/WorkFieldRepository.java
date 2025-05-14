@@ -19,19 +19,9 @@ public class WorkFieldRepository {
         return result.isEmpty() ? null : result.get(0);
     }
 
-    public String findNameById(Integer id) {
-        return em.find(WorkField.class, id).getName();
-    }
-
     public List<WorkField> findAll() {
         String q = "SELECT w FROM WorkField w";
         return em.createQuery(q, WorkField.class).getResultList();
-    }
-
-
-    public WorkField save(WorkField workField) {
-        em.persist(workField);
-        return workField;
     }
 
     public WorkField findById(Integer id) {
