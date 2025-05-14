@@ -1,8 +1,7 @@
 package com.metacoding.springrocketdanv2.resume;
 
-
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
-import com.metacoding.springrocketdanv2.resumeTechStack.ResumeTechStack;
+import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStack;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import com.metacoding.springrocketdanv2.user.User;
 import jakarta.persistence.*;
@@ -83,7 +82,7 @@ public class Resume {
         this.jobGroup = jobGroup;
     }
 
-    public void update(ResumeRequest.UpdateDTO requestDTO, List<ResumeTechStack> resumeTechStacks) {
+    public void update(ResumeRequest.UpdateDTO requestDTO, List<ResumeTechStack> resumeResumeTechStacks) {
         this.title = requestDTO.getTitle();
         this.summary = requestDTO.getSummary();
         this.portfolioUrl = requestDTO.getPortfolioUrl();
@@ -101,7 +100,7 @@ public class Resume {
         this.jobGroup = JobGroup.builder().id(requestDTO.getJobGroupId()).build();
         this.resumeTechStacks.clear();
 
-        for (ResumeTechStack resumeTechStack : resumeTechStacks) {
+        for (ResumeTechStack resumeTechStack : resumeResumeTechStacks) {
             this.resumeTechStacks.add(resumeTechStack);
         }
     }

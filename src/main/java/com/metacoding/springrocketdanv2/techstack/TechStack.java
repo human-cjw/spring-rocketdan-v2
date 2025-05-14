@@ -1,12 +1,14 @@
 package com.metacoding.springrocketdanv2.techstack;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @ToString
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "tech_stack_tb")
 public class TechStack {

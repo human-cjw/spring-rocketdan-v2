@@ -1,7 +1,7 @@
 package com.metacoding.springrocketdanv2.job;
 
 import com.metacoding.springrocketdanv2.company.Company;
-import com.metacoding.springrocketdanv2.jobTechStack.JobTechStack;
+import com.metacoding.springrocketdanv2.job.techstack.JobTechStack;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import com.metacoding.springrocketdanv2.workfield.WorkField;
@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,6 +17,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+@ToString
 @NoArgsConstructor
 @Getter
 @Entity

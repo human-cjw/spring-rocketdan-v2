@@ -1,18 +1,20 @@
 package com.metacoding.springrocketdanv2.company;
 
-import com.metacoding.springrocketdanv2.companyTechStack.CompanyTechStack;
+import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStack;
 import com.metacoding.springrocketdanv2.user.User;
 import com.metacoding.springrocketdanv2.workfield.WorkField;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+@ToString
 @NoArgsConstructor
 @Getter
 @Entity
@@ -40,8 +42,7 @@ public class Company {
 
     @CreationTimestamp
     private Timestamp createdAt;
-
-
+    
     // 유저 fk
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true)

@@ -1,7 +1,5 @@
 package com.metacoding.springrocketdanv2.job;
 
-
-import com.metacoding.springrocketdanv2.jobBookmark.JobBookmarkService;
 import com.metacoding.springrocketdanv2.user.UserResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
