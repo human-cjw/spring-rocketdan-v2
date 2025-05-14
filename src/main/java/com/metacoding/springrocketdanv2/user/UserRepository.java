@@ -1,6 +1,6 @@
 package com.metacoding.springrocketdanv2.user;
 
-import com.metacoding.springrocketdanv2.jobBookmark.JobBookmark;
+import com.metacoding.springrocketdanv2.job.bookmark.JobBookmark;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;

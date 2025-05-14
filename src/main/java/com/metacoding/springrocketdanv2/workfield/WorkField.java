@@ -1,12 +1,14 @@
 package com.metacoding.springrocketdanv2.workfield;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @ToString
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "work_field_tb")
 public class WorkField {
