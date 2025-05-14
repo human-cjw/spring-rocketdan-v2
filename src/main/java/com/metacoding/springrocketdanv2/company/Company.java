@@ -1,6 +1,6 @@
 package com.metacoding.springrocketdanv2.company;
 
-import com.metacoding.springrocketdanv2.companyTechStack.CompanyTechStack;
+import com.metacoding.springrocketdanv2.company.techstack.Techstack;
 import com.metacoding.springrocketdanv2.user.User;
 import com.metacoding.springrocketdanv2.workfield.Workfield;
 import jakarta.persistence.*;
@@ -52,7 +52,7 @@ public class Company {
     private Workfield workField;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.PERSIST)
-    private List<CompanyTechStack> companyTechStackList = new ArrayList<>();
+    private List<Techstack> techStackList = new ArrayList<>();
 
     @Builder
     public Company(Integer id, String nameKr, String nameEn, String ceo, String businessNumber,

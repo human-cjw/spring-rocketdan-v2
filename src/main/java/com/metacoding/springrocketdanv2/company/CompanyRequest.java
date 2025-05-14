@@ -1,7 +1,6 @@
 package com.metacoding.springrocketdanv2.company;
 
-import com.metacoding.springrocketdanv2.companyTechStack.CompanyTechStack;
-import com.metacoding.springrocketdanv2.techstack.Techstack;
+import com.metacoding.springrocketdanv2.company.techstack.Techstack;
 import com.metacoding.springrocketdanv2.user.User;
 import com.metacoding.springrocketdanv2.user.UserResponse;
 import com.metacoding.springrocketdanv2.workfield.Workfield;

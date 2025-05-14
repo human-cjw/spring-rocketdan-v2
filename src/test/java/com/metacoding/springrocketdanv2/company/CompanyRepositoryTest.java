@@ -25,8 +25,13 @@ public class CompanyRepositoryTest {
 
     @Test
     public void findById_test() {
-        Integer id = 1;
-        Company company = companyRepository.findById(id);
+        // given
+        Integer companyId = 1;
+
+        // when
+        Company company = companyRepository.findById(companyId);
+
+        // then
         if (company == null) {
             System.out.println("company is null!");
         } else {

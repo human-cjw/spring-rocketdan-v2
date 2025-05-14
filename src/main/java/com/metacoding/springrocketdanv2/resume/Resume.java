@@ -2,7 +2,6 @@ package com.metacoding.springrocketdanv2.resume;
 
 
 import com.metacoding.springrocketdanv2.jobgroup.Jobgroup;
-import com.metacoding.springrocketdanv2.resumeTechStack.ResumeTechStack;
 import com.metacoding.springrocketdanv2.salaryrange.Salaryrange;
 import com.metacoding.springrocketdanv2.user.User;
 import jakarta.persistence.*;
