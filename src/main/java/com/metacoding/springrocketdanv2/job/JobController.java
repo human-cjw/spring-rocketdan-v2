@@ -1,6 +1,5 @@
 package com.metacoding.springrocketdanv2.job;
 
-import com.metacoding.springrocketdanv2.user.UserResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -19,7 +18,7 @@ import java.util.List;
 public class JobController {
     private final JobService jobService;
     private final HttpSession session;
-
+//    private final JobBookmarkService jobBookmarkService;
 
     @GetMapping("/")
     public String list(Model models, JobResponse.DTO dto) {
@@ -31,9 +30,9 @@ public class JobController {
 
     @GetMapping("/job/{jobId}")
     public String show(@PathVariable("jobId") Integer jobId, Model model, HttpSession session) {
-        UserResponse.SessionUserDTO sessionUserDTO = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
+//        UserResponse.SessionUserDTO sessionUserDTO = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
 
-        JobResponse.DetailDTO dto = jobService.글상세보기(jobId, sessionUserDTO);
+        JobResponse.DetailDTO dto = jobService.글상세보기(jobId, null);
         System.out.println(dto.isOwner());
 
         model.addAttribute("jobDetail", dto);
@@ -53,8 +52,8 @@ public class JobController {
 
     @PostMapping("/job/save")
     public String save(@Valid JobRequest.JobSaveDTO reqDTO, Errors errors) {
-        UserResponse.SessionUserDTO sessionUserDTO = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-        jobService.등록하기(reqDTO, sessionUserDTO.getCompanyId());
+//        UserResponse.SessionUserDTO sessionUserDTO = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
+        jobService.등록하기(reqDTO, null);
 
         return "redirect:/company/job";
     }
@@ -62,8 +61,8 @@ public class JobController {
     @GetMapping("/job/{jobId}/update-form")
     public String updateForm(@PathVariable("jobId") Integer jobId,
                              HttpServletRequest request) {
-        JobResponse.JobUpdateDTO respDTO = jobService.수정보기(jobId);
-        request.setAttribute("model", respDTO);
+//        JobResponse.JobUpdateDTO respDTO = jobService.수정보기(jobId);
+//        request.setAttribute("model", respDTO);
         return "job/update-form";
     }
 

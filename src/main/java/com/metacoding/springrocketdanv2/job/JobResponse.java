@@ -7,9 +7,7 @@ import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
 import com.metacoding.springrocketdanv2.techstack.TechStack;
-import com.metacoding.springrocketdanv2.user.UserResponse;
 import com.metacoding.springrocketdanv2.workfield.WorkField;
-import com.metacoding.springrocketdanv2.workfield.WorkFieldResponse;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -52,7 +50,7 @@ public class JobResponse {
                          Timestamp createdAt, String description, String location,
                          String employmentType, String workField, String nameKr,
                          SalaryRange salaryRange, Integer companyId, Integer jobId,
-                         String contactManager, String companyPhone, List<JobTechStack> jobTechStacks, UserResponse.SessionUserDTO sessionUserDTO) {
+                         String contactManager, String companyPhone, List<JobTechStack> jobTechStacks) {
             this.title = title;
             this.deadline = deadline;
             this.careerLevel = careerLevel;
@@ -67,9 +65,6 @@ public class JobResponse {
             this.jobId = jobId;
             this.contactManager = contactManager;
             this.companyPhone = companyPhone;
-            if (sessionUserDTO != null) {
-                this.isOwner = sessionUserDTO.getCompanyId() == null ? false : sessionUserDTO.getCompanyId().equals(companyId);
-            }
 
             for (JobTechStack jobTechStack : jobTechStacks) {
                 this.jobTechStacks.add(jobTechStack.getTechStack().getName());
@@ -125,7 +120,7 @@ public class JobResponse {
         private List<CareerLevel> careerLevels;
         private List<EmploymentType> employmentTypes;
         private List<JobTechStackResponse.JobTechStackUpdateDTO> jobTechStackUpdateDTOs;
-        private List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs;
+        //        private List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs;
         private List<SalaryRangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs;
         private List<JobGroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs;
 
@@ -139,7 +134,7 @@ public class JobResponse {
                 List<CareerLevel> careerLevels,
                 List<EmploymentType> employmentTypes,
                 List<JobTechStackResponse.JobTechStackUpdateDTO> jobTechStackUpdateDTOs,
-                List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs,
+//                List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs,
                 List<SalaryRangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs,
                 List<JobGroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs
         ) {
@@ -152,7 +147,7 @@ public class JobResponse {
             this.careerLevels = careerLevels;
             this.employmentTypes = employmentTypes;
             this.jobTechStackUpdateDTOs = jobTechStackUpdateDTOs;
-            this.workFieldUpdateDTOs = workFieldUpdateDTOs;
+//            this.workFieldUpdateDTOs = workFieldUpdateDTOs;
             this.salaryRangeUpdateDTOs = salaryRangeUpdateDTOs;
             this.jobGroupUpdateDTOs = jobGroupUpdateDTOs;
         }

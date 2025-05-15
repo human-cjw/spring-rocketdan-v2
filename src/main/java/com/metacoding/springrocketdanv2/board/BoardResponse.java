@@ -29,4 +29,13 @@ public class BoardResponse {
                     .toList();
         }
     }
+
+    @Data
+    public static class VerifyDTO {
+        private String message;
+
+        public VerifyDTO(String message) {
+            this.message = message;
+        }
+    }
 }

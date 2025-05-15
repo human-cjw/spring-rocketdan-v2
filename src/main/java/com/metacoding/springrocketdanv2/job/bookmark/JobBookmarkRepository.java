@@ -46,8 +46,11 @@ public class JobBookmarkRepository {
         return em.find(JobBookmark.class, id);
     }
 
-    public void deleteJobBookmarksByJobId(Integer jobId) {
-        String q = "DELETE FROM JobBookmark jb WHERE jb.job.id = :jobId";
-        em.createQuery(q).setParameter("jobId", jobId).executeUpdate();
+    public List<JobBookmark> findJobBookmarksByUserId(Integer userId) {
+        String q = "SELECT jb FROM JobBookmark jb " +
+                "WHERE jb.user.id = :userId";
+        return em.createQuery(q, JobBookmark.class)
+                .setParameter("userId", userId)
+                .getResultList();
     }
 }

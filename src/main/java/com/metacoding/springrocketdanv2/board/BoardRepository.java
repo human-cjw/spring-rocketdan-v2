@@ -30,9 +30,8 @@ public class BoardRepository {
     }
 
     public void deleteById(Integer id) {
-        Board board = em.find(Board.class, id);
-        if (board != null) {
-            em.remove(board);
-        }
+        em.createQuery("delete from Board b where b.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 }

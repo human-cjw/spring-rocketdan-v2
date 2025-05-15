@@ -23,8 +23,4 @@ public class WorkField {
         this.id = id;
         this.name = name;
     }
-
-    public WorkField(String name) {
-        this.name = name;
-    }
 }

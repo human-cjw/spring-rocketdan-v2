@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 public class BoardRequest {
-    
+
     @Data
     public static class SaveDTO {
 
@@ -24,6 +24,14 @@ public class BoardRequest {
                 message = "비밀번호는 영문과 숫자를 포함한 4자 이상 20자 이하입니다."
         )
         private String password;
+
+        public Board toEntity() {
+            return Board.builder()
+                    .title(title)
+                    .content(content)
+                    .password(password)
+                    .build();
+        }
     }
 
     @Data
@@ -36,5 +44,10 @@ public class BoardRequest {
         @NotBlank(message = "내용은 필수입니다.")
         @Size(min = 5, max = 1000, message = "내용은 5자 이상 1000자 이하로 입력해 주세요.")
         private String content;
+    }
+
+    @Data
+    public static class VerifyDTO {
+        private String password;
     }
 }

@@ -1,48 +1,49 @@
 package com.metacoding.springrocketdanv2.board;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
-@Controller
+@Slf4j
+@RestController
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
 
 
-    @PostMapping("/board/update/{id}")
-    public @ResponseBody Map<String, String> verifyPassword(@PathVariable Integer id,
-                                                            @RequestParam String password) {
-        return boardService.verifyPassword(id, password);
+    @GetMapping("/api/check-board-password/{boardId}")
+    public String verifyPassword(@PathVariable("boardId") Integer boardId,
+                                 BoardRequest.VerifyDTO reqDTO) {
+        BoardResponse.VerifyDTO respDTO = boardService.verifyPassword(boardId, reqDTO.getPassword());
+        log.debug("비밀번호 검증 결과: ", respDTO);
+        return null;
     }
 
-    @GetMapping("/board")
-    public String list(Model model) {
+    @GetMapping("/api/board")
+    public String list() {
         BoardResponse.ListDTO respDTO = boardService.글목록보기();
-        model.addAttribute("models", respDTO);
-        return "board/list2";
+        log.debug("글목록보기" + respDTO);
+        return null;
     }
 
-    @PostMapping("/board/save")
-    public String writeBoard(@ModelAttribute BoardRequest.SaveDTO board) {
-        boardService.글쓰기(board);
-        return "redirect:/board";
+    @PostMapping("/s/api/board")
+    public String writeBoard(BoardRequest.SaveDTO reqDTO) {
+        BoardResponse.DTO respDTO = boardService.글쓰기(reqDTO);
+        log.debug("글쓰기" + respDTO);
+        return null;
     }
 
-    @PostMapping("/board/{id}/update")
-    public String update(@PathVariable("id") Integer id, BoardRequest.UpdateDTO reqDTO) { // <- form 에서 boardId와 title, content 가져와야함
-        boardService.글수정하기(reqDTO, id);
-
-        return "redirect:/board";
+    @PutMapping("/s/api/board/{boardId}")
+    public String update(@PathVariable("boardId") Integer boardId, BoardRequest.UpdateDTO reqDTO) { // <- form 에서 boardId와 title, content 가져와야함
+        BoardResponse.DTO respDTO = boardService.글수정하기(reqDTO, boardId);
+        log.debug("글수정하기" + respDTO);
+        return null;
     }
 
-    @PostMapping("/board/delete")
-    public String delete(@RequestParam("id") Integer id) { // boardId를 가져와서 삭제
-        boardService.글삭제하기(id);
-        return "redirect:/board";
+    @DeleteMapping("/s/api/board/{boardId}")
+    public String delete(@PathVariable("boardId") Integer boardId) {
+        boardService.글삭제하기(boardId);
+        return null;
     }
 
 }

@@ -1,45 +1,29 @@
 package com.metacoding.springrocketdanv2.user;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final HttpSession session;
-
-    @GetMapping("/logout")
-    public String logout() {
-        session.invalidate();
-        return "redirect:/";
-    }
 
     @PostMapping("/login")
-    public String login(@Valid UserRequest.LoginDTO loginDTO, Errors errors) {
-        UserResponse.SessionUserDTO sessionUserDTO = userService.로그인(loginDTO);
-        session.setAttribute("sessionUser", sessionUserDTO);
+    public String login(@Valid UserRequest.LoginDTO reqDTO, Errors errors) {
+        UserResponse.TokenDTO respDTO = userService.로그인(reqDTO);
+        log.debug("로그인한 유저" + respDTO);
         return "redirect:/";
-    }
-
-    @GetMapping("/login-form")
-    public String loginForm() {
-        return "user/login-form";
     }
 
     @PostMapping("/join")
-    public String join(@Valid UserRequest.JoinDTO joinDTO, Errors errors) {
-        userService.회원가입(joinDTO);
+    public String join(@Valid UserRequest.JoinDTO reqDTO, Errors errors) {
+        UserResponse.DTO respDTO = userService.회원가입(reqDTO);
+        log.debug("회원가입한 유저" + respDTO);
         return "redirect:/login-form";
-    }
-
-    @GetMapping("/join-form")
-    public String joinform() {
-        return "user/join-form";
     }
 }
