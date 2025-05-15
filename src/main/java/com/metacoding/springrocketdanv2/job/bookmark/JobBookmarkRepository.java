@@ -45,4 +45,12 @@ public class JobBookmarkRepository {
     public JobBookmark findById(Integer id) {
         return em.find(JobBookmark.class, id);
     }
+
+    public List<JobBookmark> findJobBookmarksByUserId(Integer userId) {
+        String q = "SELECT jb FROM JobBookmark jb " +
+                "WHERE jb.user.id = :userId";
+        return em.createQuery(q, JobBookmark.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
 }
