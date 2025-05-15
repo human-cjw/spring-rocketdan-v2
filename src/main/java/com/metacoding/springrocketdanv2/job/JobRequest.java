@@ -17,7 +17,7 @@ import java.util.List;
 public class JobRequest {
 
     @Data
-    public static class JobSaveDTO {
+    public static class SaveDTO {
         @NotBlank(message = "제목은 필수입니다.")
         @Pattern(
                 regexp = "^.{2,30}$",
@@ -118,7 +118,7 @@ public class JobRequest {
     }
 
     @Data
-    public static class JobUpdateDTO {
+    public static class UpdateDTO {
 
         @NotBlank(message = "제목은 필수입니다.")
         @Pattern(

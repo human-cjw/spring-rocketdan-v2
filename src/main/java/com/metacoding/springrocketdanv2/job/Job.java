@@ -80,33 +80,20 @@ public class Job {
         this.jobGroup = jobGroup;
     }
 
-    public void update(
-            String title,
-            String description,
-            String location,
-            String employmentType,
-            String deadline,
-            String status,
-            String careerLevel,
-            SalaryRange salaryRange,
-            WorkField workField,
-            JobGroup jobGroup,
-            List<JobTechStack> jobTechStacks
-    ) {
-        this.title = title;
-        this.description = description;
-        this.location = location;
-        this.employmentType = employmentType;
-        this.deadline = deadline;
-        this.status = status;
-        this.careerLevel = careerLevel;
-        this.salaryRange = salaryRange;
-        this.workField = workField;
-        this.jobGroup = jobGroup;
+    public void update(JobRequest.UpdateDTO reqDTO) {
+        this.title = reqDTO.getTitle();
+        this.description = reqDTO.getDescription();
+        this.location = reqDTO.getLocation();
+        this.employmentType = reqDTO.getEmploymentType();
+        this.deadline = reqDTO.getDeadline();
+        this.status = reqDTO.getStatus();
+        this.careerLevel = reqDTO.getCareerLevel();
+        this.salaryRange = SalaryRange.builder().id(reqDTO.getSalaryRangeId()).build();
+        this.workField = WorkField.builder().id(reqDTO.getWorkFieldId()).build();
+        this.jobGroup = JobGroup.builder().id(reqDTO.getJobGroupId()).build();
         this.jobTechStacks.clear();
-
-        for (JobTechStack jobTechStack : jobTechStacks) {
-            this.jobTechStacks.add(jobTechStack);
+        for (Integer techStackId : reqDTO.getTechStackIds()) {
+            this.jobTechStacks.add(JobTechStack.builder().id(techStackId).job(this).build());
         }
     }
 }

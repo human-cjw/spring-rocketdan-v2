@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -18,19 +19,24 @@ public class JobRepository {
         return query.getResultList();
     }
 
-    public Job findById(Integer id) {
-        return em.find(Job.class, id);
+    public Optional<Job> findById(Integer jobId) {
+        return Optional.ofNullable(em.find(Job.class, jobId));
     }
 
-    public void save(Job job) {
+    public Job save(Job job) {
         em.persist(job);
+        return job;
     }
 
-    public Job findByIdJoinJobTechStackJoinTechStack(Integer jobId) {
-        String sql = "SELECT j FROM Job j JOIN FETCH j.jobTechStacks jts JOIN FETCH jts.techStack WHERE j.id = :jobId";
-        Query query = em.createQuery(sql, Job.class);  // createQuery를 사용해야 합니다.
-        query.setParameter("jobId", jobId);  // 파라미터 설정
-        return (Job) query.getSingleResult();
-    }
+    public Optional<Job> findByIdJoinJobTechStackJoinTechStack(Integer jobId) {
+        String sql = "SELECT j FROM Job j LEFT JOIN FETCH j.jobTechStacks jts LEFT JOIN FETCH jts.techStack WHERE j.id = :jobId";
+        Query query = em.createQuery(sql, Job.class);
+        query.setParameter("jobId", jobId);
 
+        try {
+            return Optional.ofNullable((Job) query.getSingleResult());
+        } catch (Exception e) {
+            return Optional.ofNullable(null);
+        }
+    }
 }

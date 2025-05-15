@@ -5,6 +5,17 @@ import lombok.Data;
 public class JobGroupResponse {
 
     @Data
+    public static class DTO {
+        private Integer id;
+        private String name;
+
+        public DTO(JobGroup jobGroup) {
+            this.id = jobGroup.getId();
+            this.name = jobGroup.getName();
+        }
+    }
+
+    @Data
     public static class JobGroupUpdateDTO {
         private Integer id;
         private String name;
