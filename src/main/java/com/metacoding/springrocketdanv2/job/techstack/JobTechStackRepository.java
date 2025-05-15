@@ -12,16 +12,10 @@ import java.util.List;
 public class JobTechStackRepository {
     private final EntityManager em;
 
-<<<<<<< HEAD
-    public void deleteJobTechStacksByJobId(Integer jobId) {
-        String q = "DELETE FROM JobTechStack jts WHERE jts.job.id = :jobId";
-        em.createQuery(q).setParameter("jobId", jobId).executeUpdate();
-=======
     public List<JobTechStack> findAllByJobIdJoinTechStack(Integer jobId) {
         Query query = em.createQuery("select jts from JobTechStack jts join fetch jts.techStack where jts.job.id = :jobId", JobTechStack.class);
         query.setParameter("jobId", jobId);
         return query.getResultList();
->>>>>>> 394ec2d307f4964d5175ebdd4385e69cab668ca9
     }
 }
 
