@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -12,22 +13,11 @@ public class TechStackRepository {
     private final EntityManager em;
 
     public List<TechStack> findAll() {
-        String q = "SELECT t FROM CompanyTechStack t";
+        String q = "SELECT t FROM TechStack t";
         return em.createQuery(q, TechStack.class).getResultList();
     }
 
-    public TechStack findById(Integer techStackId) {
-        return em.find(TechStack.class, techStackId);
-
-
-    }
-
-    public TechStack findByName(String name) {
-        String sql = "SELECT t FROM CompanyTechStack t WHERE t.name = :name";
-        List<TechStack> result = em.createQuery(sql, TechStack.class)
-                .setParameter("name", name)
-                .getResultList();
-        return result.isEmpty() ? null : result.get(0);
-
+    public Optional<TechStack> findById(Integer techStackId) {
+        return Optional.ofNullable(em.find(TechStack.class, techStackId));
     }
 }

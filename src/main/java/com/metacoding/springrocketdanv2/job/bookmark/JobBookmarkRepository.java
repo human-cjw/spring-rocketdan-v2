@@ -1,10 +1,12 @@
 package com.metacoding.springrocketdanv2.job.bookmark;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,14 +21,14 @@ public class JobBookmarkRepository {
         em.remove(bookmark);
     }
 
-    public JobBookmark findByUserIdAndJobId(Integer userId, Integer jobId) {
+    public Optional<JobBookmark> findByUserIdAndJobId(Integer userId, Integer jobId) {
         try {
-            return em.createQuery("SELECT jb FROM JobBookmark jb WHERE jb.user.id = :userId AND jb.job.id = :jobId", JobBookmark.class)
-                    .setParameter("userId", userId)
-                    .setParameter("jobId", jobId)
-                    .getSingleResult();
+            Query query = em.createQuery("SELECT jb FROM JobBookmark jb WHERE jb.user.id = :userId AND jb.job.id = :jobId", JobBookmark.class);
+            query.setParameter("userId", userId);
+            query.setParameter("jobId", jobId);
+            return Optional.of((JobBookmark) query.getSingleResult());
         } catch (Exception e) {
-            return null;
+            return Optional.ofNullable(null);
         }
     }
 

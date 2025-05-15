@@ -4,6 +4,21 @@ import lombok.Data;
 
 public class SalaryRangeResponse {
 
+    @Data
+    public static class DTO {
+        private Integer id;
+        private Integer minSalary;
+        private Integer maxSalary;
+        private String label;
+
+        public DTO(SalaryRange salaryRange) {
+            this.id = salaryRange.getId();
+            this.minSalary = salaryRange.getMinSalary();
+            this.maxSalary = salaryRange.getMaxSalary();
+            this.label = salaryRange.getLabel();
+        }
+    }
+
     public static class SalaryRangeDTO {
         private int minSalary;
         private int maxSalary;

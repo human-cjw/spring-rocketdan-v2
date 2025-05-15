@@ -1,31 +1,52 @@
 package com.metacoding.springrocketdanv2.job;
 
-import com.metacoding.springrocketdanv2.job.techstack.JobTechStack;
-import com.metacoding.springrocketdanv2.job.techstack.JobTechStackResponse;
-import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
+import com.metacoding.springrocketdanv2.company.Company;
+import com.metacoding.springrocketdanv2.job.bookmark.JobBookmark;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
-import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
+<<<<<<< HEAD
 import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.workfield.WorkField;
+=======
+import com.metacoding.springrocketdanv2.techstack.TechStackResponse;
+import com.metacoding.springrocketdanv2.user.User;
+import com.metacoding.springrocketdanv2.workfield.WorkFieldResponse;
+>>>>>>> 394ec2d307f4964d5175ebdd4385e69cab668ca9
 import lombok.Data;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class JobResponse {
 
     @Data
-    public static class DTO {
-        private int id;
-        private String title;
-        private String careerLevel;
-        private String nameKr;
+    public static class ListDTO {
+        private List<ItemDTO> jobs;
+
+        public ListDTO(List<Job> jobs) {
+            this.jobs = jobs.stream()
+                    .map(job -> new ItemDTO(job))
+                    .toList();
+        }
+
+        public class ItemDTO {
+            private Integer id;
+            private String title;
+            private String careerLevel;
+            private String nameKr;
+
+            public ItemDTO(Job job) {
+                this.id = job.getId();
+                this.title = job.getTitle();
+                this.careerLevel = job.getCareerLevel();
+                this.nameKr = job.getCompany().getNameKr();
+            }
+        }
     }
 
     @Data
     public static class DetailDTO {
+<<<<<<< HEAD
         private String title;
         private String deadline;
         private String careerLevel;
@@ -110,78 +131,105 @@ public class JobResponse {
 
     @Data
     public static class JobUpdateDTO {
+=======
+>>>>>>> 394ec2d307f4964d5175ebdd4385e69cab668ca9
         private Integer id;
         private String title;
         private String description;
         private String location;
+        private String employmentType;
         private String deadline;
         private String status;
+        private String careerLevel;
+        private String createdAt;
+        private String updatedAt;
+        private CompanyDTO company;
+        private SalaryRangeResponse.DTO salaryRange;
+        private WorkFieldResponse.DTO workField;
+        private JobGroupResponse.DTO jobGroup;
+        private List<TechStackResponse.DTO> techStacks;
+        private boolean isOwner;
+        private boolean isBookmarked;
 
-        private List<CareerLevel> careerLevels;
-        private List<EmploymentType> employmentTypes;
-        private List<JobTechStackResponse.JobTechStackUpdateDTO> jobTechStackUpdateDTOs;
-        //        private List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs;
-        private List<SalaryRangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs;
-        private List<JobGroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs;
-
-        public JobUpdateDTO(
-                Integer id,
-                String title,
-                String description,
-                String location,
-                String deadline,
-                String status,
-                List<CareerLevel> careerLevels,
-                List<EmploymentType> employmentTypes,
-                List<JobTechStackResponse.JobTechStackUpdateDTO> jobTechStackUpdateDTOs,
-//                List<WorkFieldResponse.WorkFieldUpdateDTO> workFieldUpdateDTOs,
-                List<SalaryRangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs,
-                List<JobGroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs
-        ) {
-            this.id = id;
-            this.title = title;
-            this.description = description;
-            this.location = location;
-            this.deadline = deadline;
-            this.status = status;
-            this.careerLevels = careerLevels;
-            this.employmentTypes = employmentTypes;
-            this.jobTechStackUpdateDTOs = jobTechStackUpdateDTOs;
-//            this.workFieldUpdateDTOs = workFieldUpdateDTOs;
-            this.salaryRangeUpdateDTOs = salaryRangeUpdateDTOs;
-            this.jobGroupUpdateDTOs = jobGroupUpdateDTOs;
+        public DetailDTO(Job job, User sessionUser, Optional<JobBookmark> jobBookmark) {
+            this.id = job.getId();
+            this.title = job.getTitle();
+            this.description = job.getDescription();
+            this.location = job.getLocation();
+            this.employmentType = job.getEmploymentType();
+            this.deadline = job.getDeadline();
+            this.status = job.getStatus();
+            this.careerLevel = job.getCareerLevel();
+            this.createdAt = job.getCreatedAt().toString().substring(0, 10);
+            this.updatedAt = job.getUpdatedAt() != null ? job.getUpdatedAt().toString().substring(0, 10) : null;
+            this.company = new CompanyDTO(job.getCompany());
+            this.salaryRange = new SalaryRangeResponse.DTO(job.getSalaryRange());
+            this.workField = new WorkFieldResponse.DTO(job.getWorkField());
+            this.jobGroup = new JobGroupResponse.DTO(job.getJobGroup());
+            this.techStacks = job.getJobTechStacks().stream()
+                    .map(jobTechStack -> new TechStackResponse.DTO(jobTechStack.getTechStack()))
+                    .toList();
+            this.isOwner = sessionUser.getCompanyId().equals(job.getCompany().getId());
+            this.isBookmarked = jobBookmark.isPresent();
         }
 
-        public static class EmploymentType {
-            private String value;
+        class CompanyDTO {
+            private Integer id;
             private String name;
-            private boolean isSelected;
+            private String phone;
+            private String contactManager;
 
-            public EmploymentType(
-                    String value,
-                    String name,
-                    boolean isSelected
-            ) {
-                this.value = value;
-                this.name = name;
-                this.isSelected = isSelected;
+            public CompanyDTO(Company company) {
+                this.id = company.getId();
+                this.name = company.getNameKr();
+                this.phone = company.getPhone();
+                this.contactManager = company.getContactManager();
             }
         }
+    }
 
-        public static class CareerLevel {
-            private String value;
-            private String name;
-            private boolean isSelected;
+    @Data
+    public static class SaveDTO {
+        private String title;
+        private String description;
+        private String location;
+        private String employmentType;
+        private String deadline;
+        private String status;
+        private String jobGroup;
+        private String workField;
+        private String careerLevel;
+        private String salaryRange;
+        private List<String> techStacks;
 
-            public CareerLevel(
-                    String value,
-                    String name,
-                    boolean isSelected
-            ) {
-                this.value = value;
-                this.name = name;
-                this.isSelected = isSelected;
-            }
+        public SaveDTO(Job job) {
+            this.title = job.getTitle();
+            this.description = job.getDescription();
+            this.location = job.getLocation();
+            this.employmentType = job.getEmploymentType();
+            this.deadline = job.getDeadline();
+            this.status = job.getStatus();
+            this.jobGroup = job.getJobGroup().getName();
+            this.workField = job.getWorkField().getName();
+            this.careerLevel = job.getCareerLevel();
+            this.salaryRange = job.getSalaryRange().getLabel();
+            this.techStacks = job.getJobTechStacks().stream()
+                    .map(jobTechStack -> jobTechStack.getTechStack().getName())
+                    .toList();
         }
+    }
+
+    public static class UpdateDTO {
+        private String title;
+        private String description;
+        private String location;
+        private String employmentType;
+        private String deadline;
+        private String status;
+        private String jobGroup;
+        private String workField;
+        private String careerLevel;
+        private String salaryRange;
+        private List<String> techStacks;
     }
 }
