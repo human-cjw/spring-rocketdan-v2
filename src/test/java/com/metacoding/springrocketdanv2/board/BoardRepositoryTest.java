@@ -47,7 +47,8 @@ public class BoardRepositoryTest {
         Integer boardId = 1;
 
         // when
-        Board board = boardRepository.findById(boardId);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시글입니다"));
 
         // then
         if (board == null) {
@@ -66,7 +67,8 @@ public class BoardRepositoryTest {
         boardRepository.deleteById(boardId);
 
         // then
-        Board board = boardRepository.findById(boardId);
+        Board board = boardRepository.findById(boardId).orElse(null);
+
         if (board == null) {
             System.out.println("삭제 성공: board is null");
         } else {

@@ -37,12 +37,13 @@ public class BoardService {
     }
 
     @Transactional
-    public void 글쓰기(BoardRequest.SaveDTO boardDTO) {
+    public BoardResponse.DTO 글쓰기(BoardRequest.SaveDTO boardDTO) {
         // BoardRequest.saveDTO 객체를 Board 엔티티 객체로 변환
-        Board board = new Board(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getPassword());
+        Board boardPS = new Board(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getPassword());
 
         // Board 객체를 레파지토리로 저장
-        boardRepository.save(board);
+        boardRepository.save(boardPS);
+        return new BoardResponse.DTO(boardPS);
     }
 
     @Transactional
