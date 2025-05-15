@@ -5,76 +5,54 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
 
-    public Map<String, String> verifyPassword(Integer id, String password) {
-        Board board = boardRepository.findById(id);
+    public BoardResponse.VerifyDTO verifyPassword(Integer boardId, String password) {
+        Board boardPS = boardRepository.findById(boardId)
+                .orElseThrow(() -> new ExceptionApi400("존재하지 않는 글입니다"));
 
-        Map<String, String> response = new HashMap<>();
-        if (board.getPassword().equals(password)) {
-            response.put("status", "success");
-            response.put("message", "비밀번호가 맞습니다.");
+        if (boardPS.getPassword().equals(password)) {
+            return new BoardResponse.VerifyDTO(true, "비밀번호가 맞습니다.");
         } else {
-            response.put("status", "error");
-            response.put("message", "비밀번호가 틀렸습니다.");
+            return new BoardResponse.VerifyDTO(false, "비밀번호가 틀렸습니다.");
         }
-        return response;
     }
-
-
-    public List<BoardResponse.BoardDTO> 글목록보기() {
-        List<Board> boardList = boardRepository.findAll();
-        List<BoardResponse.BoardDTO> dtoList = new ArrayList<>();
-
-        for (Board board : boardList) {
-            BoardResponse.BoardDTO dto = new BoardResponse.BoardDTO(board);
-            dtoList.add(dto);
-        }
-
-        return dtoList;
+    
+    public BoardResponse.ListDTO 글목록보기() {
+        List<Board> boardsPS = boardRepository.findAll();
+        BoardResponse.ListDTO respDTO = new BoardResponse.ListDTO(boardsPS);
+        return respDTO;
     }
 
     @Transactional
-    public void 글쓰기(BoardRequest.SaveDTO boardDTO) {
+    public BoardResponse.DTO 글쓰기(BoardRequest.SaveDTO reqDTO) {
         // BoardRequest.saveDTO 객체를 Board 엔티티 객체로 변환
-        Board board = new Board(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getPassword());
+        Board board = reqDTO.toEntity();
 
         // Board 객체를 레파지토리로 저장
-        boardRepository.save(board);
+        Board BoardPS = boardRepository.save(board);
+        return new BoardResponse.DTO(BoardPS);
     }
 
     @Transactional
-    public boolean 글수정하기(BoardRequest.UpdateDTO reqDTO, Integer boardId) {
-        Board boardPS = boardRepository.findById(boardId);
-        if (boardPS == null) {
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
+    public BoardResponse.DTO 글수정하기(BoardRequest.UpdateDTO reqDTO, Integer boardId) {
+        Board boardPS = boardRepository.findById(boardId)
+                .orElseThrow(() -> new ExceptionApi400("잘못된 요청입니다"));
 
         boardPS.update(reqDTO.getTitle(), reqDTO.getContent());
-        return true;
+        return new BoardResponse.DTO(boardPS);
     }
-
-
-    public Board 업데이트글보기(int id) {
-        Board boardPS = boardRepository.findById(id);
-        return boardPS;
-    }
-
 
     @Transactional
-    public void 글삭제하기(Integer id) {
-        Board boardPS = boardRepository.findById(id);
-        if (boardPS == null) {
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
-        boardRepository.deleteById(id);
+    public void 글삭제하기(Integer boardId) {
+        boardRepository.findById(boardId)
+                .orElseThrow(() -> new ExceptionApi400("존재하지 않는 글입니다"));
+
+        boardRepository.deleteById(boardId);
     }
 }

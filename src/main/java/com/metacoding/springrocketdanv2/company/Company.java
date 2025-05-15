@@ -42,7 +42,7 @@ public class Company {
 
     @CreationTimestamp
     private Timestamp createdAt;
-    
+
     // 유저 fk
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true)
@@ -53,7 +53,7 @@ public class Company {
     private WorkField workField;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.PERSIST)
-    private List<CompanyTechStack> companyTechStackList = new ArrayList<>();
+    private List<CompanyTechStack> techStackList = new ArrayList<>();
 
     @Builder
     public Company(Integer id, String nameKr, String nameEn, String ceo, String businessNumber,

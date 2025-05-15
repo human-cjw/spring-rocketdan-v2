@@ -33,4 +33,15 @@ public class JobRepository {
         return (Job) query.getSingleResult();
     }
 
+    public List<Job> findJobsByCompanyId(Integer companyId) {
+        String q = "SELECT j FROM Job j JOIN FETCH j.jobGroup WHERE j.company.id = :companyId ORDER BY j.createdAt DESC";
+        return em.createQuery(q, Job.class)
+                .setParameter("companyId", companyId)
+                .getResultList();
+    }
+
+    public void deleteJobById(Integer jobId) {
+        String q = "DELETE FROM Job j WHERE j.id = :jobId";
+        em.createQuery(q).setParameter("jobId", jobId).executeUpdate();
+    }
 }

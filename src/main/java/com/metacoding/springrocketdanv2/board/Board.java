@@ -1,6 +1,7 @@
 package com.metacoding.springrocketdanv2.board;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -25,16 +26,18 @@ public class Board {
     @CreationTimestamp
     private Timestamp createdAt;
 
-    public Board(String title, String content, String password) {
+    @Builder
+    public Board(Integer id, String title, String content, String password, Timestamp createdAt) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.password = password;
+        this.createdAt = createdAt;
     }
 
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
-
     }
 
 

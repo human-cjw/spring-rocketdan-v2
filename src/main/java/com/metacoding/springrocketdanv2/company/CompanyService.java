@@ -9,6 +9,8 @@ import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStack;
 import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStackRepository;
 import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.job.JobRepository;
+import com.metacoding.springrocketdanv2.job.bookmark.JobBookmarkRepository;
+import com.metacoding.springrocketdanv2.job.techstack.JobTechStackRepository;
 import com.metacoding.springrocketdanv2.resume.Resume;
 import com.metacoding.springrocketdanv2.resume.ResumeRepository;
 import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackRepository;
@@ -42,6 +44,8 @@ public class CompanyService {
     private final JobRepository jobRepository;
     private final CareerRepository careerRepository;
     private final ResumeTechStackRepository resumeTechStackRepository;
+    private final JobBookmarkRepository jobBookmarkRepository;
+    private final JobTechStackRepository jobTechStackRepository;
 
 
     @PersistenceContext
@@ -212,7 +216,7 @@ public class CompanyService {
     }
 
     public List<CompanyResponse.CompanyManageJobDTO> 기업공고관리(Integer companyId) {
-        List<Job> jobList = companyRepository.findJobsByCompanyId(companyId);
+        List<Job> jobList = jobRepository.findJobsByCompanyId(companyId);
 
         List<CompanyResponse.CompanyManageJobDTO> companyManageJobDTOS = new ArrayList<>();
         for (Job job : jobList) {
@@ -297,16 +301,16 @@ public class CompanyService {
         if (jobPS == null) {
             throw new ExceptionApi400("잘못된 요청입니다");
         }
-        companyRepository.deleteApplicationsByJobId(jobId);
+        applicationRepository.deleteApplicationsByJobId(jobId);
 
         // 2. 북마크 삭제
-        companyRepository.deleteJobBookmarksByJobId(jobId);
+        jobBookmarkRepository.deleteJobBookmarksByJobId(jobId);
 
         // 3. 기술스택 연결 삭제
-        companyRepository.deleteJobTechStacksByJobId(jobId);
+        jobTechStackRepository.deleteJobTechStacksByJobId(jobId);
 
         // 4. 최종 공고 삭제
-        companyRepository.deleteJobById(jobId);
+        jobRepository.deleteJobById(jobId);
     }
 
     public CompanyResponse.CompanySaveFormDTO 등록보기() {

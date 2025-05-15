@@ -103,7 +103,7 @@ public class JobService {
         Job job = reqDTO.toEntity(companyId);
         jobRepository.save(job);
     }
-    
+
     @Transactional
     public void 수정하기(Integer jobId, JobRequest.JobUpdateDTO reqDTO) {
         Job jobPS = jobRepository.findByIdJoinJobTechStackJoinTechStack(jobId);

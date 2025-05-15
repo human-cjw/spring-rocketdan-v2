@@ -90,7 +90,7 @@ public class CompanyRequest {
 
             for (TechStack techStack : techStackList) {
                 CompanyTechStack cts = new CompanyTechStack(company, techStack);
-                company.getCompanyTechStackList().add(cts);
+                company.getTechStackList().add(cts);
             }
 
             return company;
