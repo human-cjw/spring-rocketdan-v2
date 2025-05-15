@@ -6,14 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class ResumeRepository {
     private final EntityManager em;
 
-    public Resume findById(Integer id) {
-        return em.find(Resume.class, id);
+    public Optional<Resume> findById(Integer resumeId) {
+        return Optional.ofNullable(em.find(Resume.class, resumeId));
     }
 
 
@@ -41,15 +42,15 @@ public class ResumeRepository {
         return query.getResultList();
     }
 
-    public Resume findByUserIdAndIsDefaultTrue(Integer userId) {
+    public Optional<Resume> findByUserIdAndIsDefaultTrue(Integer userId) {
         String sql = "SELECT res FROM Resume res WHERE res.user.id = :userId AND res.isDefault = true";
         Query query = em.createQuery(sql, Resume.class);
         query.setParameter("userId", userId);
 
         try {
-            return (Resume) query.getSingleResult();
+            return Optional.of((Resume) query.getSingleResult());
         } catch (Exception e) {
-            return null;
+            return Optional.ofNullable(null);
         }
     }
 

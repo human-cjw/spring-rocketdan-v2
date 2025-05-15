@@ -1,6 +1,7 @@
 package com.metacoding.springrocketdanv2.resume;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
+import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi404;
 import com.metacoding.springrocketdanv2.application.Application;
 import com.metacoding.springrocketdanv2.application.ApplicationRepository;
 import com.metacoding.springrocketdanv2.career.Career;
@@ -43,60 +44,16 @@ public class ResumeService {
 
 
     public ResumeResponse.DetailDTO 이력서상세보기(Integer resumeId, Integer userId) {
-        Resume resume = resumeRepository.findById(resumeId);
-        List<Certification> certifications = certificationRepository.findCertificationsByResumeId(resumeId);
-        List<ResumeTechStack> resumeTechStackList = resumeTechStackRepository.findAllByResumeId(resumeId);
-        List<Career> careers = careerRepository.findCareersByResumeId(resumeId);
-        List<TechStack> techStacks = techStackRepository.findAll();
-        List<Integer> resumeTechStackIds = new ArrayList<>();
-        for (ResumeTechStack rts : resumeTechStackList) {
-            resumeTechStackIds.add(rts.getTechStack().getId());
-        }
+        Resume resumePS = resumeRepository.findById(resumeId)
+                .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다."));
 
-        List<ResumeTechStackResponse.ResumeTechStackResponseDTO> resumeTechStackResponseDTOS = new ArrayList<>();
-        for (TechStack techStack : techStacks) {
-            resumeTechStackResponseDTOS.add(new ResumeTechStackResponse.ResumeTechStackResponseDTO(
-                    techStack.getId(),
-                    techStack.getName(),
-                    resumeTechStackIds.contains(techStack.getId())));
-        }
-
-        // ResumeTechStack -> TechStack 변환
-
-        List<TechStack> resumeTechStacks = new ArrayList<>();
-        for (ResumeTechStack rts : resumeTechStackList) {
-            resumeTechStacks.add(rts.getTechStack());
-        }
-
-        List<ResumeResponse.GraduationTypeDTO> graduationTypeDTOs = List.of(
-                new ResumeResponse.GraduationTypeDTO("졸업", "졸업".equals(resume.getGraduationType())),
-                new ResumeResponse.GraduationTypeDTO("재학", "재학".equals(resume.getGraduationType())),
-                new ResumeResponse.GraduationTypeDTO("휴학", "휴학".equals(resume.getGraduationType())),
-                new ResumeResponse.GraduationTypeDTO("졸업예정", "졸업예정".equals(resume.getGraduationType()))
-        );
-
-        List<ResumeResponse.CareerLevelTypeDTO> careerLevelTypeDTOs = List.of(
-                new ResumeResponse.CareerLevelTypeDTO("신입", "신입".equals(resume.getCareerLevel())),
-                new ResumeResponse.CareerLevelTypeDTO("경력", "경력".equals(resume.getCareerLevel()))
-        );
-
-        List<ResumeResponse.GenderTypeDTO> genderTypeDTOs = List.of(
-                new ResumeResponse.GenderTypeDTO("남", "남".equals(resume.getGender())),
-                new ResumeResponse.GenderTypeDTO("여", "여".equals(resume.getGender()))
-        );
+        List<Certification> certificationsPS = certificationRepository.findCertificationsByResumeId(resumeId);
+        List<Career> careersPS = careerRepository.findCareersByResumeId(resumeId);
 
         return new ResumeResponse.DetailDTO(
-                resume,
-                certifications,
-                resumeTechStacks,
-                resume.getUser().getEmail(),
-                resume.getUser().getUsername(),
-                careers,
-                resumeTechStackResponseDTOS,
-                graduationTypeDTOs,
-                careerLevelTypeDTOs,
-                genderTypeDTOs,
-                userId
+                resumePS,
+                certificationsPS,
+                careersPS
         );
     }
 
@@ -104,7 +61,9 @@ public class ResumeService {
     public ResumeResponse.UpdateDTO 이력서수정보기(Integer resumeId) {
         List<SalaryRange> salaryRanges = salaryRangeRepository.findAll();
         List<JobGroup> jobGroups = jobGroupRepository.findAll();
-        Resume resume = resumeRepository.findById(resumeId);
+        Resume resumePS = resumeRepository.findById(resumeId)
+                .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다."));
+        
         List<Certification> certifications = certificationRepository.findCertificationsByResumeId(resumeId);
         List<ResumeTechStack> resumeTechStackList = resumeTechStackRepository.findAllByResumeId(resumeId);
         List<Career> careers = careerRepository.findCareersByResumeId(resumeId);

@@ -8,6 +8,7 @@ import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackResponse
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
 import com.metacoding.springrocketdanv2.techstack.TechStack;
+import com.metacoding.springrocketdanv2.user.User;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -89,59 +90,89 @@ public class ResumeResponse {
         private Integer id;
         private String title;
         private String summary;
+        private String gender;
+        private String careerLevel;
         private String education;
         private String birthdate;
         private String major;
         private String graduationType;
         private String phone;
         private String portfolioUrl;
-        private String createdAt;
         private String enrollmentDate;
         private String graduationDate;
         private boolean isDefault;
-        private String name;
-        private String email;
-        private List<Certification> certifications; // 다른 테이블에서 가지고 온 것
-        private List<TechStack> resumeTechStacks; // 다른 테이블에서 가지고 온 것 (유저가 갖고 있는거)
-        private List<Career> careers;
-        private List<ResumeTechStackResponse.ResumeTechStackResponseDTO> techStacks;
-        private List<GraduationTypeDTO> graduationTypes;
-        private List<CareerLevelTypeDTO> careerLevelTypes;
-        private List<GenderTypeDTO> genderTypes;
-        private boolean isOwner;
-        private String salaryRangeLabel;
-        private String jobGroupName;
+        private String createdAt;
+        private UserDTO user;
+        private String salaryRange;
+        private String jobGroup;
+        private List<CertificationDTO> certifications;
+        private List<CareerDTO> careers;
+        private List<String> techStacks;
 
-        public DetailDTO(Resume resume, List<Certification> certifications, List<TechStack> resumeTechStacks,
-                         String email, String name, List<Career> careers,
-                         List<ResumeTechStackResponse.ResumeTechStackResponseDTO> techStacks,
-                         List<GraduationTypeDTO> graduationTypes, List<CareerLevelTypeDTO> careerLevelTypes,
-                         List<GenderTypeDTO> genderTypes, Integer userId) {
+        public DetailDTO(Resume resume, List<Certification> certifications, List<Career> careers) {
             this.id = resume.getId();
             this.title = resume.getTitle();
             this.summary = resume.getSummary();
+            this.gender = resume.getGender();
+            this.careerLevel = resume.getCareerLevel();
             this.education = resume.getEducation();
             this.birthdate = resume.getBirthdate();
             this.major = resume.getMajor();
-            this.enrollmentDate = resume.getEnrollmentDate();
-            this.graduationDate = resume.getGraduationDate();
             this.graduationType = resume.getGraduationType();
             this.phone = resume.getPhone();
             this.portfolioUrl = resume.getPortfolioUrl();
-            this.createdAt = resume.getCreatedAt().toString().substring(0, 10);
-            this.certifications = certifications;
-            this.resumeTechStacks = resumeTechStacks;
-            this.email = email;
-            this.name = name;
-            this.careers = careers;
-            this.techStacks = techStacks;
-            this.graduationTypes = graduationTypes;
-            this.careerLevelTypes = careerLevelTypes;
-            this.genderTypes = genderTypes;
+            this.enrollmentDate = resume.getEnrollmentDate();
+            this.graduationDate = resume.getGraduationDate();
             this.isDefault = resume.getIsDefault();
-            this.isOwner = resume.getUser().getId().equals(userId);
-            this.salaryRangeLabel = resume.getSalaryRange().getLabel();
-            this.jobGroupName = resume.getJobGroup().getName();
+            this.createdAt = resume.getCreatedAt().toString().substring(0, 10);
+            this.user = new UserDTO(resume.getUser());
+            this.salaryRange = resume.getSalaryRange().getLabel();
+            this.jobGroup = resume.getJobGroup().getName();
+            this.certifications = certifications.stream()
+                    .map(certification -> new CertificationDTO(certification))
+                    .toList();
+            this.careers = careers.stream()
+                    .map(career -> new CareerDTO(career))
+                    .toList();
+            this.techStacks = resume.getResumeTechStacks().stream()
+                    .map(resumeTechStack -> resumeTechStack.getTechStack().getName())
+                    .toList();
+        }
+
+        class UserDTO {
+            private Integer id;
+            private String username;
+            private String email;
+
+            public UserDTO(User user) {
+                this.id = user.getId();
+                this.username = user.getUsername();
+                this.email = user.getEmail();
+            }
+        }
+
+        class CertificationDTO {
+            private String name; // 자격증이름
+            private String issuer; // 자격증발급기관
+            private String issuedDate; // 자격증발급일자
+
+            public CertificationDTO(Certification certification) {
+                this.name = certification.getName();
+                this.issuer = certification.getIssuer();
+                this.issuedDate = certification.getIssuedDate();
+            }
+        }
+
+        class CareerDTO {
+            private String companyName; // 이전에 다녔던 기업이름
+            private String startDate; // 시작일
+            private String endDate; // 종료일
+
+            public CareerDTO(Career career) {
+                this.companyName = career.getCompanyName();
+                this.startDate = career.getStartDate();
+                this.endDate = career.getEndDate();
+            }
         }
     }
 
