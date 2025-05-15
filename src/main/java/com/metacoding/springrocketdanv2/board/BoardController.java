@@ -26,21 +26,21 @@ public class BoardController {
         return null;
     }
 
-    @PostMapping("/s/api/board")
+    @PostMapping("/api/board")
     public String writeBoard(BoardRequest.SaveDTO reqDTO) {
         BoardResponse.DTO respDTO = boardService.글쓰기(reqDTO);
         log.debug("글쓰기" + respDTO);
         return null;
     }
 
-    @PutMapping("/s/api/board/{boardId}")
+    @PutMapping("/api/board/{boardId}")
     public String update(@PathVariable("boardId") Integer boardId, BoardRequest.UpdateDTO reqDTO) { // <- form 에서 boardId와 title, content 가져와야함
         BoardResponse.DTO respDTO = boardService.글수정하기(reqDTO, boardId);
         log.debug("글수정하기" + respDTO);
         return null;
     }
 
-    @DeleteMapping("/s/api/board/{boardId}")
+    @DeleteMapping("/api/board/{boardId}")
     public String delete(@PathVariable("boardId") Integer boardId) {
         boardService.글삭제하기(boardId);
         return null;

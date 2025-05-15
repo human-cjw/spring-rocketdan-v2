@@ -32,9 +32,11 @@ public class BoardResponse {
 
     @Data
     public static class VerifyDTO {
+        private boolean success;
         private String message;
 
-        public VerifyDTO(String message) {
+        public VerifyDTO(boolean success, String message) {
+            this.success = success;
             this.message = message;
         }
     }

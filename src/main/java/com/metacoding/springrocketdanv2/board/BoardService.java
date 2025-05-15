@@ -17,12 +17,12 @@ public class BoardService {
                 .orElseThrow(() -> new ExceptionApi400("존재하지 않는 글입니다"));
 
         if (boardPS.getPassword().equals(password)) {
-            return new BoardResponse.VerifyDTO("비밀번호가 맞습니다.");
+            return new BoardResponse.VerifyDTO(true, "비밀번호가 맞습니다.");
         } else {
-            return new BoardResponse.VerifyDTO("비밀번호가 틀렸습니다.");
+            return new BoardResponse.VerifyDTO(false, "비밀번호가 틀렸습니다.");
         }
     }
-
+    
     public BoardResponse.ListDTO 글목록보기() {
         List<Board> boardsPS = boardRepository.findAll();
         BoardResponse.ListDTO respDTO = new BoardResponse.ListDTO(boardsPS);
