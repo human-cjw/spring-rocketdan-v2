@@ -19,4 +19,9 @@ public class WorkFieldRepository {
     public WorkField findById(Integer id) {
         return em.find(WorkField.class, id);
     }
+
+    public WorkField save(WorkField workField) {
+        em.persist(workField);
+        return workField;
+    }
 }

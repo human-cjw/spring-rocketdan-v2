@@ -53,7 +53,7 @@ public class Company {
     private WorkField workField;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.PERSIST)
-    private List<CompanyTechStack> techStackList = new ArrayList<>();
+    private List<CompanyTechStack> companyTechStacks = new ArrayList<>();
 
     @Builder
     public Company(Integer id, String nameKr, String nameEn, String ceo, String businessNumber,

@@ -3,6 +3,7 @@ package com.metacoding.springrocketdanv2.company;
 import com.metacoding.springrocketdanv2.career.Career;
 import com.metacoding.springrocketdanv2.resume.Resume;
 import com.metacoding.springrocketdanv2.techstack.TechStack;
+import com.metacoding.springrocketdanv2.user.UserResponse;
 import com.metacoding.springrocketdanv2.workfield.WorkField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,86 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CompanyResponse {
+
+    @Data
+    public static class DetailDTO {
+        private Integer id;
+        private String nameKr;
+        private String nameEn;
+        private String ceo;
+        private String businessNumber;
+        private String email;
+        private String phone;
+        private String address;
+        private String introduction;
+        private String oneLineIntro;
+        private String homepageUrl;
+        private String logoImageUrl;
+        private String infoImageUrl;
+        private String contactManager;
+        private String startDate;
+        private String createdAt;
+        private String workFieldName; // ManyToOne → 이름만
+        private List<String> techStackNames; // OneToMany → 이름만
+        private boolean isOwner;
+
+        public DetailDTO(Company company, UserResponse.DTO sessionUser) {
+            this.id = company.getId();
+            this.nameKr = company.getNameKr();
+            this.nameEn = company.getNameEn();
+            this.ceo = company.getCeo();
+            this.businessNumber = company.getBusinessNumber();
+            this.email = company.getEmail();
+            this.phone = company.getPhone();
+            this.address = company.getAddress();
+            this.introduction = company.getIntroduction();
+            this.oneLineIntro = company.getOneLineIntro();
+            this.homepageUrl = company.getHomepageUrl();
+            this.logoImageUrl = company.getLogoImageUrl();
+            this.infoImageUrl = company.getInfoImageUrl();
+            this.contactManager = company.getContactManager();
+            this.startDate = company.getStartDate();
+            this.createdAt = company.getCreatedAt().toString();
+            this.workFieldName = company.getWorkField() != null ? company.getWorkField().getName() : null;
+            this.techStackNames = company.getTechStackList().stream()
+                    .map(cts -> cts.getTechStack().getName())
+                    .toList();
+            this.isOwner = sessionUser != null &&
+                    "company".equals(sessionUser.getUserType()) &&
+                    sessionUser.getCompanyId() != null &&
+                    sessionUser.getCompanyId().equals(company.getId());
+        }
+    }
+
+    @Data
+    public static class ListDTO {
+        private List<ItemDTO> companies;
+
+        public ListDTO(List<Company> companyList, UserResponse.DTO sessionUser) {
+            this.companies = companyList.stream()
+                    .map(company -> new ItemDTO(company, sessionUser))
+                    .toList();
+        }
+    }
+
+    @Data
+    public static class ItemDTO {
+        private Integer id;
+        private String nameKr;
+        private String logoImageUrl;
+        private boolean isOwner;
+
+        public ItemDTO(Company company, UserResponse.DTO sessionUser) {
+            this.id = company.getId();
+            this.nameKr = company.getNameKr();
+            this.logoImageUrl = company.getLogoImageUrl();
+            this.isOwner = sessionUser != null &&
+                    "company".equals(sessionUser.getUserType()) &&
+                    sessionUser.getCompanyId() != null &&
+                    sessionUser.getCompanyId().equals(company.getId());
+        }
+    }
+
 
     @Data
     public static class CompanySaveFormDTO {
