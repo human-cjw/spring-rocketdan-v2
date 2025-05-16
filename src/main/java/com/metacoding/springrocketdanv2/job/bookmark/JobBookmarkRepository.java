@@ -13,12 +13,13 @@ import java.util.Optional;
 public class JobBookmarkRepository {
     private final EntityManager em;
 
-    public void save(JobBookmark bookmark) {
-        em.persist(bookmark);
+    public JobBookmark save(JobBookmark jobBookmark) {
+        em.persist(jobBookmark);
+        return jobBookmark;
     }
 
-    public void delete(JobBookmark bookmark) {
-        em.remove(bookmark);
+    public void delete(JobBookmark jobBookmark) {
+        em.remove(jobBookmark);
     }
 
     public Optional<JobBookmark> findByUserIdAndJobId(Integer userId, Integer jobId) {
@@ -44,11 +45,11 @@ public class JobBookmarkRepository {
                 .getResultList();
     }
 
-    public JobBookmark findById(Integer id) {
-        return em.find(JobBookmark.class, id);
+    public Optional<JobBookmark> findById(Integer id) {
+        return Optional.ofNullable(em.find(JobBookmark.class, id));
     }
 
-    public List<JobBookmark> findJobBookmarksByUserId(Integer userId) {
+    public List<JobBookmark> findByUserId(Integer userId) {
         String q = "SELECT jb FROM JobBookmark jb " +
                 "WHERE jb.user.id = :userId";
         return em.createQuery(q, JobBookmark.class)

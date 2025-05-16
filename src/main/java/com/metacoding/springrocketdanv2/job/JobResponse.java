@@ -18,9 +18,24 @@ public class JobResponse {
     public static class ListDTO {
         private List<ItemDTO> jobs;
 
-        public ListDTO(List<Job> jobs) {
+        public ListDTO(List<Job> jobs, List<JobBookmark> jobBookmarks) {
+            if (jobBookmarks.size() == 0) {
+                this.jobs = jobs.stream()
+                        .map(job -> {
+                            return new ItemDTO(job, false);
+                        })
+                        .toList();
+            }
+            List<Integer> jobBookmarkJobIds = jobBookmarks.stream()
+                    .map(jobBookmark -> jobBookmark.getJob().getId())
+                    .toList();
+
             this.jobs = jobs.stream()
-                    .map(job -> new ItemDTO(job))
+                    .map(job -> {
+                        boolean isBookmarked = jobBookmarkJobIds.contains(job.getId());
+
+                        return new ItemDTO(job, isBookmarked);
+                    })
                     .toList();
         }
 
@@ -30,12 +45,14 @@ public class JobResponse {
             private String title;
             private String careerLevel;
             private String companyName;
+            private boolean isBookmarked;
 
-            public ItemDTO(Job job) {
+            public ItemDTO(Job job, boolean isBookmarked) {
                 this.id = job.getId();
                 this.title = job.getTitle();
                 this.careerLevel = job.getCareerLevel();
                 this.companyName = job.getCompany().getNameKr();
+                this.isBookmarked = isBookmarked;
             }
         }
     }

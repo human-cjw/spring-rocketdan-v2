@@ -6,7 +6,6 @@ import com.metacoding.springrocketdanv2.user.UserResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,14 +16,14 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class JobBookmarkController {
-    private final JobBookmarkRepository jobBookmarkRepository;
     private final JobBookmarkService jobBookmarkService;
+    private final HttpSession session;
 
-    @GetMapping("/job")
-    public String jobList(HttpSession session, Model model) {
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
+    @GetMapping("/user/{userId}/job-bookmark/count")
+    public String getBookmarkCount() {
+//        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
 
-        Integer sessionUserId = (sessionUser != null) ? sessionUser.getId() : null;
+        Integer sessionUserId = null;
 
         List<JobBookmarkResponse.JobListWithBookmarkDTO> dtoList = jobBookmarkService.getAllJobsWithBookmarkInfo(sessionUserId); // null이면 북마크 표시 없이
 
@@ -35,7 +34,6 @@ public class JobBookmarkController {
         return "job/list";
     }
 
-    @Transactional
     @PostMapping("/job/{jobId}/bookmark")
     public String toggle(@PathVariable("jobId") Integer jobId, HttpSession session) {
         UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");

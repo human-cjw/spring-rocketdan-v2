@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +18,16 @@ public class JobService {
     private final JobRepository jobRepository;
     private final JobBookmarkRepository jobBookmarkRepository;
 
-    public JobResponse.ListDTO 글목록보기() {
+    public JobResponse.ListDTO 글목록보기(Integer userId) {
         List<Job> jobsPS = jobRepository.findAll();
 
-        return new JobResponse.ListDTO(jobsPS);
+        List<JobBookmark> jobBookmarks = new ArrayList<>();
+
+        if (userId != null) {
+            jobBookmarks = jobBookmarkRepository.findByUserId(userId);
+        }
+
+        return new JobResponse.ListDTO(jobsPS, jobBookmarks);
     }
 
     public JobResponse.DetailDTO 글상세보기(Integer jobId, User sessionUser) {

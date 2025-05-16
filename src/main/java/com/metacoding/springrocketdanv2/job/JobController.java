@@ -16,7 +16,7 @@ public class JobController {
 
     @GetMapping("/")
     public String list() {
-        JobResponse.ListDTO respDTO = jobService.글목록보기();
+        JobResponse.ListDTO respDTO = jobService.글목록보기(null);
         log.debug("공고목록보기" + respDTO);
         return null;
     }
@@ -43,16 +43,6 @@ public class JobController {
 
     @PutMapping("/job/{jobId}")
     public String update(@PathVariable("jobId") Integer jobId,
-                         @Valid JobRequest.UpdateDTO reqDTO, Errors errors) {
-        JobResponse.UpdateDTO respDTO = jobService.수정하기(jobId, reqDTO);
-
-        log.debug("공고수정" + respDTO);
-
-        return null;
-    }
-
-    @DeleteMapping("/job/{jobId}")
-    public String delete(@PathVariable("jobId") Integer jobId,
                          @Valid JobRequest.UpdateDTO reqDTO, Errors errors) {
         JobResponse.UpdateDTO respDTO = jobService.수정하기(jobId, reqDTO);
 
