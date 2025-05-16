@@ -1,75 +1,53 @@
 package com.metacoding.springrocketdanv2.job;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@Controller
+@Slf4j
+@RestController
 @RequiredArgsConstructor
 public class JobController {
     private final JobService jobService;
     private final HttpSession session;
-//    private final JobBookmarkService jobBookmarkService;
 
     @GetMapping("/")
-    public String list(Model models, JobResponse.DTO dto) {
-        List<JobResponse.DTO> jobllist = jobService.글목록보기();
-        models.addAttribute("models", jobllist);
-        models.addAttribute("nameKr", dto.getNameKr());
-        return "redirect:/job";
+    public String list() {
+        JobResponse.ListDTO respDTO = jobService.글목록보기(null);
+        log.debug("공고목록보기" + respDTO);
+        return null;
     }
 
     @GetMapping("/job/{jobId}")
-    public String show(@PathVariable("jobId") Integer jobId, Model model, HttpSession session) {
+    public String show(@PathVariable("jobId") Integer jobId) {
+        JobResponse.DetailDTO respDTO = jobService.글상세보기(jobId, null);
+
+        log.debug("공고상세보기" + respDTO);
+
+        return null;
+    }
+
+    @PostMapping("/job")
+    public String save(@Valid JobRequest.SaveDTO reqDTO, Errors errors) {
 //        UserResponse.SessionUserDTO sessionUserDTO = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
+        JobResponse.SaveDTO respDTO = jobService.등록하기(reqDTO, null);
 
-        JobResponse.DetailDTO dto = jobService.글상세보기(jobId, null);
-        System.out.println(dto.isOwner());
+        log.debug("공고등록" + respDTO);
 
-        model.addAttribute("jobDetail", dto);
-        model.addAttribute("nameKr", dto.getNameKr());
-        model.addAttribute("salaryRange", dto.getSalaryRange());
-
-        return "job/detail";
+        return null;
     }
 
 
-    @GetMapping("/job/save-form")
-    public String saveForm(HttpServletRequest request) {
-        JobResponse.JobSaveDTO respDTO = jobService.등록보기();
-        request.setAttribute("model", respDTO);
-        return "job/save-form";
-    }
-
-    @PostMapping("/job/save")
-    public String save(@Valid JobRequest.JobSaveDTO reqDTO, Errors errors) {
-//        UserResponse.SessionUserDTO sessionUserDTO = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-        jobService.등록하기(reqDTO, null);
-
-        return "redirect:/company/job";
-    }
-
-    @GetMapping("/job/{jobId}/update-form")
-    public String updateForm(@PathVariable("jobId") Integer jobId,
-                             HttpServletRequest request) {
-//        JobResponse.JobUpdateDTO respDTO = jobService.수정보기(jobId);
-//        request.setAttribute("model", respDTO);
-        return "job/update-form";
-    }
-
-    @PostMapping("/job/{jobId}/update")
+    @PutMapping("/job/{jobId}")
     public String update(@PathVariable("jobId") Integer jobId,
-                         @Valid JobRequest.JobUpdateDTO reqDTO, Errors errors) {
-        jobService.수정하기(jobId, reqDTO);
-        return "redirect:/job/" + jobId;
+                         @Valid JobRequest.UpdateDTO reqDTO, Errors errors) {
+        JobResponse.UpdateDTO respDTO = jobService.수정하기(jobId, reqDTO);
+
+        log.debug("공고수정" + respDTO);
+
+        return null;
     }
 }

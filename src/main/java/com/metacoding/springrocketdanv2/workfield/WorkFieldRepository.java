@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class WorkFieldRepository {
         return em.createQuery(q, WorkField.class).getResultList();
     }
 
-    public WorkField findById(Integer id) {
-        return em.find(WorkField.class, id);
+    public Optional<WorkField> findById(Integer id) {
+        return Optional.ofNullable(em.find(WorkField.class, id));
     }
 }

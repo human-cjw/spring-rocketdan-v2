@@ -1,32 +1,35 @@
 package com.metacoding.springrocketdanv2.job.bookmark;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class JobBookmarkRepository {
     private final EntityManager em;
 
-    public void save(JobBookmark bookmark) {
-        em.persist(bookmark);
+    public JobBookmark save(JobBookmark jobBookmark) {
+        em.persist(jobBookmark);
+        return jobBookmark;
     }
 
-    public void delete(JobBookmark bookmark) {
-        em.remove(bookmark);
+    public void delete(JobBookmark jobBookmark) {
+        em.remove(jobBookmark);
     }
 
-    public JobBookmark findByUserIdAndJobId(Integer userId, Integer jobId) {
+    public Optional<JobBookmark> findByUserIdAndJobId(Integer userId, Integer jobId) {
         try {
-            return em.createQuery("SELECT jb FROM JobBookmark jb WHERE jb.user.id = :userId AND jb.job.id = :jobId", JobBookmark.class)
-                    .setParameter("userId", userId)
-                    .setParameter("jobId", jobId)
-                    .getSingleResult();
+            Query query = em.createQuery("SELECT jb FROM JobBookmark jb WHERE jb.user.id = :userId AND jb.job.id = :jobId", JobBookmark.class);
+            query.setParameter("userId", userId);
+            query.setParameter("jobId", jobId);
+            return Optional.of((JobBookmark) query.getSingleResult());
         } catch (Exception e) {
-            return null;
+            return Optional.ofNullable(null);
         }
     }
 
@@ -42,11 +45,11 @@ public class JobBookmarkRepository {
                 .getResultList();
     }
 
-    public JobBookmark findById(Integer id) {
-        return em.find(JobBookmark.class, id);
+    public Optional<JobBookmark> findById(Integer id) {
+        return Optional.ofNullable(em.find(JobBookmark.class, id));
     }
 
-    public List<JobBookmark> findJobBookmarksByUserId(Integer userId) {
+    public List<JobBookmark> findByUserId(Integer userId) {
         String q = "SELECT jb FROM JobBookmark jb " +
                 "WHERE jb.user.id = :userId";
         return em.createQuery(q, JobBookmark.class)
