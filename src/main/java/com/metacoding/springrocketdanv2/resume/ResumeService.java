@@ -10,15 +10,12 @@ import com.metacoding.springrocketdanv2.certification.Certification;
 import com.metacoding.springrocketdanv2.certification.CertificationRepository;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroupRepository;
-import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
 import com.metacoding.springrocketdanv2.resume.bookmark.ResumeBookmark;
 import com.metacoding.springrocketdanv2.resume.bookmark.ResumeBookmarkRepository;
 import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStack;
 import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackRepository;
-import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackResponse;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeRepository;
-import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
 import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import lombok.RequiredArgsConstructor;
@@ -64,59 +61,11 @@ public class ResumeService {
         Resume resumePS = resumeRepository.findById(resumeId)
                 .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다."));
 
-        List<Certification> certifications = certificationRepository.findCertificationsByResumeId(resumeId);
-        List<ResumeTechStack> resumeTechStackList = resumeTechStackRepository.findAllByResumeId(resumeId);
-        List<Career> careers = careerRepository.findCareersByResumeId(resumeId);
-        
-        List<Integer> resumeTechStackIds = new ArrayList<>();
-        for (ResumeTechStack rts : resumeTechStackList) {
-            resumeTechStackIds.add(rts.getTechStack().getId());
-        }
-
-        List<ResumeTechStackResponse.ResumeTechStackResponseDTO> resumeTechStackResponseDTOS = new ArrayList<>();
-        for (TechStack techStack : techStacks) {
-            resumeTechStackResponseDTOS.add(new ResumeTechStackResponse.ResumeTechStackResponseDTO(
-                    techStack.getId(),
-                    techStack.getName(),
-                    resumeTechStackIds.contains(techStack.getId())));
-        }
-
-        List<SalaryRangeResponse.SalaryRangeUpdateDTO> salaryRangeUpdateDTOs = new ArrayList<>();
-        for (SalaryRange salaryRange : salaryRanges) {
-            salaryRangeUpdateDTOs.add(
-                    new SalaryRangeResponse.SalaryRangeUpdateDTO(
-                            salaryRange.getId(),
-                            salaryRange.getLabel(),
-                            resume.getSalaryRange().getId().equals(salaryRange.getId())
-                    )
-            );
-        }
-
-        List<JobGroupResponse.JobGroupUpdateDTO> jobGroupUpdateDTOs = new ArrayList<>();
-        for (JobGroup jobGroup : jobGroups) {
-            jobGroupUpdateDTOs.add(
-                    new JobGroupResponse.JobGroupUpdateDTO(
-                            jobGroup.getId(),
-                            jobGroup.getName(),
-                            resume.getJobGroup().getId().equals(jobGroup.getId())
-                    )
-            );
-        }
+        List<Certification> certificationsPS = certificationRepository.findCertificationsByResumeId(resumeId);
+        List<Career> careersPS = careerRepository.findCareersByResumeId(resumeId);
 
         return new ResumeResponse.UpdateDTO(
-                resume,
-                certifications,
-                resumeTechStacks,
-                resume.getUser().getEmail(),
-                resume.getUser().getUsername(),
-                careers,
-                resumeTechStackResponseDTOS,
-                graduationTypeDTOs,
-                careerLevelTypeDTOs,
-                genderTypeDTOs,
-                salaryRangeUpdateDTOs,
-                jobGroupUpdateDTOs
-        );
+
     }
 
     @Transactional

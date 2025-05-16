@@ -24,7 +24,6 @@ public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String title;
     @Column(columnDefinition = "text")
     private String summary; // 자기소개
