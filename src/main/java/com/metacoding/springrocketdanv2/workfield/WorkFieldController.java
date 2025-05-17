@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class WorkFieldController {
     private final WorkFieldService workFieldService;
 
-    @GetMapping("/api/workFields")
-    public void getWorkFields() {
+    @GetMapping("/api/workField")
+    public String getWorkFields() {
         WorkFieldResponse.ListDTO respDTO = workFieldService.목록보기();
         log.debug("workFields", respDTO);
+        return null;
     }
 }

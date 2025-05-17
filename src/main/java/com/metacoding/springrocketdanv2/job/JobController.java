@@ -40,7 +40,6 @@ public class JobController {
         return null;
     }
 
-
     @PutMapping("/s/api/job/{jobId}")
     public String update(@PathVariable("jobId") Integer jobId,
                          @Valid JobRequest.UpdateDTO reqDTO, Errors errors) {
