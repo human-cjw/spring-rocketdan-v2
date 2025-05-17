@@ -19,7 +19,7 @@ public class JobRepository {
         return query.getResultList();
     }
 
-    public Optional<Job> findById(Integer jobId) {
+    public Optional<Job> findByJobId(Integer jobId) {
         return Optional.ofNullable(em.find(Job.class, jobId));
     }
 
@@ -28,8 +28,17 @@ public class JobRepository {
         return job;
     }
 
-    public Optional<Job> findByIdJoinJobTechStackJoinTechStack(Integer jobId) {
-        String sql = "SELECT j FROM Job j LEFT JOIN FETCH j.jobTechStacks jts LEFT JOIN FETCH jts.techStack WHERE j.id = :jobId";
+    public Optional<Job> findByJobIdJoinFetchAll(Integer jobId) {
+        String sql = """
+                SELECT j FROM Job j
+                    JOIN FETCH j.jobTechStacks jts
+                    JOIN FETCH jts.techStack ts
+                    JOIN FETCH j.company c
+                    JOIN FETCH j.salaryRange sr
+                    JOIN FETCH j.workField w
+                    JOIN FETCH j.jobGroup jg
+                WHERE j.id = :jobId
+                """;
         Query query = em.createQuery(sql, Job.class);
         query.setParameter("jobId", jobId);
         try {
@@ -37,5 +46,40 @@ public class JobRepository {
         } catch (Exception e) {
             return Optional.ofNullable(null);
         }
+    }
+
+    public void deleteByJobId(Integer jobId) {
+        em.createQuery("DELETE FROM Job j WHERE j.id = :jobId")
+                .setParameter("jobId", jobId)
+                .executeUpdate();
+    }
+
+    public void updateByJobId(Integer jobId, JobRequest.UpdateDTO reqDTO) {
+        em.createQuery("""
+                        UPDATE Job j SET
+                            j.title = :title,
+                            j.description = :description,
+                            j.location = :location,
+                            j.employmentType = :employmentType,
+                            j.deadline = :deadline,
+                            j.status = :status,
+                            j.careerLevel = :careerLevel,
+                            j.salaryRange = (SELECT s FROM SalaryRange s WHERE s.id = :salaryRangeId),
+                            j.workField = (SELECT w FROM WorkField w WHERE w.id = :workFieldId),
+                            j.jobGroup = (SELECT g FROM JobGroup g WHERE g.id = :jobGroupId)
+                        WHERE j.id = :jobId
+                        """)
+                .setParameter("title", reqDTO.getTitle())
+                .setParameter("description", reqDTO.getDescription())
+                .setParameter("location", reqDTO.getLocation())
+                .setParameter("employmentType", reqDTO.getEmploymentType())
+                .setParameter("deadline", reqDTO.getDeadline())
+                .setParameter("status", reqDTO.getStatus())
+                .setParameter("careerLevel", reqDTO.getCareerLevel())
+                .setParameter("salaryRangeId", reqDTO.getSalaryRangeId())
+                .setParameter("workFieldId", reqDTO.getWorkFieldId())
+                .setParameter("jobGroupId", reqDTO.getJobGroupId())
+                .setParameter("jobId", jobId)
+                .executeUpdate();
     }
 }

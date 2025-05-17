@@ -27,7 +27,7 @@ public class JobBookmarkResponse {
             private String jobCareerLevel;
             private String jobEmploymentType;
             private String jobCreatedAt;
-            private List<TechStackResponse.DTO> jobTechStacks;
+            private List<TechStackResponse.DTO> techStacks;
             private String companyName;
             private String companyLogoImageUrl;
 
@@ -37,7 +37,7 @@ public class JobBookmarkResponse {
                 this.jobCareerLevel = job.getCareerLevel();
                 this.jobEmploymentType = job.getEmploymentType();
                 this.jobCreatedAt = job.getCreatedAt().toString().substring(0, 10);
-                this.jobTechStacks = job.getJobTechStacks().stream()
+                this.techStacks = job.getJobTechStacks().stream()
                         .map(jobTechStack -> new TechStackResponse.DTO(jobTechStack.getTechStack()))
                         .toList();
                 this.companyName = job.getCompany().getNameKr();

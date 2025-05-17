@@ -131,8 +131,8 @@ public class ApplicationRepository {
                 .getResultList();
     }
 
-    public void deleteApplicationsByJobId(Integer jobId) {
-        String q = "DELETE FROM Application a WHERE a.job.id = :jobId AND a.resume IS NOT NULL";
+    public void deleteByJobId(Integer jobId) {
+        String q = "DELETE FROM Application a WHERE a.job.id = :jobId";
         em.createQuery(q)
                 .setParameter("jobId", jobId)
                 .executeUpdate();

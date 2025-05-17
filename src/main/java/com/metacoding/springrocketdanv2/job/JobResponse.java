@@ -10,7 +10,6 @@ import com.metacoding.springrocketdanv2.workfield.WorkFieldResponse;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Optional;
 
 public class JobResponse {
 
@@ -20,24 +19,25 @@ public class JobResponse {
         private Integer bookmarkCount;
 
         public ListDTO(List<Job> jobs, List<JobBookmark> jobBookmarks) {
-            if (jobBookmarks.size() == 0) {
+            if (jobBookmarks.isEmpty()) {
+                this.jobs = jobs.stream()
+                        .map(job -> new ItemDTO(job, null))
+                        .toList();
+            } else {
                 this.jobs = jobs.stream()
                         .map(job -> {
-                            return new ItemDTO(job, false);
+                            Integer bookmarkId = null;
+                            for (JobBookmark jobBookmark : jobBookmarks) {
+                                if (jobBookmark.getJob().getId().equals(job.getId())) {
+                                    bookmarkId = jobBookmark.getId();
+                                    break;
+                                }
+                            }
+                            return new ItemDTO(job, bookmarkId);
                         })
                         .toList();
             }
-            List<Integer> jobBookmarkJobIds = jobBookmarks.stream()
-                    .map(jobBookmark -> jobBookmark.getJob().getId())
-                    .toList();
 
-            this.jobs = jobs.stream()
-                    .map(job -> {
-                        boolean isBookmarked = jobBookmarkJobIds.contains(job.getId());
-
-                        return new ItemDTO(job, isBookmarked);
-                    })
-                    .toList();
 
             this.bookmarkCount = jobBookmarks.size();
         }
@@ -48,14 +48,14 @@ public class JobResponse {
             private String title;
             private String careerLevel;
             private String companyName;
-            private boolean isBookmarked;
+            private Integer bookmarkId;
 
-            public ItemDTO(Job job, boolean isBookmarked) {
+            public ItemDTO(Job job, Integer bookmarkId) {
                 this.id = job.getId();
                 this.title = job.getTitle();
                 this.careerLevel = job.getCareerLevel();
                 this.companyName = job.getCompany().getNameKr();
-                this.isBookmarked = isBookmarked;
+                this.bookmarkId = bookmarkId;
             }
         }
     }
@@ -78,9 +78,9 @@ public class JobResponse {
         private JobGroupResponse.DTO jobGroup;
         private List<TechStackResponse.DTO> techStacks;
         private boolean isOwner;
-        private boolean isBookmarked;
+        private Integer jobBookmarkId;
 
-        public DetailDTO(Job job, User sessionUser, Optional<JobBookmark> jobBookmark) {
+        public DetailDTO(Job job, User sessionUser, Integer jobBookmarkId) {
             this.id = job.getId();
             this.title = job.getTitle();
             this.description = job.getDescription();
@@ -99,7 +99,7 @@ public class JobResponse {
                     .map(jobTechStack -> new TechStackResponse.DTO(jobTechStack.getTechStack()))
                     .toList();
             this.isOwner = sessionUser.getCompanyId() != null && sessionUser.getCompanyId().equals(job.getCompany().getId());
-            this.isBookmarked = jobBookmark.isPresent();
+            this.jobBookmarkId = jobBookmarkId;
         }
 
         @Data
@@ -201,7 +201,7 @@ public class JobResponse {
         private SalaryRangeResponse.DTO salaryRange;
         private WorkFieldResponse.DTO workField;
         private JobGroupResponse.DTO jobGroup;
-        private List<TechStackResponse.DTO> jobTechStacks;
+        private List<TechStackResponse.DTO> techStacks;
 
         public DTO(Job job) {
             this.id = job.getId();
@@ -219,7 +219,7 @@ public class JobResponse {
             this.salaryRange = new SalaryRangeResponse.DTO(job.getSalaryRange());
             this.workField = new WorkFieldResponse.DTO(job.getWorkField());
             this.jobGroup = new JobGroupResponse.DTO(job.getJobGroup());
-            this.jobTechStacks = job.getJobTechStacks().stream()
+            this.techStacks = job.getJobTechStacks().stream()
                     .map(jobTechStack -> new TechStackResponse.DTO(jobTechStack.getTechStack()))
                     .toList();
         }

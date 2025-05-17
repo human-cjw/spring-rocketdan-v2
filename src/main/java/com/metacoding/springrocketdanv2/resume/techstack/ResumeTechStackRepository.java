@@ -27,14 +27,22 @@ public class ResumeTechStackRepository {
                 .getResultList();
     }
 
+    public List<ResumeTechStack> findAllByResumeIdJoinTechStack(Integer resumeId) {
+        String q = "SELECT r FROM ResumeTechStack r JOIN FETCH r.techStack WHERE r.resume.id = :resumeId";
+        return em.createQuery(q, ResumeTechStack.class)
+                .setParameter("resumeId", resumeId)
+                .getResultList();
+    }
+
     public void deleteByResumeId(Integer resumeId) {
         em.createQuery("DELETE FROM ResumeTechStack r WHERE r.resume.id = :resumeId")
                 .setParameter("resumeId", resumeId)
                 .executeUpdate();
     }
 
-    public void save(ResumeTechStack resumeTechStack) {
+    public ResumeTechStack save(ResumeTechStack resumeTechStack) {
         em.persist(resumeTechStack);
+        return resumeTechStack;
     }
 
 }

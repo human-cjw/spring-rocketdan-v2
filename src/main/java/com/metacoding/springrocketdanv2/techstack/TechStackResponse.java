@@ -6,11 +6,11 @@ public class TechStackResponse {
 
     @Data
     public static class DTO {
-        private Integer id;
+        private Integer techStackId;
         private String name;
 
         public DTO(TechStack techStack) {
-            this.id = techStack.getId();
+            this.techStackId = techStack.getId();
             this.name = techStack.getName();
         }
     }
