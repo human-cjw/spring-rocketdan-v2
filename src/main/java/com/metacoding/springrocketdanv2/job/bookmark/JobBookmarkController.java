@@ -1,86 +1,39 @@
 package com.metacoding.springrocketdanv2.job.bookmark;
 
-import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
-import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi403;
-import com.metacoding.springrocketdanv2.user.UserResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@Controller
+@Slf4j
+@RestController
 @RequiredArgsConstructor
 public class JobBookmarkController {
     private final JobBookmarkService jobBookmarkService;
     private final HttpSession session;
 
-    @GetMapping("/user/{userId}/job-bookmark/count")
-    public String getBookmarkCount() {
-//        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-
+    @PostMapping("/s/api/job-bookmark")
+    public String save(@Valid JobBookmarkRequest.SaveDTO reqDTO, Errors errors) {
         Integer sessionUserId = null;
-
-        List<JobBookmarkResponse.JobListWithBookmarkDTO> dtoList = jobBookmarkService.getAllJobsWithBookmarkInfo(sessionUserId); // null이면 북마크 표시 없이
-
-        Long bookmarkCount = (sessionUserId != null) ? jobBookmarkService.count(sessionUserId) : 0L;
-
-        model.addAttribute("models", dtoList);
-        model.addAttribute("bookmarkCount", bookmarkCount);
-        return "job/list";
+        JobBookmarkResponse.SaveDTO respDTO = jobBookmarkService.북마크등록(reqDTO, sessionUserId);
+        log.debug("북마크등록" + respDTO);
+        return null;
     }
 
-    @PostMapping("/job/{jobId}/bookmark")
-    public String toggle(@PathVariable("jobId") Integer jobId, HttpSession session) {
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-
-        JobBookmarkRequest.SaveDTO dto = new JobBookmarkRequest.SaveDTO();
-        dto.setJobId(jobId);
-
-        jobBookmarkService.북마크토글(dto, sessionUser.getId());
-
-        return "redirect:/job";
+    @GetMapping("/s/api/job-bookmark")
+    public String list() {
+        Integer sessionUserId = null;
+        JobBookmarkResponse.ListDTO respDTO = jobBookmarkService.북마크목록보기(sessionUserId);
+        log.debug("북마크목록보기" + respDTO);
+        return null;
     }
 
-    @GetMapping("/user/bookmark")
-    public String bookmarkList(HttpSession session, Model model) {
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-
-        if (sessionUser.getCompanyId() != null) {
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
-
-        List<JobBookmarkResponse.BookmarkListDTO> dtoList = jobBookmarkService.getBookmarkList(sessionUser.getId());
-
-        model.addAttribute("model", dtoList);
-
-        return "bookmark/jobBookmark";
-    }
-
-    @GetMapping("/user/bookmark/{bookmarkId}/delete")
-    public String deleteBookmark(@PathVariable("bookmarkId") Integer bookmarkId) {
-        jobBookmarkService.북마크삭제(bookmarkId);
-        return "redirect:/user/bookmark";
-    }
-
-    @PostMapping("/job-bookmark/{jobId}/toggle")
-    public String toggleFromDetail(@PathVariable Integer jobId, HttpSession session) {
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-
-        if (sessionUser == null) {
-            throw new ExceptionApi403("권한이 없습니다");
-        }
-
-        JobBookmarkRequest.SaveDTO dto = new JobBookmarkRequest.SaveDTO();
-        dto.setJobId(jobId);
-
-        jobBookmarkService.북마크토글(dto, sessionUser.getId());
-
-        // 현재 상세 페이지를 그대로 다시 보여주도록 redirect
-        return "redirect:/job/" + jobId;
+    @DeleteMapping("/s/api/job-bookmark/{jobBookmarkId}")
+    public String delete(@PathVariable("jobBookmarkId") Integer jobBookmarkId) {
+        Integer sessionUserId = null;
+        jobBookmarkService.북마크삭제(jobBookmarkId, sessionUserId);
+        return null;
     }
 }

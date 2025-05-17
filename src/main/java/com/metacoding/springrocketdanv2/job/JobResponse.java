@@ -17,6 +17,7 @@ public class JobResponse {
     @Data
     public static class ListDTO {
         private List<ItemDTO> jobs;
+        private Integer bookmarkCount;
 
         public ListDTO(List<Job> jobs, List<JobBookmark> jobBookmarks) {
             if (jobBookmarks.size() == 0) {
@@ -37,6 +38,8 @@ public class JobResponse {
                         return new ItemDTO(job, isBookmarked);
                     })
                     .toList();
+
+            this.bookmarkCount = jobBookmarks.size();
         }
 
         @Data
@@ -176,6 +179,47 @@ public class JobResponse {
             this.careerLevel = job.getCareerLevel();
             this.salaryRange = new SalaryRangeResponse.DTO(job.getSalaryRange());
             this.techStacks = job.getJobTechStacks().stream()
+                    .map(jobTechStack -> new TechStackResponse.DTO(jobTechStack.getTechStack()))
+                    .toList();
+        }
+    }
+
+    @Data
+    public static class DTO {
+        private Integer id;
+        private String title;
+        private String description;
+        private String location;
+        private String employmentType;
+        private String deadline;
+        private String status;
+        private String careerLevel;
+        private String createdAt;
+        private String updatedAt;
+        private Integer companyId;
+        private String companyName;
+        private SalaryRangeResponse.DTO salaryRange;
+        private WorkFieldResponse.DTO workField;
+        private JobGroupResponse.DTO jobGroup;
+        private List<TechStackResponse.DTO> jobTechStacks;
+
+        public DTO(Job job) {
+            this.id = job.getId();
+            this.title = job.getTitle();
+            this.description = job.getDescription();
+            this.location = job.getLocation();
+            this.employmentType = job.getEmploymentType();
+            this.deadline = job.getDeadline();
+            this.status = job.getStatus();
+            this.careerLevel = job.getCareerLevel();
+            this.createdAt = job.getCreatedAt().toString().substring(0, 10);
+            this.updatedAt = job.getUpdatedAt() != null ? job.getUpdatedAt().toString().substring(0, 10) : null;
+            this.companyId = job.getCompany().getId();
+            this.companyName = job.getCompany().getNameKr();
+            this.salaryRange = new SalaryRangeResponse.DTO(job.getSalaryRange());
+            this.workField = new WorkFieldResponse.DTO(job.getWorkField());
+            this.jobGroup = new JobGroupResponse.DTO(job.getJobGroup());
+            this.jobTechStacks = job.getJobTechStacks().stream()
                     .map(jobTechStack -> new TechStackResponse.DTO(jobTechStack.getTechStack()))
                     .toList();
         }

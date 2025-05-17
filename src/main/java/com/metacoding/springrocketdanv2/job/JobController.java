@@ -14,15 +14,15 @@ public class JobController {
     private final JobService jobService;
     private final HttpSession session;
 
-    @GetMapping("/")
+    @GetMapping({"/", "/api/job"})
     public String list() {
         JobResponse.ListDTO respDTO = jobService.글목록보기(null);
         log.debug("공고목록보기" + respDTO);
         return null;
     }
 
-    @GetMapping("/job/{jobId}")
-    public String show(@PathVariable("jobId") Integer jobId) {
+    @GetMapping("/api/job/{jobId}")
+    public String detail(@PathVariable("jobId") Integer jobId) {
         JobResponse.DetailDTO respDTO = jobService.글상세보기(jobId, null);
 
         log.debug("공고상세보기" + respDTO);
@@ -30,7 +30,7 @@ public class JobController {
         return null;
     }
 
-    @PostMapping("/job")
+    @PostMapping("/s/api/job")
     public String save(@Valid JobRequest.SaveDTO reqDTO, Errors errors) {
 //        UserResponse.SessionUserDTO sessionUserDTO = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
         JobResponse.SaveDTO respDTO = jobService.등록하기(reqDTO, null);
@@ -40,8 +40,7 @@ public class JobController {
         return null;
     }
 
-
-    @PutMapping("/job/{jobId}")
+    @PutMapping("/s/api/job/{jobId}")
     public String update(@PathVariable("jobId") Integer jobId,
                          @Valid JobRequest.UpdateDTO reqDTO, Errors errors) {
         JobResponse.UpdateDTO respDTO = jobService.수정하기(jobId, reqDTO);
