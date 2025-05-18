@@ -82,4 +82,12 @@ public class JobRepository {
                 .setParameter("jobId", jobId)
                 .executeUpdate();
     }
+
+    public List<Job> findAllByCompanyId(Integer companyId) {
+        String q = "SELECT j FROM Job j JOIN FETCH j.jobGroup WHERE j.company.id = :companyId ORDER BY j.createdAt DESC";
+        return em.createQuery(q, Job.class)
+                .setParameter("companyId", companyId)
+                .getResultList();
+    }
+
 }

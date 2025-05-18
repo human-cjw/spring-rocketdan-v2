@@ -5,14 +5,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class CompanyRepository {
     private final EntityManager em;
 
-    public Company findById(Integer id) {
-        return em.find(Company.class, id); // Lazy loading
+    public Optional<Company> findById(Integer id) {
+        Company companyPS = em.find(Company.class, id);
+        return Optional.ofNullable(companyPS);
     }
 
     public List<Company> findAll() {

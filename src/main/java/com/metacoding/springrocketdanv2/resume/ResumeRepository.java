@@ -13,7 +13,7 @@ import java.util.Optional;
 public class ResumeRepository {
     private final EntityManager em;
 
-    public Optional<Resume> findByResumeIdId(Integer resumeId) {
+    public Optional<Resume> findByResumeId(Integer resumeId) {
         return Optional.ofNullable(em.find(Resume.class, resumeId));
     }
 

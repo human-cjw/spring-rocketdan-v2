@@ -20,4 +20,9 @@ public class WorkFieldRepository {
     public Optional<WorkField> findById(Integer id) {
         return Optional.ofNullable(em.find(WorkField.class, id));
     }
+
+    public WorkField save(WorkField workField) {
+        em.persist(workField);
+        return workField;
+    }
 }

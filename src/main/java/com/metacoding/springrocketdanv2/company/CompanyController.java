@@ -3,19 +3,17 @@ package com.metacoding.springrocketdanv2.company;
 import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import com.metacoding.springrocketdanv2.user.UserResponse;
 import com.metacoding.springrocketdanv2.workfield.WorkFieldRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-@Controller
+@Slf4j
+@RestController
 @RequiredArgsConstructor
 public class CompanyController {
 
@@ -23,124 +21,57 @@ public class CompanyController {
     private final WorkFieldRepository workFieldRepository;
     private final TechStackRepository techStackRepository;
 
-
-    @GetMapping("/company/{companyId}")
-    public String detail(@PathVariable("companyId") Integer companyId, Model model, HttpSession session) {
-        CompanyResponse.CompanyResponseDTO responseDTO = companyService.기업상세(companyId);
-
-        // 현재 로그인한 유저 정보 가져오기
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-
-        boolean isOwner = false;
-        if (sessionUser != null) {
-            if ("company".equals(sessionUser.getUserType()) && sessionUser.getCompanyId() != null) {
-                if (sessionUser.getCompanyId().equals(companyId)) {
-                    isOwner = true;
-                }
-            }
-        }
-
-        responseDTO.setOwner(isOwner);
-
-        model.addAttribute("model", responseDTO);
-        return "company/detail";
+    @GetMapping("/api/company/{companyId}")
+    public String detail(@PathVariable Integer companyId, HttpSession session) {
+        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
+        CompanyResponse.DetailDTO respDTO = companyService.기업상세(companyId, sessionUser);
+        log.debug("기업상세: ", respDTO);
+        return null;
     }
 
-    @GetMapping("/company")
-    public String list(HttpServletRequest request, HttpSession session, Model model) {
-        List<Company> companyList = companyService.기업리스트();
-        request.setAttribute("models", companyList);
-
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-        if (sessionUser != null) {
-            model.addAttribute("isCompany", "company".equals(sessionUser.getUserType()));
-        } else {
-            model.addAttribute("isCompany", false);
-        }
-
-        return "company/list";
+    @GetMapping("/api/company")
+    public String list(HttpSession session) {
+        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
+        CompanyResponse.ListDTO respDTO = companyService.기업리스트(sessionUser);
+        log.debug("회사 목록: ", respDTO);
+        return null;
     }
 
-    @GetMapping("/company/save-form")
-    public String saveForm(Model model) {
-
-        model.addAttribute("model", companyService.등록보기());
-        return "company/save-form";
-    }
-
-    @PostMapping("/company/save")
-    public String save(@Valid @ModelAttribute CompanyRequest.CompanySaveDTO requestDTO, Errors errors, HttpSession session) {
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-        UserResponse.SessionUserDTO sessionUserDTO = companyService.기업등록(requestDTO, sessionUser);
+    @PostMapping("/s/api/company")
+    public String save(CompanyRequest.SaveDTO reqDTO, HttpSession session) {
+        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
+        CompanyRequest.SaveDTO sessionUserDTO = companyService.기업등록(reqDTO, sessionUser.getId());
         session.setAttribute("sessionUser", sessionUserDTO);
-        return "redirect:/company/" + sessionUserDTO.getCompanyId();
+        log.debug("기업 등록 완료: ", sessionUserDTO);
+        return null;
     }
 
-    @GetMapping("/company/update-form")
-    public String updateForm(HttpSession session, Model model) {
-        // 1. 세션에서 로그인한 사용자 꺼내기
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-
-        if (sessionUser == null) {
-            throw new RuntimeException("로그인이 필요합니다."); // 세션 없으면 막기
-        }
-
-        // 2. 세션에 유저 저장
-        session.setAttribute("sessionUser", sessionUser);
-
-        // 3. 유저 ID를 이용해서 내 기업 정보 조회
-        CompanyResponse.UpdateFormDTO dto = companyService.내기업조회(sessionUser.getId());
-
-        model.addAttribute("model", dto);
-        return "company/update-form";
+    @PostMapping("/s/api/company/update")
+    public String update(CompanyRequest.UpdateDTO reqDTO, Errors errors, HttpSession session) {
+        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
+        companyService.기업수정(reqDTO);
+        log.debug("기업 수정 완료: ", reqDTO);
+        return null;
     }
 
-
-    @PostMapping("/company/update")
-    public String update(@Valid @ModelAttribute CompanyRequest.UpdateDTO requestDTO, Errors errors, HttpSession session) {
-
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-
-        companyService.기업수정(requestDTO);
-
-        return "redirect:/company/" + requestDTO.getId();
+    @GetMapping("/s/api/company/job")
+    public String manage(HttpSession session) {
+        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
+        CompanyResponse.JobListDTO respDTO = companyService.기업공고관리(sessionUser.getCompanyId());
+        log.debug("기업 공고 관리 목록: ", respDTO);
+        return null;
     }
 
-    @GetMapping("/company/job")
-    public String manage(HttpSession session, Model model) {
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-
-        if (sessionUser == null) {
-            throw new RuntimeException("로그인이 필요합니다.");
-        }
-
-        List<CompanyResponse.CompanyManageJobDTO> respDTO = companyService.기업공고관리(sessionUser.getCompanyId());
-
-        model.addAttribute("model", respDTO);
-
-        return "company/manage-job";
-    }
-
-    @GetMapping("/company/job/{jobId}")
+    @GetMapping("/s/api/company/job/{jobId}")
     public String manageDetail(@PathVariable Integer jobId,
-                               @RequestParam(required = false) String status,
-                               Model model) {
-        if (status == null || status.isBlank()) {
-            status = "접수";
-        }
-
-        CompanyResponse.CompanyManageResumePageDTO dto = companyService.지원자조회(jobId, status);
-        model.addAttribute("model", dto);
-        model.addAttribute("isStatus접수", status.equals("접수"));
-        model.addAttribute("isStatus검토", status.equals("검토"));
-        model.addAttribute("isStatus합격", status.equals("합격"));
-        model.addAttribute("isStatus불합격", status.equals("불합격"));
-
-        System.out.println("지원자 확인" + dto);
-
-        return "company/manage-resume";
+                               @RequestParam(defaultValue = "접수") String status,
+                               HttpSession session) {
+        CompanyResponse.ResumeListDTO respDTO = companyService.지원자조회(jobId, status);
+        log.debug("지원자 확인: ", respDTO);
+        return null;
     }
 
+    //--------------------------------------여기까지 완료-----------------------------------------------------
     @GetMapping("/company/application/{applicationId}")
     public String acceptance(@PathVariable("applicationId") Integer applicationId, Model model) {
         CompanyResponse.CompanyacceptanceDTO respDTO = companyService.지원서상세보기(applicationId);
