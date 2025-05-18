@@ -38,7 +38,6 @@ public class JobResponse {
                         .toList();
             }
 
-
             this.bookmarkCount = jobBookmarks.size();
         }
 
