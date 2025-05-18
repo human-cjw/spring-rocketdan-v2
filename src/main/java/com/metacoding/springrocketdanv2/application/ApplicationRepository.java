@@ -62,7 +62,7 @@ public class ApplicationRepository {
     }
 
 
-    public void updateByResumeId(Integer resumeId) {
+    public void updateResumeNullByResumeId(Integer resumeId) {
         em.createQuery("UPDATE Application a SET a.resume = null, a.user = null WHERE a.resume.id = :resumeId")
                 .setParameter("resumeId", resumeId)
                 .executeUpdate();

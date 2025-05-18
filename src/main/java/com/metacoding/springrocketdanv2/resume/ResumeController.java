@@ -1,7 +1,5 @@
 package com.metacoding.springrocketdanv2.resume;
 
-import com.metacoding.springrocketdanv2.user.UserResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,30 +39,31 @@ public class ResumeController {
     @GetMapping("/s/api/user/resume")
     public String list(@RequestParam(required = false, value = "isDefault", defaultValue = "false") boolean isDefault) {
         Integer sessionUserId = null;
+
         ResumeResponse.ListDTO respDTO = resumeService.이력서목록보기(sessionUserId, isDefault);
+
+        log.debug("이력서목록보기" + respDTO);
 
         return null;
     }
 
-
-    @GetMapping("/resume/save-form")
-    public String saveForm(HttpServletRequest request) {
-        ResumeResponse.SaveDTO respDTO = resumeService.이력서등록보기();
-        request.setAttribute("model", respDTO);
-        return "resume/save-form";
-    }
-
-    @GetMapping("/user/resume/{resumeId}/delete")
+    @DeleteMapping("/s/api/resume/{resumeId}")
     public String delete(@PathVariable("resumeId") Integer resumeId) {
-        UserResponse.SessionUserDTO sessionUserDTO = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-        resumeService.이력서삭제(resumeId, sessionUserDTO.getId());
-        return "redirect:/user/resume";
+        Integer sessionUserId = null;
+
+        resumeService.이력서삭제(resumeId, sessionUserId);
+
+        return null;
     }
 
-    @PostMapping("/resume/save")
+    @PostMapping("/s/api/resume/")
     public String save(@Valid ResumeRequest.SaveDTO reqDTO, Errors errors) {
-        UserResponse.SessionUserDTO sessionUserDTO = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-        resumeService.이력서등록(sessionUserDTO.getId(), reqDTO);
-        return "redirect:/user/resume";
+        Integer sessionUserId = null;
+
+        ResumeResponse.SaveDTO respDTO = resumeService.이력서등록(reqDTO, sessionUserId);
+
+        log.debug("이력서등록" + respDTO);
+
+        return null;
     }
 }

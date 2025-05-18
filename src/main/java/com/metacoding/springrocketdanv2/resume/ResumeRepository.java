@@ -73,7 +73,7 @@ public class ResumeRepository {
         }
     }
 
-    public void deleteById(Integer resumeId) {
+    public void deleteByResumeId(Integer resumeId) {
         em.createQuery("DELETE FROM Resume r WHERE r.id = :resumeId")
                 .setParameter("resumeId", resumeId)
                 .executeUpdate();

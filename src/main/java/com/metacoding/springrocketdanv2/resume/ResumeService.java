@@ -8,16 +8,11 @@ import com.metacoding.springrocketdanv2.career.Career;
 import com.metacoding.springrocketdanv2.career.CareerRepository;
 import com.metacoding.springrocketdanv2.certification.Certification;
 import com.metacoding.springrocketdanv2.certification.CertificationRepository;
-import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroupRepository;
-import com.metacoding.springrocketdanv2.resume.bookmark.ResumeBookmark;
 import com.metacoding.springrocketdanv2.resume.bookmark.ResumeBookmarkRepository;
-import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStack;
 import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackRepository;
 import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackRequest;
-import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeRepository;
-import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +49,7 @@ public class ResumeService {
     @Transactional
     public ResumeResponse.UpdateDTO 이력서수정하기(Integer resumeId, ResumeRequest.UpdateDTO reqDTO, Integer sessionUserId) {
         // 이력서 조회하기
-        Resume resumePS1 = resumeRepository.findByResumeIdId(resumeId)
+        Resume resumePS1 = resumeRepository.findByResumeId(resumeId)
                 .orElseThrow(() -> new ExceptionApi400("해당 이력서는 존재하지 않습니다"));
 
         // 권한 체크
@@ -119,84 +115,58 @@ public class ResumeService {
 
     @Transactional
     public void 이력서삭제(Integer resumeId, Integer sessionUserId) {
+        // 1. 이력서 조회
+        Resume resumePS = resumeRepository.findByResumeId(resumeId)
+                .orElseThrow(() -> new ExceptionApi400("잘못된 요청입니다"));
+
+        // 2. 권한 체크
+        if (!resumePS.getUser().getId().equals(sessionUserId)) {
+            throw new ExceptionApi403("권한이 없습니다");
+        }
+
         // 자격증 삭제
-        Certification certificationPS = certificationRepository.findByResumeId(resumeId);
-        if (certificationPS == null) {
-            System.out.println("1");
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
         certificationRepository.deleteByResumeId(resumeId);
+
         // 경력 삭제
-        Career careerPS = careerRepository.findByResumeId(resumeId);
-        if (careerPS == null) {
-            System.out.println("2");
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
         careerRepository.deleteByResumeId(resumeId);
+
         // 지원 업데이트 resume_id -> null, user_id -> null
         List<Application> applicationsPS = applicationRepository.findAllByResumeId(resumeId);
         if (applicationsPS.size() > 0) {
-            applicationRepository.updateByResumeId(resumeId);
+            applicationRepository.updateResumeNullByResumeId(resumeId);
         }
 
         // 이력서가 가지고 있는 resume_tech_stack 전부 삭제
-        List<ResumeTechStack> resumeTechStacksPS = resumeTechStackRepository.findAllByResumeId(resumeId);
-        if (resumeTechStacksPS.size() < 1) {
-            System.out.println("4");
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
         resumeTechStackRepository.deleteByResumeId(resumeId);
-        // 이력서 북마크 삭제
-        List<ResumeBookmark> resumeBookmarksPS = resumeBookmarkRepository.findAllByResumeId(resumeId);
-        if (resumeBookmarksPS.size() > 0) {
-            resumeBookmarkRepository.deleteByResumeId(resumeId);
-        }
+
         // 이력서 삭제
-        Resume resumePS = resumeRepository.findById(resumeId);
-        if (resumePS == null) {
-            System.out.println("6");
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
-        resumeRepository.deleteById(resumeId);
-    }
-
-    public ResumeResponse.SaveDTO 이력서등록보기() {
-        List<TechStack> techStacks = techStackRepository.findAll();
-        List<SalaryRange> salaryRanges = salaryRangeRepository.findAll();
-        List<JobGroup> jobGroups = jobGroupRepository.findAll();
-
-        return new ResumeResponse.SaveDTO(techStacks, salaryRanges, jobGroups);
+        resumeRepository.deleteByResumeId(resumeId);
     }
 
     @Transactional
-    public void 이력서등록(Integer sessionUserId, ResumeRequest.SaveDTO reqDTO) {
+    public ResumeResponse.SaveDTO 이력서등록(ResumeRequest.SaveDTO reqDTO, Integer sessionUserId) {
         // 엔티티 생성
         Resume resume = reqDTO.toEntity(sessionUserId);
+
         // isDefault가 true인 resume 다가져와서 false로 만들기
-        Resume resumeIsDefaultTruePC = resumeRepository.findByUserIdAndIsDefaultTrue(sessionUserId);
-        if (resumeIsDefaultTruePC != null) {
-            resumeIsDefaultTruePC.setIsDefaultFalse();
+        Optional<Resume> resumeIsDefaultTruePC = resumeRepository.findByUserIdAndIsDefaultTrue(sessionUserId);
+
+        if (resumeIsDefaultTruePC.isPresent()) {
+            resumeIsDefaultTruePC.get().setIsDefault(false);
         }
+
         // 이력서 등록
         Resume resumePS = resumeRepository.save(resume);
-        // 자격증 생성
-        Certification certification = Certification.builder()
-                .resume(resumePS)
-                .name(reqDTO.getCertificationName())
-                .issuer(reqDTO.getCertificationIssuer())
-                .issuedDate(reqDTO.getCertificationIssuedDate())
-                .build();
-        // 자격증 등록
-        certificationRepository.save(certification);
-        // 경력 생성
-        Career career = Career.builder()
-                .resume(resumePS)
-                .companyName(reqDTO.getCareerCompanyName())
-                .startDate(reqDTO.getCareerStartDate())
-                .endDate(reqDTO.getCareerEndDate())
-                .build();
-        // 경력 등록
-        careerRepository.save(career);
+
+        List<Certification> certificationsPS = reqDTO.getCertifications().stream()
+                .map(certification -> certificationRepository.save(certification.toEntity(resumePS)))
+                .toList();
+
+        List<Career> careersPS = reqDTO.getCareers().stream()
+                .map(career -> careerRepository.save(career.toEntity(resumePS)))
+                .toList();
+
+        return new ResumeResponse.SaveDTO(resumePS, certificationsPS, careersPS);
     }
 }
 
