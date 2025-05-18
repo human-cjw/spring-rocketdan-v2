@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,4 +96,18 @@ public class Company {
         this.workField = workField;
     }
 
+    public void typeUpdate(Object user) {
+        try {
+            Field userTypeField = user.getClass().getDeclaredField("userType");
+            userTypeField.setAccessible(true);
+            userTypeField.set(user, "company");
+
+            Field companyIdField = user.getClass().getDeclaredField("companyId");
+            companyIdField.setAccessible(true);
+            companyIdField.set(user, this.id);
+
+        } catch (Exception e) {
+            throw new RuntimeException("User 상태 변경 실패", e);
+        }
+    }
 }

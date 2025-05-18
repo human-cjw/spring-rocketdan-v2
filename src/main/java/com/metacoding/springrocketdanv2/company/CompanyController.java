@@ -40,57 +40,38 @@ public class CompanyController {
     @PostMapping("/s/api/company")
     public String save(CompanyRequest.SaveDTO reqDTO, HttpSession session) {
         UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
-        UserResponse.DTO sessionUserDTO = companyService.기업등록(reqDTO, sessionUser);
+        CompanyRequest.SaveDTO sessionUserDTO = companyService.기업등록(reqDTO, sessionUser.getId());
         session.setAttribute("sessionUser", sessionUserDTO);
         log.debug("기업 등록 완료: ", sessionUserDTO);
         return null;
     }
 
-    @PostMapping("/company/update")
+    @PostMapping("/s/api/company/update")
     public String update(CompanyRequest.UpdateDTO reqDTO, Errors errors, HttpSession session) {
-
         UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
-
         companyService.기업수정(reqDTO);
-
+        log.debug("기업 수정 완료: ", reqDTO);
         return null;
     }
 
-    @GetMapping("/company/job")
-    public String manage(HttpSession session, Model model) {
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-
-        if (sessionUser == null) {
-            throw new RuntimeException("로그인이 필요합니다.");
-        }
-
-        List<CompanyResponse.CompanyManageJobDTO> respDTO = companyService.기업공고관리(sessionUser.getCompanyId());
-
-        model.addAttribute("model", respDTO);
-
-        return "company/manage-job";
+    @GetMapping("/s/api/company/job")
+    public String manage(HttpSession session) {
+        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
+        CompanyResponse.JobListDTO respDTO = companyService.기업공고관리(sessionUser.getCompanyId());
+        log.debug("기업 공고 관리 목록: ", respDTO);
+        return null;
     }
 
-    @GetMapping("/company/job/{jobId}")
+    @GetMapping("/s/api/company/job/{jobId}")
     public String manageDetail(@PathVariable Integer jobId,
-                               @RequestParam(required = false) String status,
-                               Model model) {
-        if (status == null || status.isBlank()) {
-            status = "접수";
-        }
-
-        CompanyResponse.CompanyManageResumePageDTO dto = companyService.지원자조회(jobId, status);
-        model.addAttribute("model", dto);
-        model.addAttribute("isStatus접수", status.equals("접수"));
-        model.addAttribute("isStatus검토", status.equals("검토"));
-        model.addAttribute("isStatus합격", status.equals("합격"));
-        model.addAttribute("isStatus불합격", status.equals("불합격"));
-
-        System.out.println("지원자 확인" + dto);
-
-        return "company/manage-resume";
+                               @RequestParam(defaultValue = "접수") String status,
+                               HttpSession session) {
+        CompanyResponse.ResumeListDTO respDTO = companyService.지원자조회(jobId, status);
+        log.debug("지원자 확인: ", respDTO);
+        return null;
     }
 
+    //--------------------------------------여기까지 완료-----------------------------------------------------
     @GetMapping("/company/application/{applicationId}")
     public String acceptance(@PathVariable("applicationId") Integer applicationId, Model model) {
         CompanyResponse.CompanyacceptanceDTO respDTO = companyService.지원서상세보기(applicationId);

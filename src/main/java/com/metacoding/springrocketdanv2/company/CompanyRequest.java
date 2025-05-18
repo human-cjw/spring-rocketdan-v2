@@ -69,7 +69,25 @@ public class CompanyRequest {
         @Size(max = 50, message = "업무 분야는 50자 이내여야 합니다.")
         private Integer workFieldId;
 
-        public Company toEntity(UserResponse.DTO sessionUserDTO) {
+        public SaveDTO(Company company) {
+            this.nameKr = company.getNameKr();
+            this.nameEn = company.getNameEn();
+            this.introduction = company.getIntroduction();
+            this.oneLineIntro = company.getOneLineIntro();
+            this.startDate = company.getStartDate();
+            this.businessNumber = company.getBusinessNumber();
+            this.email = company.getEmail();
+            this.contactManager = company.getContactManager();
+            this.phone = company.getPhone();
+            this.ceo = company.getCeo();
+            this.address = company.getAddress();
+            this.workFieldId = company.getWorkField().getId();
+            this.techStackIds = company.getCompanyTechStacks().stream()
+                    .map(cts -> cts.getTechStack().getId())
+                    .toList();
+        }
+
+        public Company toEntity(User user) {
             Company company = Company.builder()
                     .nameKr(nameKr)
                     .nameEn(nameEn)
@@ -80,9 +98,7 @@ public class CompanyRequest {
                     .email(email)
                     .contactManager(contactManager)
                     .address(address)
-                    .user(User.builder()
-                            .id(sessionUserDTO.getId())
-                            .build())
+                    .user(user)
                     .workField(WorkField.builder().id(workFieldId).build())
                     .phone(phone)
                     .ceo(ceo)
@@ -96,8 +112,6 @@ public class CompanyRequest {
                                 .build()
                 );
             }
-
-
             return company;
         }
     }

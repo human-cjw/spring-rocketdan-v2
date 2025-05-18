@@ -17,6 +17,7 @@ import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackReposito
 import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import com.metacoding.springrocketdanv2.user.User;
+import com.metacoding.springrocketdanv2.user.UserRepository;
 import com.metacoding.springrocketdanv2.user.UserResponse;
 import com.metacoding.springrocketdanv2.workfield.WorkField;
 import com.metacoding.springrocketdanv2.workfield.WorkFieldRepository;
@@ -45,6 +46,7 @@ public class CompanyService {
     private final ResumeTechStackRepository resumeTechStackRepository;
     private final JobBookmarkRepository jobBookmarkRepository;
     private final JobTechStackRepository jobTechStackRepository;
+    private final UserRepository userRepository;
 
 
     @PersistenceContext
@@ -66,111 +68,85 @@ public class CompanyService {
 
     // 기업 등록
     @Transactional
-    public UserResponse.DTO 기업등록(CompanyRequest.SaveDTO reqDTO, UserResponse.DTO sessionUser) {
+    public CompanyRequest.SaveDTO 기업등록(CompanyRequest.SaveDTO reqDTO, Integer userId) {
+        // 1. 유저 조회
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new ExceptionApi400("유저를 찾을 수 없습니다."));
 
-        // 1. 회사 + 연관 기술 스택 cascade 저장
-        Company company = reqDTO.toEntity(sessionUser);
+        // 2. 회사 생성
+        Company company = reqDTO.toEntity(userPS);
         Company companyPS = companyRepository.save(company);
 
-        // 2. 유저 정보 수정
-        User user = em.find(User.class, sessionUser.getId());
-        try {
-            Field userTypeField = User.class.getDeclaredField("userType");
-            userTypeField.setAccessible(true);
-            userTypeField.set(user, "company");
+        // 3. 회사가 유저 상태를 직접 바꿈
+        companyPS.typeUpdate(userPS);
 
-            Field companyIdField = User.class.getDeclaredField("companyId");
-            companyIdField.setAccessible(true);
-            companyIdField.set(user, companyPS.getId());
-        } catch (Exception e) {
-            throw new RuntimeException("User 필드 업데이트 실패", e);
-        }
-
-        // 3. 세션 유저 정보 리턴
-        return new UserResponse.DTO(user);
-    }
-
-    // 내 기업 조회
-    public CompanyResponse.DetailDTO 내기업조회(Integer userId) {
-        Company company = companyRepository.findByUserId(userId);
-        return new CompanyResponse.DetailDTO(company);
+        // 4. 응답 DTO 리턴
+        return new CompanyRequest.SaveDTO(companyPS);
     }
 
     // 기업 수정
     @Transactional
-    public void 기업수정(CompanyRequest.UpdateDTO dto) {
+    public void 기업수정(CompanyRequest.UpdateDTO reqDTO) {
 
-        Company company = companyRepository.findById(dto.getId());
+        // 1. 회사 엔티티 조회 (없는 경우 예외)
+        Company companyPS = companyRepository.findById(reqDTO.getId())
+                .orElseThrow(() -> new ExceptionApi400("회사를 찾을 수 없습니다."));
 
-        if (company == null) {
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
 
-        // workFieldId로 조회
-        WorkField workField = workFieldRepository.findById(dto.getWorkFieldId());
-        if (workField == null) {
-            throw new RuntimeException("선택한 산업 분야가 존재하지 않습니다.");
-        }
+        // 2. 산업 분야 연관 엔티티 조회 (연관관계 설정용)
+        WorkField workFieldPS = workFieldRepository.findById(reqDTO.getWorkFieldId())
+                .orElseThrow(() -> new RuntimeException("선택한 산업 분야가 존재하지 않습니다."));
 
-        company.update(dto, workField);
+         // 3. 회사 정보 수정 (기본 필드 + 연관 workField)
+        companyPS.update(reqDTO, workFieldPS);
 
-        // 기존 기술 스택 삭제 후 새로 저장
-        companyTechStackRepository.deleteByCompanyId(company.getId());
+        // 4. 기존 기술 스택 관계 모두 삭제
+        companyTechStackRepository.deleteByCompanyId(companyPS.getId());
 
-        List<String> techStackList = dto.getTechStack();
-        if (techStackList != null) {
-            for (String techName : techStackList) {
-                TechStack techStack = techStackRepository.findByName(techName);
-                if (techStack != null) {
-                    CompanyTechStack cts = new CompanyTechStack(company, techStack);
-                    companyTechStackRepository.save(cts);
-                }
-            }
+        // 5. 새로운 기술 스택 아이디 기반으로 CompanyTechStack 재생성 및 저장
+        List<Integer> techStackIds  = reqDTO.getTechStackIds();
+        if (techStackIds != null) {
+            techStackIds.stream()
+                    .map(id -> techStackRepository.findById(id))
+                    .filter(tech -> tech != null)
+                    .map(tech -> new CompanyTechStack(companyPS, tech))
+                    .forEach(cts -> companyTechStackRepository.save(cts));
         }
     }
 
-    public List<CompanyResponse.CompanyManageJobDTO> 기업공고관리(Integer companyId) {
+    // 기업 공고관리
+    public CompanyResponse.JobListDTO 기업공고관리(Integer companyId) {
         List<Job> jobList = jobRepository.findJobsByCompanyId(companyId);
-
-        List<CompanyResponse.CompanyManageJobDTO> companyManageJobDTOS = new ArrayList<>();
-        for (Job job : jobList) {
-            companyManageJobDTOS.add(new CompanyResponse.CompanyManageJobDTO(
-                    job.getId(),
-                    job.getTitle(),
-                    job.getCareerLevel(),
-                    job.getCreatedAt().toLocalDateTime(),
-                    job.getJobGroup().getName()
-            ));
-        }
-        return companyManageJobDTOS;
+        return new CompanyResponse.JobListDTO(jobList);
     }
 
-    public CompanyResponse.CompanyManageResumePageDTO 지원자조회(Integer jobId, String status) {
-        List<Application> applications = applicationRepository.findByJobId(jobId, status);
+    // 지원자 조회
+    public CompanyResponse.ResumeListDTO 지원자조회(Integer jobId, String status) {
+        // 1. 공고 제목 조회
+        String jobTitle = jobRepository.findById(jobId)
+                .map(job -> job.getTitle())
+                .orElse("공고 제목 없음");
 
-        List<CompanyResponse.CompanyManageResumeDTO> applicationDTOs = new ArrayList<>();
+        // 2. 지원자 목록 조회 및 DTO 변환
+        List<CompanyResponse.ResumeListDTO.ResumeItemDTO> applicationDTOs =
+                applicationRepository.findByJobId(jobId, status).stream()
+                        .filter(app -> app.getResume() != null)
+                        .map(app -> {
+                            Resume resume = resumeRepository.findById(app.getResume().getId()).orElse(null);
+                            return new CompanyResponse.ResumeListDTO.ResumeItemDTO(
+                                    app.getId(),
+                                    app.getUser().getUsername(),
+                                    resume != null ? resume.getTitle() : "이력서 없음",
+                                    resume != null ? resume.getCareerLevel() : "없음",
+                                    app.getCreatedAt().toLocalDateTime(),
+                                    app.getStatus()
+                            );
+                        })
+                        .toList();
 
-        for (Application app : applications) {
-            System.out.println(app);
-            if (app.getResume() == null) continue;
-
-            Resume resume = resumeRepository.findById(app.getResume().getId());  // lazy 대신 직접 조회
-            applicationDTOs.add(new CompanyResponse.CompanyManageResumeDTO(
-                    app.getId(),
-                    app.getUser().getUsername(),
-                    resume.getTitle(),
-                    resume.getCareerLevel(),
-                    app.getCreatedAt().toLocalDateTime(),
-                    app.getStatus()
-            ));
-        }
-
-        Job job = jobRepository.findById(jobId);  // 공고는 한번만 조회
-        String jobTitle = (job != null) ? job.getTitle() : "공고 제목 없음";
-
-        return new CompanyResponse.CompanyManageResumePageDTO(jobId, jobTitle, applicationDTOs);
+        return new CompanyResponse.ResumeListDTO(jobId, jobTitle, applicationDTOs);
     }
-
+    // -------------------------여기까지 완료 옵셔널 처리 해야함-------------------------------------------------------
     @Transactional
     public CompanyResponse.CompanyacceptanceDTO 지원서상세보기(Integer applicationId) {
         // 1. 지원서 조회
