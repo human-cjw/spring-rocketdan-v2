@@ -1,8 +1,10 @@
 package com.metacoding.springrocketdanv2.application;
 
+import com.metacoding.springrocketdanv2.career.Career;
 import com.metacoding.springrocketdanv2.company.Company;
 import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.resume.Resume;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.user.User;
 import lombok.Data;
 
@@ -230,6 +232,64 @@ public class ApplicationResponse {
             this.careerLevel = job.getCareerLevel();
             this.updatedAt = job.getUpdatedAt() != null ? job.getUpdatedAt().toString().substring(0, 10) : null;
             this.description = job.getDescription();
+        }
+    }
+
+    @Data
+    public static class AcceptanceDTO {
+        private Integer applicationId;
+        private String username;
+        private String resumeTitle;
+        private String summary;
+        private String gender;
+        private String careerLevel;
+        private String education;
+        private String birthdate;
+        private String major;
+        private String graduationType;
+        private String phone;
+        private String portfolioUrl;
+
+        private List<CareerDTO> careers;
+        private List<TechStackDTO> techStacks;
+
+        public AcceptanceDTO(Resume resume, List<Career> careers, List<TechStack> techStacks, Integer applicationId) {
+            this.applicationId = applicationId;
+            this.username = resume.getUser().getUsername();
+            this.resumeTitle = resume.getTitle();
+            this.summary = resume.getSummary();
+            this.gender = resume.getGender();
+            this.careerLevel = resume.getCareerLevel();
+            this.education = resume.getEducation();
+            this.birthdate = resume.getBirthdate();
+            this.major = resume.getMajor();
+            this.graduationType = resume.getGraduationType();
+            this.phone = resume.getPhone();
+            this.portfolioUrl = resume.getPortfolioUrl();
+            this.careers = careers.stream()
+                    .map(career -> new CareerDTO(career.getCompanyName()))
+                    .toList();
+            this.techStacks = techStacks.stream()
+                    .map(tech -> new TechStackDTO(tech.getName()))
+                    .toList();
+        }
+
+        @Data
+        public static class CareerDTO {
+            private String companyName;
+
+            public CareerDTO(String companyName) {
+                this.companyName = companyName;
+            }
+        }
+
+        @Data
+        public static class TechStackDTO {
+            private String name;
+
+            public TechStackDTO(String name) {
+                this.name = name;
+            }
         }
     }
 }

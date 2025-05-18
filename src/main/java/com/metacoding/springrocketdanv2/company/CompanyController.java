@@ -1,5 +1,8 @@
 package com.metacoding.springrocketdanv2.company;
 
+import com.metacoding.springrocketdanv2.application.ApplicationResponse;
+import com.metacoding.springrocketdanv2.application.ApplicationService;
+import com.metacoding.springrocketdanv2.job.JobService;
 import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import com.metacoding.springrocketdanv2.user.UserResponse;
 import com.metacoding.springrocketdanv2.workfield.WorkFieldRepository;
@@ -18,6 +21,8 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyService companyService;
+    private final ApplicationService applicationService;
+    private final JobService jobService;
     private final WorkFieldRepository workFieldRepository;
     private final TechStackRepository techStackRepository;
 
@@ -71,37 +76,17 @@ public class CompanyController {
         return null;
     }
 
-    //--------------------------------------여기까지 완료-----------------------------------------------------
-    @GetMapping("/company/application/{applicationId}")
-    public String acceptance(@PathVariable("applicationId") Integer applicationId, Model model) {
-        CompanyResponse.CompanyacceptanceDTO respDTO = companyService.지원서상세보기(applicationId);
-        model.addAttribute("model", respDTO);
-        return "company/acceptance";
+    @GetMapping("/s/api/company/application/{applicationId}")
+    public String acceptance(@PathVariable Integer applicationId) {
+        ApplicationResponse.AcceptanceDTO respDTO = applicationService.지원서상세보기(applicationId);
+        log.debug("지원서 상세: ", respDTO);
+        return null;
     }
 
-    @PostMapping("/company/application/{applicationId}/accept")
-    public String accept(@PathVariable("applicationId") Integer applicationId) {
-        System.out.println("컨트롤러 확인용 합격" + applicationId);
-        Integer jobId = companyService.지원상태수정(applicationId, "합격");
-        return "redirect:/company/job/" + jobId;
-    }
-
-    @PostMapping("/company/application/{applicationId}/reject")
-    public String reject(@PathVariable("applicationId") Integer applicationId) {
-        System.out.println("컨트롤러 확인용 불합격" + applicationId);
-        Integer jobId = companyService.지원상태수정(applicationId, "불합격");
-        return "redirect:/company/job/" + jobId;
-    }
-
-    @PostMapping("/company/job/{jobId}/delete")
+    @PostMapping("/s/api/job/{jobId}/delete")
     public String deleteJob(@PathVariable Integer jobId, HttpSession session) {
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-        if (sessionUser == null || !"company".equals(sessionUser.getUserType())) {
-            return "redirect:/login-form";
-        }
-
-        companyService.공고삭제(jobId);
-
-        return "redirect:/company/job";
+        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
+        jobService.공고삭제(jobId);
+        return null;
     }
 }

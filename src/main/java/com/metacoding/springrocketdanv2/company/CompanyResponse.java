@@ -167,49 +167,4 @@ public class CompanyResponse {
             }
         }
     }
-
-    //---------------------------------여기까지 완료 ------------------------------------------------------------
-    @Data
-    public static class CompanyacceptanceDTO {
-        private Integer applicationId;
-        private String username;
-        private String resumeTitle;
-        private String summary;
-        private String gender;
-        private String careerLevel;
-        private String education;
-        private String birthdate;
-        private String major;
-        private String graduationType;
-        private String phone;
-        private String portfolioUrl;
-
-        private List<String> careerCompanyNames; // 커리어 회사명 리스트
-        private List<String> techStackNames; // 기술스택 이름 리스트
-
-        public CompanyacceptanceDTO(Resume resume, List<Career> careers, List<TechStack> techStacks, Integer applicationId) {
-            this.applicationId = applicationId;
-            this.username = resume.getUser().getUsername();
-            this.resumeTitle = resume.getTitle();
-            this.summary = resume.getSummary();
-            this.gender = resume.getGender();
-            this.careerLevel = resume.getCareerLevel();
-            this.education = resume.getEducation();
-            this.birthdate = resume.getBirthdate();
-            this.major = resume.getMajor();
-            this.graduationType = resume.getGraduationType();
-            this.phone = resume.getPhone();
-            this.portfolioUrl = resume.getPortfolioUrl();
-
-            // 커리어 회사명만 뽑아오기
-            this.careerCompanyNames = careers.stream()
-                    .map(Career::getCompanyName)
-                    .collect(Collectors.toList());
-
-            // 기술스택 이름만 뽑아오기
-            this.techStackNames = techStacks.stream()
-                    .map(TechStack::getName)
-                    .collect(Collectors.toList());
-        }
-    }
 }

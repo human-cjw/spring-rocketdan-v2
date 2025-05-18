@@ -1,11 +1,17 @@
 package com.metacoding.springrocketdanv2.application;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
+import com.metacoding.springrocketdanv2.career.Career;
+import com.metacoding.springrocketdanv2.career.CareerRepository;
 import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.job.JobRepository;
 import com.metacoding.springrocketdanv2.resume.Resume;
 import com.metacoding.springrocketdanv2.resume.ResumeRepository;
+import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackRepository;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
+import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import com.metacoding.springrocketdanv2.user.UserResponse;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +25,8 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
     private final ResumeRepository resumeRepository;
+    private final CareerRepository careerRepository;
+    private final ResumeTechStackRepository resumeTechStackRepository;
 
     public ApplicationResponse.ProcessDTO2 입사지원현황보기(Integer userId, Integer jobId) {
         Application applicationPS = applicationRepository.findByUserIdAndJobId(userId, jobId);
@@ -98,5 +106,38 @@ public class ApplicationService {
         ApplicationResponse.ApplyDoneDTO respDTO = new ApplicationResponse.ApplyDoneDTO(jobPC);
 
         return respDTO;
+    }
+
+    @Transactional
+    public ApplicationResponse.AcceptanceDTO 지원서상세보기(Integer applicationId) {
+        // 1. 지원서 조회
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ExceptionApi400("지원서를 찾을 수 없습니다."));
+
+        // 2. 상태가 "접수"면 "검토"로 변경
+        if ("접수".equals(application.getStatus())) {
+            application.updateStatus("검토");
+        }
+
+        // 3. 이력서 조회
+        Resume resume = resumeRepository.findById(application.getResume().getId())
+                .orElseThrow(() -> new ExceptionApi400("이력서를 찾을 수 없습니다."));
+
+        // 4. 커리어, 기술스택 조회
+        List<Career> careers = careerRepository.findCareersByResumeId(resume.getId());
+        List<TechStack> techStacks = resumeTechStackRepository.findAllByResumeIdWithTechStack(resume.getId());
+
+        // 5. DTO 생성
+        return new ApplicationResponse.AcceptanceDTO(resume, careers, techStacks, application.getId());
+    }
+
+    @Transactional
+    public Integer 지원상태수정(Integer applicationId, String newStatus) {
+        Application applicationPS = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ExceptionApi400("지원서를 찾을 수 없습니다."));
+
+        applicationPS.updateStatus(newStatus);
+
+        return applicationPS.getJob().getId(); // 필요 시 사용
     }
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -18,8 +19,8 @@ public class JobRepository {
         return query.getResultList();
     }
 
-    public Job findById(Integer id) {
-        return em.find(Job.class, id);
+    public Optional<Job> findById(Integer id) {
+        return Optional.ofNullable(em.find(Job.class, id));
     }
 
     public void save(Job job) {

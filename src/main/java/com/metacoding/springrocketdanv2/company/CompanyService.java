@@ -42,15 +42,7 @@ public class CompanyService {
     private final ApplicationRepository applicationRepository;
     private final ResumeRepository resumeRepository;
     private final JobRepository jobRepository;
-    private final CareerRepository careerRepository;
-    private final ResumeTechStackRepository resumeTechStackRepository;
-    private final JobBookmarkRepository jobBookmarkRepository;
-    private final JobTechStackRepository jobTechStackRepository;
     private final UserRepository userRepository;
-
-
-    @PersistenceContext
-    private EntityManager em;
 
     // 기업 상세보기
     public CompanyResponse.DetailDTO 기업상세(Integer companyId, UserResponse.DTO sessionUser) {
@@ -145,68 +137,5 @@ public class CompanyService {
                         .toList();
 
         return new CompanyResponse.ResumeListDTO(jobId, jobTitle, applicationDTOs);
-    }
-    // -------------------------여기까지 완료 옵셔널 처리 해야함-------------------------------------------------------
-    @Transactional
-    public CompanyResponse.CompanyacceptanceDTO 지원서상세보기(Integer applicationId) {
-        // 1. 지원서 조회
-        Application application = applicationRepository.findById(applicationId);
-
-        if (application == null) {
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
-
-        // 2. 상태가 "접수"면 "검토"로 변경
-        if ("접수".equals(application.getStatus())) {
-            application.updateStatus("검토");
-        }
-
-        // 3. 이력서 조회
-        Resume resume = resumeRepository.findById(application.getResume().getId());
-
-        // 4. 커리어 조회
-        List<Career> careers = careerRepository.findCareersByResumeId(resume.getId());
-
-        // 5. 이력서 기술스택 조회
-        List<TechStack> techStacks = resumeTechStackRepository.findAllByResumeIdWithTechStack(resume.getId());
-
-        // 6. DTO 조립
-        return new CompanyResponse.CompanyacceptanceDTO(resume, careers, techStacks, applicationId);
-    }
-
-    @Transactional
-    public Integer 지원상태수정(Integer applicationId, String newStatus) {
-        Application applicationPS = applicationRepository.findById(applicationId);
-        if (applicationPS == null) {
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
-        applicationPS.updateStatus(newStatus);
-        return applicationPS.getJob().getId();
-    }
-
-    @Transactional
-    public void 공고삭제(Integer jobId) {
-        // 1. 지원 내역 삭제
-        Job jobPS = jobRepository.findById(jobId);
-        if (jobPS == null) {
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
-        applicationRepository.deleteApplicationsByJobId(jobId);
-
-        // 2. 북마크 삭제
-        jobBookmarkRepository.deleteJobBookmarksByJobId(jobId);
-
-        // 3. 기술스택 연결 삭제
-        jobTechStackRepository.deleteJobTechStacksByJobId(jobId);
-
-        // 4. 최종 공고 삭제
-        jobRepository.deleteJobById(jobId);
-    }
-
-    public CompanyResponse.CompanySaveFormDTO 등록보기() {
-        List<WorkField> workFields = workFieldRepository.findAll();
-        List<TechStack> techStacks = techStackRepository.findAll();
-
-        return new CompanyResponse.CompanySaveFormDTO(workFields, techStacks);
     }
 }

@@ -1,9 +1,11 @@
 package com.metacoding.springrocketdanv2.job;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
+import com.metacoding.springrocketdanv2.application.ApplicationRepository;
 import com.metacoding.springrocketdanv2.job.bookmark.JobBookmark;
 import com.metacoding.springrocketdanv2.job.bookmark.JobBookmarkRepository;
 import com.metacoding.springrocketdanv2.job.techstack.JobTechStack;
+import com.metacoding.springrocketdanv2.job.techstack.JobTechStackRepository;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroupRepository;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
@@ -30,6 +32,8 @@ public class JobService {
     private final SalaryRangeRepository salaryRangeRepository;
     private final JobGroupRepository jobGroupRepository;
     private final JobBookmarkRepository jobBookmarkRepository;
+    private final ApplicationRepository applicationRepository;
+    private final JobTechStackRepository jobTechStackRepository;
 
     public List<JobResponse.DTO> 글목록보기() {
         List<Job> jobs = jobRepository.findAll();  // 모든 Job 조회
@@ -138,5 +142,24 @@ public class JobService {
                 jobGroup,
                 jobTechStacks
         );
+    }
+
+    @Transactional
+    public void 공고삭제(Integer jobId) {
+        // 1. 공고 존재 여부 확인 (Optional 처리)
+        jobRepository.findById(jobId)
+                .orElseThrow(() -> new ExceptionApi400("잘못된 요청입니다"));
+
+        // 2. 지원 내역 삭제
+        applicationRepository.deleteApplicationsByJobId(jobId);
+
+        // 3. 북마크 삭제
+        jobBookmarkRepository.deleteJobBookmarksByJobId(jobId);
+
+        // 4. 기술 스택 연결 삭제
+        jobTechStackRepository.deleteJobTechStacksByJobId(jobId);
+
+        // 5. 공고 삭제
+        jobRepository.deleteJobById(jobId);
     }
 }

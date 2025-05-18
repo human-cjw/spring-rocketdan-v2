@@ -6,14 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class ResumeRepository {
     private final EntityManager em;
 
-    public Resume findById(Integer id) {
-        return em.find(Resume.class, id);
+    public Optional<Resume> findById(Integer id) {
+        return Optional.ofNullable(em.find(Resume.class, id));
     }
 
 

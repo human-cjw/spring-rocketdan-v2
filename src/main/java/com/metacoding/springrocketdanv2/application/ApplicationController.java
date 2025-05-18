@@ -80,4 +80,16 @@ public class ApplicationController {
 
         return "user/application/process";
     }
+
+    @PostMapping("/s/api/application/{applicationId}/accept")
+    public String accept(@PathVariable Integer applicationId) {
+        Integer jobId = applicationService.지원상태수정(applicationId, "합격");
+        return null;
+    }
+
+    @PostMapping("/s/api/application/{applicationId}/reject")
+    public String reject(@PathVariable Integer applicationId) {
+        Integer jobId = applicationService.지원상태수정(applicationId, "불합격");
+        return null;
+    }
 }
