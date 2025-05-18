@@ -3,7 +3,6 @@ package com.metacoding.springrocketdanv2.resume;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStack;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
-import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.user.User;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -81,33 +80,6 @@ public class Resume {
         this.user = user;
         this.salaryRange = salaryRange;
         this.jobGroup = jobGroup;
-    }
-
-    public void update(ResumeRequest.UpdateDTO reqDTO) {
-        this.title = reqDTO.getTitle();
-        this.summary = reqDTO.getSummary();
-        this.portfolioUrl = reqDTO.getPortfolioUrl();
-        this.gender = reqDTO.getGender();
-        this.education = reqDTO.getEducation();
-        this.birthdate = reqDTO.getBirthdate();
-        this.major = reqDTO.getMajor();
-        this.graduationType = reqDTO.getGraduationType();
-        this.phone = reqDTO.getPhone();
-        this.enrollmentDate = reqDTO.getEnrollmentDate();
-        this.graduationDate = reqDTO.getGraduationDate();
-        this.careerLevel = reqDTO.getCareerLevel();
-        this.isDefault = reqDTO.getIsDefault() != null ? reqDTO.getIsDefault() : false;
-        this.salaryRange = SalaryRange.builder().id(reqDTO.getSalaryRangeId()).build();
-        this.jobGroup = JobGroup.builder().id(reqDTO.getJobGroupId()).build();
-        this.resumeTechStacks.clear();
-        this.resumeTechStacks.addAll(
-                reqDTO.getTechStackIds().stream()
-                        .map(techStackId -> ResumeTechStack.builder()
-                                .techStack(TechStack.builder().id(techStackId).build())
-                                .resume(this)
-                                .build())
-                        .toList()
-        );
     }
 
     public void setIsDefault(boolean isDefault) {

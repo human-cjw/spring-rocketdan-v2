@@ -1,82 +1,87 @@
 package com.metacoding.springrocketdanv2.company;
 
-import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import com.metacoding.springrocketdanv2.user.UserResponse;
-import com.metacoding.springrocketdanv2.workfield.WorkFieldRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class CompanyController {
-
     private final CompanyService companyService;
-    private final WorkFieldRepository workFieldRepository;
-    private final TechStackRepository techStackRepository;
+    private final HttpSession session;
 
     @GetMapping("/api/company/{companyId}")
-    public String detail(@PathVariable Integer companyId, HttpSession session) {
-        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
-        CompanyResponse.DetailDTO respDTO = companyService.기업상세(companyId, sessionUser);
+    public String detail(@PathVariable Integer companyId) {
+        Integer sessionUserCompanyId = null;
+
+        CompanyResponse.DetailDTO respDTO = companyService.기업상세(companyId, sessionUserCompanyId);
+
         log.debug("기업상세: ", respDTO);
+
         return null;
     }
 
     @GetMapping("/api/company")
-    public String list(HttpSession session) {
-        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
-        CompanyResponse.ListDTO respDTO = companyService.기업리스트(sessionUser);
+    public String list() {
+        CompanyResponse.ListDTO respDTO = companyService.기업리스트();
+
         log.debug("회사 목록: ", respDTO);
+
         return null;
     }
 
     @PostMapping("/s/api/company")
-    public String save(CompanyRequest.SaveDTO reqDTO, HttpSession session) {
-        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
-        CompanyRequest.SaveDTO sessionUserDTO = companyService.기업등록(reqDTO, sessionUser.getId());
-        session.setAttribute("sessionUser", sessionUserDTO);
-        log.debug("기업 등록 완료: ", sessionUserDTO);
+    public String save(CompanyRequest.SaveDTO reqDTO) {
+        Integer sessionUserId = null;
+
+        CompanyResponse.SaveDTO respDTO = companyService.기업등록(reqDTO, sessionUserId);
+
+        log.debug("기업등록" + respDTO);
+
         return null;
     }
 
-    @PostMapping("/s/api/company/update")
-    public String update(CompanyRequest.UpdateDTO reqDTO, Errors errors, HttpSession session) {
-        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
-        companyService.기업수정(reqDTO);
-        log.debug("기업 수정 완료: ", reqDTO);
+    @PutMapping("/s/api/company/{companyId}")
+    public String update(@RequestParam("companyId") Integer companyId, CompanyRequest.UpdateDTO reqDTO, Errors errors) {
+        Integer sessionUserCompanyId = null;
+
+        CompanyResponse.UpdateDTO respDTO = companyService.기업수정(reqDTO, companyId, sessionUserCompanyId);
+
+        log.debug("기업수정", respDTO);
+
         return null;
     }
 
     @GetMapping("/s/api/company/job")
-    public String manage(HttpSession session) {
-        UserResponse.DTO sessionUser = (UserResponse.DTO) session.getAttribute("sessionUser");
-        CompanyResponse.JobListDTO respDTO = companyService.기업공고관리(sessionUser.getCompanyId());
+    public String manage() {
+        Integer sessionUserCompanyId = null;
+
+        CompanyResponse.JobListDTO respDTO = companyService.기업공고관리(sessionUserCompanyId);
+
         log.debug("기업 공고 관리 목록: ", respDTO);
+
         return null;
     }
 
-    @GetMapping("/s/api/company/job/{jobId}")
+    @GetMapping("/s/api/company/job/{jobId}/application")
     public String manageDetail(@PathVariable Integer jobId,
-                               @RequestParam(defaultValue = "접수") String status,
-                               HttpSession session) {
-        CompanyResponse.ResumeListDTO respDTO = companyService.지원자조회(jobId, status);
+                               @RequestParam(value = "status", defaultValue = "접수") String status) {
+        CompanyResponse.ApplicationListDTO respDTO = companyService.지원자조회(jobId, status);
+
         log.debug("지원자 확인: ", respDTO);
+
         return null;
     }
 
     //--------------------------------------여기까지 완료-----------------------------------------------------
-    @GetMapping("/company/application/{applicationId}")
-    public String acceptance(@PathVariable("applicationId") Integer applicationId, Model model) {
-        CompanyResponse.CompanyacceptanceDTO respDTO = companyService.지원서상세보기(applicationId);
-        model.addAttribute("model", respDTO);
-        return "company/acceptance";
+    @GetMapping("/s/api/company/application/{applicationId}")
+    public String acceptance(@PathVariable("applicationId") Integer applicationId) {
+        companyService.지원서상세보기(applicationId);
+        return null;
     }
 
     @PostMapping("/company/application/{applicationId}/accept")

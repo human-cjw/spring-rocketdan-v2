@@ -81,21 +81,6 @@ public class Company {
         this.workField = workField;
     }
 
-    public void update(CompanyRequest.UpdateDTO redDTO, WorkField workField) {
-        this.nameKr = redDTO.getNameKr();
-        this.nameEn = redDTO.getNameEn();
-        this.oneLineIntro = redDTO.getOneLineIntro();
-        this.introduction = redDTO.getIntroduction();
-        this.startDate = redDTO.getStartDate();
-        this.businessNumber = redDTO.getBusinessNumber();
-        this.email = redDTO.getEmail();
-        this.contactManager = redDTO.getContactManager();
-        this.phone = redDTO.getPhone();
-        this.ceo = redDTO.getCeo();
-        this.address = redDTO.getAddress();
-        this.workField = workField;
-    }
-
     public void typeUpdate(Object user) {
         try {
             Field userTypeField = user.getClass().getDeclaredField("userType");

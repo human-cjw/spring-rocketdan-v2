@@ -1,5 +1,7 @@
 package com.metacoding.springrocketdanv2.resume;
 
+import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
@@ -53,14 +55,6 @@ public class ResumeRepository {
         return query.getResultList();
     }
 
-    public List<Resume> findAllByUserId(Integer userId) {
-        String sql;
-        sql = "SELECT res FROM Resume res WHERE res.user.id = :userId ORDER BY res.id DESC";
-        Query query = em.createQuery(sql, Resume.class);
-        query.setParameter("userId", userId);
-        return query.getResultList();
-    }
-
     public Optional<Resume> findByUserIdAndIsDefaultTrue(Integer userId) {
         String sql = "SELECT res FROM Resume res WHERE res.user.id = :userId AND res.isDefault = true";
         Query query = em.createQuery(sql, Resume.class);
@@ -85,6 +79,9 @@ public class ResumeRepository {
     }
 
     public void updateByResumeId(Integer resumeId, ResumeRequest.UpdateDTO reqDTO) {
+        SalaryRange salaryRangeRef = em.getReference(SalaryRange.class, reqDTO.getSalaryRangeId());
+        JobGroup jobGroupRef = em.getReference(JobGroup.class, reqDTO.getJobGroupId());
+
         em.createQuery("""
                         UPDATE Resume r SET
                             r.title = :title,
@@ -99,9 +96,9 @@ public class ResumeRepository {
                             r.enrollmentDate = :enrollmentDate,
                             r.graduationDate = :graduationDate,
                             r.careerLevel = :careerLevel,
-                            r.isDefault = COALESCE(:isDefault, false),
-                            r.salaryRange = (SELECT s FROM SalaryRange s WHERE s.id = :salaryRangeId),
-                            r.jobGroup = (SELECT jg FROM JobGroup jg WHERE jg.id = :jobGroupId)
+                            r.isDefault = :isDefault,
+                            r.salaryRange = :salaryRange,
+                            r.jobGroup = :jobGroup
                         WHERE r.id = :resumeId
                         """)
                 .setParameter("title", reqDTO.getTitle())
@@ -116,9 +113,9 @@ public class ResumeRepository {
                 .setParameter("enrollmentDate", reqDTO.getEnrollmentDate())
                 .setParameter("graduationDate", reqDTO.getGraduationDate())
                 .setParameter("careerLevel", reqDTO.getCareerLevel())
-                .setParameter("isDefault", reqDTO.getIsDefault() != null ? reqDTO.getIsDefault() : false)
-                .setParameter("salaryRangeId", reqDTO.getSalaryRangeId())
-                .setParameter("jobGroupId", reqDTO.getJobGroupId())
+                .setParameter("isDefault", reqDTO.getIsDefault())
+                .setParameter("salaryRange", salaryRangeRef)
+                .setParameter("jobGroup", jobGroupRef)
                 .setParameter("resumeId", resumeId)
                 .executeUpdate();
     }

@@ -44,9 +44,9 @@ public class JobController {
     @PutMapping("/s/api/job/{jobId}")
     public String update(@PathVariable("jobId") Integer jobId,
                          @Valid JobRequest.UpdateDTO reqDTO, Errors errors) {
-        Integer companyId = null;
+        Integer sessionUserCompanyId = null;
 
-        JobResponse.UpdateDTO respDTO = jobService.수정하기(jobId, reqDTO, companyId);
+        JobResponse.UpdateDTO respDTO = jobService.수정하기(jobId, reqDTO, sessionUserCompanyId);
 
         log.debug("공고수정" + respDTO);
 

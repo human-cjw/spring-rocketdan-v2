@@ -1,5 +1,8 @@
 package com.metacoding.springrocketdanv2.job;
 
+import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
+import com.metacoding.springrocketdanv2.workfield.WorkField;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +58,10 @@ public class JobRepository {
     }
 
     public void updateByJobId(Integer jobId, JobRequest.UpdateDTO reqDTO) {
+        SalaryRange salaryRangeRef = em.getReference(SalaryRange.class, reqDTO.getSalaryRangeId());
+        WorkField workFieldRef = em.getReference(WorkField.class, reqDTO.getWorkFieldId());
+        JobGroup jobGroupRef = em.getReference(JobGroup.class, reqDTO.getJobGroupId());
+
         em.createQuery("""
                         UPDATE Job j SET
                             j.title = :title,
@@ -64,9 +71,9 @@ public class JobRepository {
                             j.deadline = :deadline,
                             j.status = :status,
                             j.careerLevel = :careerLevel,
-                            j.salaryRange = (SELECT s FROM SalaryRange s WHERE s.id = :salaryRangeId),
-                            j.workField = (SELECT w FROM WorkField w WHERE w.id = :workFieldId),
-                            j.jobGroup = (SELECT g FROM JobGroup g WHERE g.id = :jobGroupId)
+                            j.salaryRange = :salaryRange,
+                            j.workField = :workField,
+                            j.jobGroup = :jobGroup
                         WHERE j.id = :jobId
                         """)
                 .setParameter("title", reqDTO.getTitle())
@@ -76,15 +83,15 @@ public class JobRepository {
                 .setParameter("deadline", reqDTO.getDeadline())
                 .setParameter("status", reqDTO.getStatus())
                 .setParameter("careerLevel", reqDTO.getCareerLevel())
-                .setParameter("salaryRangeId", reqDTO.getSalaryRangeId())
-                .setParameter("workFieldId", reqDTO.getWorkFieldId())
-                .setParameter("jobGroupId", reqDTO.getJobGroupId())
+                .setParameter("salaryRange", salaryRangeRef)
+                .setParameter("workField", workFieldRef)
+                .setParameter("jobGroup", jobGroupRef)
                 .setParameter("jobId", jobId)
                 .executeUpdate();
     }
 
     public List<Job> findAllByCompanyId(Integer companyId) {
-        String q = "SELECT j FROM Job j JOIN FETCH j.jobGroup WHERE j.company.id = :companyId ORDER BY j.createdAt DESC";
+        String q = "SELECT j FROM Job j WHERE j.company.id = :companyId ORDER BY j.id DESC";
         return em.createQuery(q, Job.class)
                 .setParameter("companyId", companyId)
                 .getResultList();

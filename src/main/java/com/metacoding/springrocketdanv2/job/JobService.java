@@ -61,11 +61,11 @@ public class JobService {
     }
 
     @Transactional
-    public JobResponse.UpdateDTO 수정하기(Integer jobId, JobRequest.UpdateDTO reqDTO, Integer companyId) {
+    public JobResponse.UpdateDTO 수정하기(Integer jobId, JobRequest.UpdateDTO reqDTO, Integer sessionUserCompanyId) {
         Job jobPS1 = jobRepository.findByJobId(jobId)
                 .orElseThrow(() -> new ExceptionApi400("해당 공고는 존재하지 않습니다"));
 
-        if (!jobPS1.getCompany().equals(companyId)) {
+        if (!jobPS1.getCompany().equals(sessionUserCompanyId)) {
             throw new ExceptionApi403("권한이 없습니다");
         }
 
