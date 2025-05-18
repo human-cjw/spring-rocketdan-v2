@@ -13,7 +13,6 @@ import com.metacoding.springrocketdanv2.techstack.TechStackResponse;
 import com.metacoding.springrocketdanv2.user.UserResponse;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -135,45 +134,28 @@ public class ResumeResponse {
     public static class ListDTO {
         private List<ItemDTO> resumes;
 
+        public ListDTO(List<Resume> resumes) {
+            this.resumes = resumes.stream()
+                    .map((resume) -> new ItemDTO(resume))
+                    .toList();
+        }
+
+        @Data
         class ItemDTO {
             private Integer resumeId;
             private String title;
             private String createdAt;
             private Boolean isDefault;
-        }
-    }
 
-    @Data
-    public static class ResumeListDTO {
-        private boolean isAll;
-        private boolean isDefault;
-        private List<ResumeItemDTO> resumeItems = new ArrayList<>();
-
-        public ResumeListDTO(List<Resume> resumes, boolean isDefault) {
-            if (isDefault) {
-                this.isDefault = true;
-            } else {
-                this.isAll = true;
-            }
-
-            for (Resume resume : resumes) {
-                this.resumeItems.add(new ResumeItemDTO(resume.getId(), resume.getTitle(), resume.getCreatedAt().toString().substring(0, 10)));
-            }
-        }
-
-        @Data
-        class ResumeItemDTO {
-            private Integer id;
-            private String title;
-            private String createdAt;
-
-            public ResumeItemDTO(Integer id, String title, String createdAt) {
-                this.id = id;
-                this.title = title;
-                this.createdAt = createdAt;
+            public ItemDTO(Resume resume) {
+                this.resumeId = resume.getId();
+                this.title = resume.getTitle();
+                this.createdAt = resume.getCreatedAt().toString().substring(0, 10);
+                this.isDefault = resume.getIsDefault();
             }
         }
     }
+
 
     @Data
     public static class SaveDTO {

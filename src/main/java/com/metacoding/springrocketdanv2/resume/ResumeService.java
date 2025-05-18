@@ -111,10 +111,10 @@ public class ResumeService {
         return new ResumeResponse.UpdateDTO(resumePS2, certificationsPS, careersPS);
     }
 
-    public ResumeResponse.ResumeListDTO 이력서목록보기(Integer sessionUserId, boolean isDefault) {
+    public ResumeResponse.ListDTO 이력서목록보기(Integer sessionUserId, boolean isDefault) {
         List<Resume> resumesPS = resumeRepository.findAllByUserId(sessionUserId, isDefault);
 
-        return new ResumeResponse.ResumeListDTO(resumes, isDefault);
+        return new ResumeResponse.ListDTO(resumesPS);
     }
 
     @Transactional

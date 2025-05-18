@@ -41,7 +41,7 @@ public class ResumeController {
     @GetMapping("/s/api/user/resume")
     public String list(@RequestParam(required = false, value = "isDefault", defaultValue = "false") boolean isDefault) {
         Integer sessionUserId = null;
-        ResumeResponse.ResumeListDTO respDTO = resumeService.이력서목록보기(sessionUserId, isDefault);
+        ResumeResponse.ListDTO respDTO = resumeService.이력서목록보기(sessionUserId, isDefault);
 
         return null;
     }
