@@ -2,7 +2,6 @@ package com.metacoding.springrocketdanv2.job.bookmark;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi403;
-import com.metacoding.springrocketdanv2.job.JobRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobBookmarkService {
     private final JobBookmarkRepository jobBookmarkRepository;
-    private final JobRepository jobRepository;
 
     @Transactional
     public JobBookmarkResponse.SaveDTO 북마크등록(JobBookmarkRequest.SaveDTO reqDTO, Integer sessionUserId) {
