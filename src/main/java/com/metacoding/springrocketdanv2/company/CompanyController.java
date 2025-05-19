@@ -1,9 +1,12 @@
 package com.metacoding.springrocketdanv2.company;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
+import com.metacoding.springrocketdanv2._core.util.Resp;
+import com.metacoding.springrocketdanv2.user.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,61 +20,61 @@ public class CompanyController {
     private final HttpSession session;
 
     @GetMapping("/api/company/{companyId}")
-    public String detail(@PathVariable Integer companyId) {
-        Integer sessionUserCompanyId = null;
+    public ResponseEntity<?> detail(@PathVariable Integer companyId) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        CompanyResponse.DetailDTO respDTO = companyService.기업상세(companyId, sessionUserCompanyId);
+        CompanyResponse.DetailDTO respDTO = companyService.기업상세(companyId, sessionUser.getCompanyId());
 
         log.debug("기업상세: ", respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @GetMapping("/api/company")
-    public String list() {
+    public ResponseEntity<?> list() {
         CompanyResponse.ListDTO respDTO = companyService.기업리스트();
 
         log.debug("회사 목록: ", respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @PostMapping("/s/api/company")
-    public String save(CompanyRequest.SaveDTO reqDTO) {
+    public ResponseEntity<?> save(CompanyRequest.SaveDTO reqDTO) {
         Integer sessionUserId = null;
 
         CompanyResponse.SaveDTO respDTO = companyService.기업등록(reqDTO, sessionUserId);
 
         log.debug("기업등록" + respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @PutMapping("/s/api/company/{companyId}")
-    public String update(@RequestParam("companyId") Integer companyId, CompanyRequest.UpdateDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> update(@RequestParam("companyId") Integer companyId, CompanyRequest.UpdateDTO reqDTO, Errors errors) {
         Integer sessionUserCompanyId = null;
 
         CompanyResponse.UpdateDTO respDTO = companyService.기업수정(reqDTO, companyId, sessionUserCompanyId);
 
         log.debug("기업수정", respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @GetMapping("/s/api/company/job")
-    public String manage() {
+    public ResponseEntity<?> manage() {
         Integer sessionUserCompanyId = null;
 
         CompanyResponse.JobListDTO respDTO = companyService.기업공고관리(sessionUserCompanyId);
 
         log.debug("기업 공고 관리 목록: ", respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @GetMapping("/s/api/company/job/{jobId}/application")
-    public String companyApplicationList(@PathVariable Integer jobId,
-                                         @RequestParam(value = "status", defaultValue = "접수") String status) {
+    public ResponseEntity<?> companyApplicationList(@PathVariable Integer jobId,
+                                                    @RequestParam(value = "status", defaultValue = "접수") String status) {
 
         // 유효성 검사: null 또는 허용된 값만 통과
         if (status != null && !List.of("접수", "검토", "합격", "불합격").contains(status)) {
@@ -82,17 +85,17 @@ public class CompanyController {
 
         log.debug("지원자 확인: ", respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @GetMapping("/s/api/company/application/{applicationId}")
-    public String companyApplication(@PathVariable("applicationId") Integer applicationId) {
+    public ResponseEntity<?> companyApplication(@PathVariable("applicationId") Integer applicationId) {
         Integer sessionUserCompanyId = null;
         CompanyResponse.ApplicationDetailDTO respDTO = companyService.지원서상세보기(applicationId, sessionUserCompanyId);
 
         log.debug("지원서상세보기-기업" + respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 }
 

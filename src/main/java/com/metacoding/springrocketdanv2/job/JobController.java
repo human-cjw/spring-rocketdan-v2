@@ -1,9 +1,12 @@
 package com.metacoding.springrocketdanv2.job;
 
+import com.metacoding.springrocketdanv2._core.util.Resp;
+import com.metacoding.springrocketdanv2.user.User;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,50 +18,52 @@ public class JobController {
     private final HttpSession session;
 
     @GetMapping({"/", "/api/job"})
-    public String list() {
+    public ResponseEntity<?> list() {
         JobResponse.ListDTO respDTO = jobService.글목록보기(null);
         log.debug("공고목록보기" + respDTO);
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @GetMapping("/api/job/{jobId}")
-    public String detail(@PathVariable("jobId") Integer jobId) {
-        JobResponse.DetailDTO respDTO = jobService.글상세보기(jobId, null);
+    public ResponseEntity<?> detail(@PathVariable("jobId") Integer jobId) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        JobResponse.DetailDTO respDTO = jobService.글상세보기(jobId, sessionUser);
 
         log.debug("공고상세보기" + respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @PostMapping("/s/api/job")
-    public String save(@Valid JobRequest.SaveDTO reqDTO, Errors errors) {
-        Integer companyId = null;
+    public ResponseEntity<?> save(@Valid JobRequest.SaveDTO reqDTO, Errors errors) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        JobResponse.SaveDTO respDTO = jobService.등록하기(reqDTO, companyId);
+        JobResponse.SaveDTO respDTO = jobService.등록하기(reqDTO, sessionUser.getCompanyId());
 
         log.debug("공고등록" + respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @PutMapping("/s/api/job/{jobId}")
-    public String update(@PathVariable("jobId") Integer jobId,
-                         @Valid JobRequest.UpdateDTO reqDTO, Errors errors) {
-        Integer sessionUserCompanyId = null;
+    public ResponseEntity<?> update(@PathVariable("jobId") Integer jobId,
+                                    @Valid JobRequest.UpdateDTO reqDTO, Errors errors) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        JobResponse.UpdateDTO respDTO = jobService.수정하기(jobId, reqDTO, sessionUserCompanyId);
+        JobResponse.UpdateDTO respDTO = jobService.수정하기(jobId, reqDTO, sessionUser.getCompanyId());
 
         log.debug("공고수정" + respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @DeleteMapping("/s/api/job/{jobId}")
-    public String delete(@PathVariable("jobId") Integer jobId) {
-        Integer companyId = null;
+    public ResponseEntity<?> delete(@PathVariable("jobId") Integer jobId) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        jobService.삭제하기(jobId, companyId);
+        jobService.삭제하기(jobId, sessionUser.getCompanyId());
 
-        return null;
+        return Resp.ok(null);
     }
 }
