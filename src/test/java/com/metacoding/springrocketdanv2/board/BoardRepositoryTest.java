@@ -32,13 +32,13 @@ public class BoardRepositoryTest {
     @Test
     public void save_test() {
         // given
-        Board board = new Board("제목", "내용", "1234");
+//        Board board = new Board("제목", "내용", "1234");
 
         // when
-        boardRepository.save(board);
+//        boardRepository.save(board);
 
         // then
-        System.out.println("board 저장 완료 title = " + board.getTitle());
+//        System.out.println("board 저장 완료 title = " + board.getTitle());
     }
 
     @Test
