@@ -26,6 +26,7 @@ public class Board {
     @CreationTimestamp
     private Timestamp createdAt;
 
+
     @Builder
     public Board(Integer id, String title, String content, String password, Timestamp createdAt) {
         this.id = id;

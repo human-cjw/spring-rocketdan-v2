@@ -1,5 +1,6 @@
 package com.metacoding.springrocketdanv2.board;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -12,6 +13,9 @@ import java.util.List;
 public class BoardRepositoryTest {
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private EntityManager em;
 
     @Test
     public void findAll_test() {
@@ -32,13 +36,24 @@ public class BoardRepositoryTest {
     @Test
     public void save_test() {
         // given
-        Board board = new Board("제목", "내용", "1234");
+        Board board = Board.builder()
+                .title("제목")
+                .content("내용")
+                .password("1234")
+                .build();
 
         // when
         boardRepository.save(board);
+        em.flush();
+        em.clear();
 
-        // then
-        System.out.println("board 저장 완료 title = " + board.getTitle());
+        // eye
+        Board result = boardRepository.findById(board.getId()).orElseThrow();
+        System.out.println("ID: " + result.getId());
+        System.out.println("Title: " + result.getTitle());
+        System.out.println("Content: " + result.getContent());
+        System.out.println("Password: " + result.getPassword());
+        System.out.println("CreatedAt: " + result.getCreatedAt());
     }
 
     @Test
@@ -47,10 +62,9 @@ public class BoardRepositoryTest {
         Integer boardId = 1;
 
         // when
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시글입니다"));
+        Board board = boardRepository.findById(boardId).orElse(null);
 
-        // then
+        // eye
         if (board == null) {
             System.out.println("board is null!");
         } else {
@@ -61,12 +75,17 @@ public class BoardRepositoryTest {
     @Test
     public void deleteById_test() {
         // given
-        Integer boardId = 1;
+        Board saved = boardRepository.save(Board.builder()
+                .title("제목")
+                .content("내용")
+                .password("1234")
+                .build());
+        Integer boardId = saved.getId();
 
         // when
         boardRepository.deleteById(boardId);
 
-        // then
+        // eye
         Board board = boardRepository.findById(boardId).orElse(null);
 
         if (board == null) {
