@@ -17,11 +17,11 @@ public class SalaryRangeRepositoryTest {
     public void findAll_test() {
         // given
         // (조건 없음 – 전체 조회)
-
+        
         // when
         List<SalaryRange> salaryList = salaryRangeRepository.findAll();
 
-        // then
+        // eye
         if (salaryList.isEmpty()) {
             System.out.println("급여 구간 데이터 없음");
         } else {
