@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,33 +28,52 @@ public class ApplicationRepository {
                 .getResultList();
     }
 
-    public List<Application> findByUserIdStatus(Integer userId, String status) {
-        String q = """
-                    SELECT a FROM Application a
-                    JOIN FETCH a.job
-                    JOIN FETCH a.resume
-                    JOIN FETCH a.company
-                    JOIN FETCH a.user
-                    WHERE a.user.id = :userId
-                    AND (:status IS NULL OR a.status = :status)
-                """;
-        return em.createQuery(q, Application.class)
-                .setParameter("userId", userId)
-                .setParameter("status", status)
-                .getResultList();
+    public List<Application> findByUserIdAndStatus(Integer userId, String status) {
+        String q;
+        Query query;
+        if (status == null) {
+            q = """
+                        SELECT a FROM Application a
+                        JOIN FETCH a.job
+                        JOIN FETCH a.resume
+                        JOIN FETCH a.company
+                        JOIN FETCH a.user
+                        WHERE a.user.id = :userId
+                    """;
+            query = em.createQuery(q, Application.class)
+                    .setParameter("userId", userId);
+        } else {
+            q = """
+                        SELECT a FROM Application a
+                        JOIN FETCH a.job
+                        JOIN FETCH a.resume
+                        JOIN FETCH a.company
+                        JOIN FETCH a.user
+                        WHERE a.user.id = :userId
+                        AND a.status = :status
+                    """;
+            query = em.createQuery(q, Application.class)
+                    .setParameter("userId", userId)
+                    .setParameter("status", status);
+        }
+        return query.getResultList();
     }
 
-    public void save(Application application) {
+    public Application save(Application application) {
         em.persist(application);
+        return application;
     }
 
 
-    public List<Application> findByJobId(Integer jobId, String status) {
+    public List<Application> findByJobIdJoinFetchAll(Integer jobId, String status) {
         String q = """
                     SELECT a
                     FROM Application a
+                    JOIN FETCH a.resume r
+                    JOIN FETCH a.user u
+                    JOIN FETCH a.job j
                     WHERE a.job.id = :jobId
-                    AND (:status IS NULL OR a.status = :status)
+                    AND a.status = :status
                 """;
         return em.createQuery(q, Application.class)
                 .setParameter("jobId", jobId)
@@ -62,7 +82,7 @@ public class ApplicationRepository {
     }
 
 
-    public void updateByResumeId(Integer resumeId) {
+    public void updateResumeNullByResumeId(Integer resumeId) {
         em.createQuery("UPDATE Application a SET a.resume = null, a.user = null WHERE a.resume.id = :resumeId")
                 .setParameter("resumeId", resumeId)
                 .executeUpdate();
@@ -112,15 +132,15 @@ public class ApplicationRepository {
 
     }
 
-    public Application findByJobIdWithUserId(Integer jobId, Integer userId) {
+    public Optional<Application> findByJobIdAndUserId(Integer jobId, Integer userId) {
         String q = "SELECT a FROM Application a WHERE a.job.id = :jobId AND a.user.id = :userId";
+        Query query = em.createQuery(q, Application.class)
+                .setParameter("jobId", jobId)
+                .setParameter("userId", userId);
         try {
-            return (Application) em.createQuery(q, Application.class)
-                    .setParameter("jobId", jobId)
-                    .setParameter("userId", userId)
-                    .getSingleResult();
+            return Optional.ofNullable((Application) query.getSingleResult());
         } catch (Exception e) {
-            return null;
+            return Optional.ofNullable(null);
         }
     }
 
@@ -131,8 +151,8 @@ public class ApplicationRepository {
                 .getResultList();
     }
 
-    public void deleteApplicationsByJobId(Integer jobId) {
-        String q = "DELETE FROM Application a WHERE a.job.id = :jobId AND a.resume IS NOT NULL";
+    public void deleteByJobId(Integer jobId) {
+        String q = "DELETE FROM Application a WHERE a.job.id = :jobId";
         em.createQuery(q)
                 .setParameter("jobId", jobId)
                 .executeUpdate();

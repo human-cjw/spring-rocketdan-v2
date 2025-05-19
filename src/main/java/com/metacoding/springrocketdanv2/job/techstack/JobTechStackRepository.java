@@ -1,21 +1,23 @@
 package com.metacoding.springrocketdanv2.job.techstack;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
 public class JobTechStackRepository {
     private final EntityManager em;
 
-    public List<JobTechStack> findAllByJobIdJoinTechStack(Integer jobId) {
-        Query query = em.createQuery("select jts from JobTechStack jts join fetch jts.techStack where jts.job.id = :jobId", JobTechStack.class);
-        query.setParameter("jobId", jobId);
-        return query.getResultList();
+    public void deleteByJobId(Integer jobId) {
+        em.createQuery("DELETE FROM JobTechStack jts WHERE jts.job.id = :jobId")
+                .setParameter("jobId", jobId)
+                .executeUpdate();
+    }
+
+    public JobTechStack save(JobTechStack jobTechStack) {
+        em.persist(jobTechStack);
+        return jobTechStack;
     }
 }
 

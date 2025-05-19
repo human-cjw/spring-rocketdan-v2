@@ -1,5 +1,8 @@
 package com.metacoding.springrocketdanv2.job;
 
+import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
+import com.metacoding.springrocketdanv2.workfield.WorkField;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +22,7 @@ public class JobRepository {
         return query.getResultList();
     }
 
-    public Optional<Job> findById(Integer jobId) {
+    public Optional<Job> findByJobId(Integer jobId) {
         return Optional.ofNullable(em.find(Job.class, jobId));
     }
 
@@ -28,8 +31,17 @@ public class JobRepository {
         return job;
     }
 
-    public Optional<Job> findByIdJoinJobTechStackJoinTechStack(Integer jobId) {
-        String sql = "SELECT j FROM Job j LEFT JOIN FETCH j.jobTechStacks jts LEFT JOIN FETCH jts.techStack WHERE j.id = :jobId";
+    public Optional<Job> findByJobIdJoinFetchAll(Integer jobId) {
+        String sql = """
+                SELECT j FROM Job j
+                    JOIN FETCH j.jobTechStacks jts
+                    JOIN FETCH jts.techStack ts
+                    JOIN FETCH j.company c
+                    JOIN FETCH j.salaryRange sr
+                    JOIN FETCH j.workField w
+                    JOIN FETCH j.jobGroup jg
+                WHERE j.id = :jobId
+                """;
         Query query = em.createQuery(sql, Job.class);
         query.setParameter("jobId", jobId);
         try {
@@ -38,4 +50,51 @@ public class JobRepository {
             return Optional.ofNullable(null);
         }
     }
+
+    public void deleteByJobId(Integer jobId) {
+        em.createQuery("DELETE FROM Job j WHERE j.id = :jobId")
+                .setParameter("jobId", jobId)
+                .executeUpdate();
+    }
+
+    public void updateByJobId(Integer jobId, JobRequest.UpdateDTO reqDTO) {
+        SalaryRange salaryRangeRef = em.getReference(SalaryRange.class, reqDTO.getSalaryRangeId());
+        WorkField workFieldRef = em.getReference(WorkField.class, reqDTO.getWorkFieldId());
+        JobGroup jobGroupRef = em.getReference(JobGroup.class, reqDTO.getJobGroupId());
+
+        em.createQuery("""
+                        UPDATE Job j SET
+                            j.title = :title,
+                            j.description = :description,
+                            j.location = :location,
+                            j.employmentType = :employmentType,
+                            j.deadline = :deadline,
+                            j.status = :status,
+                            j.careerLevel = :careerLevel,
+                            j.salaryRange = :salaryRange,
+                            j.workField = :workField,
+                            j.jobGroup = :jobGroup
+                        WHERE j.id = :jobId
+                        """)
+                .setParameter("title", reqDTO.getTitle())
+                .setParameter("description", reqDTO.getDescription())
+                .setParameter("location", reqDTO.getLocation())
+                .setParameter("employmentType", reqDTO.getEmploymentType())
+                .setParameter("deadline", reqDTO.getDeadline())
+                .setParameter("status", reqDTO.getStatus())
+                .setParameter("careerLevel", reqDTO.getCareerLevel())
+                .setParameter("salaryRange", salaryRangeRef)
+                .setParameter("workField", workFieldRef)
+                .setParameter("jobGroup", jobGroupRef)
+                .setParameter("jobId", jobId)
+                .executeUpdate();
+    }
+
+    public List<Job> findAllByCompanyId(Integer companyId) {
+        String q = "SELECT j FROM Job j WHERE j.company.id = :companyId ORDER BY j.id DESC";
+        return em.createQuery(q, Job.class)
+                .setParameter("companyId", companyId)
+                .getResultList();
+    }
+
 }

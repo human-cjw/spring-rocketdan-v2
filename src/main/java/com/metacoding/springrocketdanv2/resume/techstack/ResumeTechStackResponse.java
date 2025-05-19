@@ -3,22 +3,17 @@ package com.metacoding.springrocketdanv2.resume.techstack;
 import lombok.Data;
 
 public class ResumeTechStackResponse {
-    // 이안에 DTO 만들기
+
     @Data
-    public static class ResumeTechStackResponseDTO {
-        private Integer id;
-        private String name;
-        private boolean isChecked;
+    public static class UpdateDTO {
+        private Integer resumeTechStackId;
+        private Integer techStackId;
+        private String techStackName;
 
-
-        public ResumeTechStackResponseDTO(Integer id, String name, boolean isChecked) {
-            this.id = id;
-            this.name = name;
-            this.isChecked = isChecked;
+        public UpdateDTO(ResumeTechStack resumeTechStack) {
+            this.resumeTechStackId = resumeTechStack.getId();
+            this.techStackId = resumeTechStack.getTechStack().getId();
+            this.techStackName = resumeTechStack.getTechStack().getName();
         }
-    }
-
-
-    public class ResumeTechStackUpdateDTO {
     }
 }

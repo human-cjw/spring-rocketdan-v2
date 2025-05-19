@@ -11,7 +11,7 @@ import java.util.List;
 public class CareerRepository {
     private final EntityManager em;
 
-    public List<Career> findCareersByResumeId(Integer resumeId) {
+    public List<Career> findAllByResumeId(Integer resumeId) {
         String q = "SELECT car FROM Career car WHERE car.resume.id = :resumeId";
         return em.createQuery(q, Career.class)
                 .setParameter("resumeId", resumeId)
@@ -24,8 +24,9 @@ public class CareerRepository {
                 .executeUpdate();
     }
 
-    public void save(Career career) {
+    public Career save(Career career) {
         em.persist(career);
+        return career;
     }
 
     public Career findByResumeId(Integer resumeId) {
