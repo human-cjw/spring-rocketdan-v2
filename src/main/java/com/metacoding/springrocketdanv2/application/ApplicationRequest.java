@@ -24,7 +24,7 @@ public class ApplicationRequest {
                     .company(Company.builder().id(companyId).build())
                     .resume(Resume.builder().id(this.resumeId).build())
                     .user(User.builder().id(userId).build())
-                    .status(ApplicationEnum.APPLIED.value)
+                    .status(ApplicationStatusEnum.APPLIED.value)
                     .build();
         }
     }

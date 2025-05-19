@@ -1,14 +1,14 @@
 package com.metacoding.springrocketdanv2.application;
 
-import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -22,22 +22,6 @@ public class ApplicationController {
         Integer sessionUserId = null;
 
         applicationService.지원하기(reqDTO, sessionUserId);
-
-        return null;
-    }
-
-    @GetMapping("/s/api/user/application")
-    public String userApplicationList(@RequestParam(required = false) String status) {
-        Integer sessionUserId = null;
-
-        // 유효성 검사: null 또는 허용된 값만 통과
-        if (status != null && !List.of("접수", "검토", "합격", "불합격").contains(status)) {
-            throw new ExceptionApi400("지원 상태는 '접수', '검토', '합격', '불합격' 중 하나여야 합니다.");
-        }
-
-        ApplicationResponse.ListForUserDTO respDTO = applicationService.내지원목록보기(sessionUserId, status);
-
-        log.debug("내지원목록보기" + respDTO);
 
         return null;
     }

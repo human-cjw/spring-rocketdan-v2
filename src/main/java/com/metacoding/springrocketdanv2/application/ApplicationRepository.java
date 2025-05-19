@@ -13,22 +13,7 @@ import java.util.Optional;
 public class ApplicationRepository {
     private final EntityManager em;
 
-    public List<Application> findByUserId(Integer userId) {
-        String q = """
-                    SELECT a
-                    FROM Application a
-                    JOIN FETCH a.job
-                    JOIN FETCH a.resume
-                    JOIN FETCH a.company
-                    JOIN FETCH a.user
-                    WHERE a.user.id = :userId
-                """;
-        return em.createQuery(q, Application.class)
-                .setParameter("userId", userId)
-                .getResultList();
-    }
-
-    public List<Application> findByUserIdAndStatus(Integer userId, String status) {
+    public List<Application> findAllByUserIdAndStatus(Integer userId, String status) {
         String q;
         Query query;
         if (status == null) {
@@ -65,7 +50,7 @@ public class ApplicationRepository {
     }
 
 
-    public List<Application> findByJobIdJoinFetchAll(Integer jobId, String status) {
+    public List<Application> findAllByJobIdJoinFetchAllNotNull(Integer jobId, String status) {
         String q = """
                     SELECT a
                     FROM Application a
@@ -74,6 +59,7 @@ public class ApplicationRepository {
                     JOIN FETCH a.job j
                     WHERE a.job.id = :jobId
                     AND a.status = :status
+                    AND a.resume IS NOT NULL
                 """;
         return em.createQuery(q, Application.class)
                 .setParameter("jobId", jobId)
@@ -90,46 +76,6 @@ public class ApplicationRepository {
 
     public Optional<Application> findById(Integer id) {
         return Optional.ofNullable(em.find(Application.class, id));
-    }
-
-    public Application findByCompanyIdWithUserId(Integer companyId, Integer userId) {
-        String q = """
-                    SELECT a
-                    FROM Application a
-                    WHERE a.company.id = :companyId
-                    AND a.user.id = :userId
-                """;
-        Query query = em.createQuery(q, Application.class);
-        query.setParameter("companyId", companyId);
-        query.setParameter("userId", userId);
-
-        try {
-            return (Application) query.getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public Application findByUserIdAndJobId(Integer userId, Integer jobId) {
-        String q = """
-                    SELECT a
-                    FROM Application a
-                    JOIN FETCH a.job
-                    JOIN FETCH a.resume
-                    JOIN FETCH a.company
-                    WHERE a.user.id = :userId
-                        AND a.job.id = :jobId
-                """;
-
-        try {
-            return em.createQuery(q, Application.class)
-                    .setParameter("userId", userId)
-                    .setParameter("jobId", jobId)
-                    .getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
-
     }
 
     public Optional<Application> findByJobIdAndUserId(Integer jobId, Integer userId) {
@@ -158,10 +104,23 @@ public class ApplicationRepository {
                 .executeUpdate();
     }
 
-    public List<Application> findApplicationsByJobIdWhereResumeNotNull(Integer jobId) {
-        String q = "SELECT a FROM Application a WHERE a.job.id = :jobId AND a.resume IS NOT NULL ORDER BY a.id DESC";
-        return em.createQuery(q, Application.class)
-                .setParameter("jobId", jobId)
-                .getResultList();
+    public Optional<Application> findByApplicationIdJoinResumeAndUser(Integer applicationId) {
+        String q = """
+                    SELECT a
+                    FROM Application a
+                    JOIN FETCH a.resume r
+                    JOIN FETCH a.user u
+                    WHERE a.job.id = :applicationId
+                    AND a.status = :status
+                """;
+
+        Query query = em.createQuery(q, Application.class)
+                .setParameter("applicationId", applicationId);
+
+        try {
+            return Optional.ofNullable((Application) query.getSingleResult());
+        } catch (Exception e) {
+            return Optional.ofNullable(null);
+        }
     }
 }

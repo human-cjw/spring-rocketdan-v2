@@ -8,19 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
-
-    public ApplicationResponse.ListForUserDTO 내지원목록보기(Integer sessionUserId, String status) {
-        List<Application> applicationsPS = applicationRepository.findByUserIdAndStatus(sessionUserId, status);
-
-        return new ApplicationResponse.ListForUserDTO(applicationsPS);
-    }
 
     @Transactional
     public ApplicationResponse.SaveDTO 지원하기(ApplicationRequest.SaveDTO reqDTO, Integer sessionUserId) {

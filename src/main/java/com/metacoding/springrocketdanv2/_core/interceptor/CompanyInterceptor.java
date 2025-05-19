@@ -1,7 +1,7 @@
 package com.metacoding.springrocketdanv2._core.interceptor;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi401;
-import com.metacoding.springrocketdanv2.user.UserResponse;
+import com.metacoding.springrocketdanv2.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -15,7 +15,7 @@ public class CompanyInterceptor implements HandlerInterceptor {
         System.out.println("uri: " + uri);
 
         HttpSession session = request.getSession();
-        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
         Integer companyId = null;
         if (sessionUser != null) {

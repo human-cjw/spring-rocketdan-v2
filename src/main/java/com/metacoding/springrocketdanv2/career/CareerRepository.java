@@ -28,15 +28,4 @@ public class CareerRepository {
         em.persist(career);
         return career;
     }
-
-    public Career findByResumeId(Integer resumeId) {
-        String q = "SELECT car FROM Career car WHERE car.resume.id = :resumeId";
-        try {
-            return em.createQuery(q, Career.class)
-                    .setParameter("resumeId", resumeId)
-                    .getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }
