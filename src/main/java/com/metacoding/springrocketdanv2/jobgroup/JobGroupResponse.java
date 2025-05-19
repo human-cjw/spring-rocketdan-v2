@@ -2,6 +2,8 @@ package com.metacoding.springrocketdanv2.jobgroup;
 
 import lombok.Data;
 
+import java.util.List;
+
 public class JobGroupResponse {
 
     @Data
@@ -12,6 +14,17 @@ public class JobGroupResponse {
         public DTO(JobGroup jobGroup) {
             this.id = jobGroup.getId();
             this.name = jobGroup.getName();
+        }
+    }
+
+    @Data
+    public static class ListDTO {
+        List<DTO> jobGroups;
+
+        public ListDTO(List<JobGroup> jobGroups) {
+            this.jobGroups = jobGroups.stream()
+                    .map(jobGroup -> new DTO(jobGroup))
+                    .toList();
         }
     }
 }

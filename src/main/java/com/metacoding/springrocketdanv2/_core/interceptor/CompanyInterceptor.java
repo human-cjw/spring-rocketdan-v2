@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-@Deprecated
 public class CompanyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -23,11 +22,7 @@ public class CompanyInterceptor implements HandlerInterceptor {
         }
 
         if (companyId == null) {
-            if (uri.contains("/api")) {
-                throw new ExceptionApi401("기업 인증이 필요합니다");
-            } else {
-                throw new ExceptionApi401("기업 인증이 필요합니다");
-            }
+            throw new ExceptionApi401("기업 인증이 필요합니다");
         }
 
         return true;
