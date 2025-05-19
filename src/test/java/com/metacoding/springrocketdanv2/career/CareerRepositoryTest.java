@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 
 @Import({CareerRepository.class, ResumeRepository.class})
+
 @DataJpaTest
 public class CareerRepositoryTest {
     @Autowired

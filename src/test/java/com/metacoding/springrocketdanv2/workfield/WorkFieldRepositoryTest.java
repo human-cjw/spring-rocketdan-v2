@@ -18,9 +18,15 @@ public class WorkFieldRepositoryTest {
         // given
 
         // when
-        List<WorkField> workFields = workFieldRepository.findAll();
+        List<WorkField> workFieldList = workFieldRepository.findAll();
 
         // eye
-        System.out.println(workFields);
+        if (workFieldList.isEmpty()) {
+            System.out.println("workFieldList is empty");
+        } else {
+            for (WorkField workField : workFieldList) {
+                System.out.println("workFieldId: " + workField.getId() + ", workFieldName: " + workField.getName());
+            }
+        }
     }
 }
