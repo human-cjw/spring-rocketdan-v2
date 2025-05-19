@@ -20,7 +20,7 @@ public class CompanyRepositoryTest {
 
     @Test
     public void findById_test() {
-        // given
+//        // given
 //        Integer companyId = 1;
 //
 //        // when

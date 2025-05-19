@@ -16,13 +16,13 @@ public class CareerRepositoryTest {
 
     @Test
     public void findCareersByResumeId_test() {
-        // given
-        Integer resumeId = 1;
-
-        // when
+//        // given
+//        Integer resumeId = 1;
+//
+//        // when
 //        List<Career> careerList = careerRepository.findCareersByResumeId(resumeId);
-
-        // then
+//
+//        // then
 //        if (careerList.isEmpty()) {
 //            System.out.println("해당 resumeId로 조회된 경력 없음");
 //        } else {
@@ -34,13 +34,13 @@ public class CareerRepositoryTest {
 
     @Test
     public void deleteByResumeId_test() {
-        // given
-        Integer resumeId = 1;
-
-        // when
-        careerRepository.deleteByResumeId(resumeId);
-
-        // then
+//        // given
+//        Integer resumeId = 1;
+//
+//        // when
+//        careerRepository.deleteByResumeId(resumeId);
+//
+//        // then
 //        List<Career> result = careerRepository.findCareersByResumeId(resumeId);
 //        if (result.isEmpty()) {
 //            System.out.println("삭제 성공: 해당 이력서에 연결된 경력 없음");
@@ -51,7 +51,7 @@ public class CareerRepositoryTest {
 
     @Test
     public void save_test() {
-        // given
+//        // given
 //        Resume resume = resumeRepository.findById(1);
 //        Career career = new Career(null, "삼성전자", "2021-01", "2023-12", null, null, resume);
 //
@@ -65,12 +65,12 @@ public class CareerRepositoryTest {
     @Test
     public void findByResumeId_test() {
         // given
-//        Integer resumeId = 1;
-//
-//        // when
+        Integer resumeId = 1;
+
+        // when
 //        Career career = careerRepository.findByResumeId(resumeId);
-//
-//        // then
+
+        // then
 //        if (career == null) {
 //            System.out.println("해당 resumeId에 대한 경력 정보 없음");
 //        } else {

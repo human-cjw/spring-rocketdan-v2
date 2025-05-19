@@ -21,7 +21,7 @@ public class CertificationRepositoryTest {
 
     @Test
     public void findCertificationsByResumeId_test() {
-        // given
+//        // given
 //        Integer resumeId = 1;
 //
 //        // when
@@ -39,7 +39,7 @@ public class CertificationRepositoryTest {
 
     @Test
     public void deleteByResumeId_test() {
-        // given
+//        // given
 //        Integer resumeId = 1;
 //
 //        // when
@@ -56,7 +56,7 @@ public class CertificationRepositoryTest {
 
     @Test
     public void save_test() {
-        // given
+//        // given
 //        Resume resume = resumeRepository.findById(1);
 //        Certification cert = new Certification(null, "정보처리기사", "한국산업인력공단", "2022-06", null, resume);
 //
@@ -70,12 +70,12 @@ public class CertificationRepositoryTest {
     @Test
     public void findByResumeId_test() {
         // given
-//        Integer resumeId = 1;
-//
-//        // when
+        Integer resumeId = 1;
+
+        // when
 //        Career career = careerRepository.findByResumeId(resumeId);
-//
-//        // then
+
+        // then
 //        if (career == null) {
 //            System.out.println("조회 실패: 경력 없음");
 //        } else {

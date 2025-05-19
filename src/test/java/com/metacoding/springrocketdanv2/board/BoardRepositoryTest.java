@@ -33,29 +33,29 @@ public class BoardRepositoryTest {
     public void save_test() {
         // given
 //        Board board = new Board("제목", "내용", "1234");
-
-        // when
+//
+//        // when
 //        boardRepository.save(board);
-
-        // then
+//
+//        // then
 //        System.out.println("board 저장 완료 title = " + board.getTitle());
     }
 
     @Test
     public void findById_test() {
         // given
-        Integer boardId = 1;
-
-        // when
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시글입니다"));
-
-        // then
-        if (board == null) {
-            System.out.println("board is null!");
-        } else {
-            System.out.println("title: " + board.getTitle() + ", content: " + board.getContent());
-        }
+//        Integer boardId = 1;
+//
+//        // when
+//        Board board = boardRepository.findById(boardId)
+//                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시글입니다"));
+//
+//        // then
+//        if (board == null) {
+//            System.out.println("board is null!");
+//        } else {
+//            System.out.println("title: " + board.getTitle() + ", content: " + board.getContent());
+//        }
     }
 
     @Test

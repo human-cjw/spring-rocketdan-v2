@@ -19,8 +19,14 @@ public class JobController {
 
     @GetMapping({"/", "/api/job"})
     public ResponseEntity<?> list() {
-        JobResponse.ListDTO respDTO = jobService.글목록보기(null);
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        Integer sessionUserId = sessionUser != null ? sessionUser.getId() : null;
+
+        JobResponse.ListDTO respDTO = jobService.글목록보기(sessionUserId);
+
         log.debug("공고목록보기" + respDTO);
+
         return Resp.ok(respDTO);
     }
 
