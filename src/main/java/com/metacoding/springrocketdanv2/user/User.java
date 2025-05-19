@@ -46,12 +46,12 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public static enum UserType {
-        USER, COMPANY
-    }
-
-    public void typeUpdate(Integer companyId) {
-        this.companyId = companyId;
-        this.userType = User.UserType.COMPANY;  // ← 이렇게 접근해야 함!
-    }
+//    public static enum UserType {
+//        USER, COMPANY
+//    }
+//
+//    public void typeUpdate(Integer companyId) {
+//        this.companyId = companyId;
+//        this.userType = User.UserType.COMPANY;  // ← 이렇게 접근해야 함!
+//    }
 }

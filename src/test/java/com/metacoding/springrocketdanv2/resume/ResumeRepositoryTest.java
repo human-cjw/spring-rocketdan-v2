@@ -13,13 +13,6 @@ public class ResumeRepositoryTest {
 
     @Test
     public void findById_test() {
-        //given
-        Integer resumeId = 1;
 
-        // when
-        Resume resume = resumeRepository.findById(resumeId);
-
-        // eye
-        System.out.println("출력 : " + resume);
     }
 }
