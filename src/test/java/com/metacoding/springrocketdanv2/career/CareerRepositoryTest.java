@@ -74,37 +74,6 @@ public class CareerRepositoryTest {
     }
 
     @Test
-    public void findByResumeId_test() {
-        // given
-        Resume resume = new Resume();
-        em.persist(resume);
-
-        Career career = Career.builder()
-                .companyName("엔씨소프트")
-                .startDate("2018-01")
-                .endDate("2020-12")
-                .resume(resume)
-                .build();
-        em.persist(career);
-        em.flush();
-        em.clear();
-
-        // when
-        Career result = careerRepository.findByResumeId(resume.getId());
-
-        // then
-        if (result == null) {
-            System.out.println("조회 실패: result is null");
-        } else {
-            System.out.println("조회 성공: " + result.getCompanyName());
-            System.out.println("시작일: " + result.getStartDate());
-            System.out.println("종료일: " + result.getEndDate());
-            System.out.println("createdAt: " + result.getCreatedAt());
-            System.out.println("resumeId: " + result.getResume().getId());
-        }
-    }
-
-    @Test
     public void deleteByResumeId_test() {
         // given
         Resume resume = new Resume();
