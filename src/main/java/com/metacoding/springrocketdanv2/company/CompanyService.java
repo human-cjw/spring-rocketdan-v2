@@ -47,7 +47,7 @@ public class CompanyService {
 
         Company companyPS = companyRepository.save(company);
 
-        User userPS = userRepository.findById(sessionUserId)
+        User userPS = userRepository.findByUserId(sessionUserId)
                 .orElseThrow(() -> new ExceptionApi404("존재하지 않는 유저 입니다"));
 
         userPS.typeUpdate(companyPS.getId());

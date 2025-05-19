@@ -31,7 +31,7 @@ public class ApplicationService {
 
     @Transactional
     public ApplicationResponse.UpdateDTO 지원상태변경(Integer applicationId, ApplicationRequest.UpdateDTO reqDTO, Integer sessionUserCompanyId) {
-        Application applicationPS = applicationRepository.findById(applicationId)
+        Application applicationPS = applicationRepository.findByApplicationId(applicationId)
                 .orElseThrow(() -> new ExceptionApi400("잘못된 요청입니다"));
 
         if (!applicationPS.getCompany().getId().equals(sessionUserCompanyId)) {

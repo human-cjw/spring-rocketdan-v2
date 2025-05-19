@@ -48,7 +48,7 @@ public class BoardRepositoryTest {
         em.clear();
 
         // eye
-        Board result = boardRepository.findById(board.getId()).orElseThrow();
+        Board result = boardRepository.findByBoardId(board.getId()).orElseThrow();
         System.out.println("ID: " + result.getId());
         System.out.println("Title: " + result.getTitle());
         System.out.println("Content: " + result.getContent());
@@ -62,7 +62,7 @@ public class BoardRepositoryTest {
         Integer boardId = 1;
 
         // when
-        Board board = boardRepository.findById(boardId).orElse(null);
+        Board board = boardRepository.findByBoardId(boardId).orElse(null);
 
         // eye
         if (board == null) {
@@ -83,10 +83,10 @@ public class BoardRepositoryTest {
         Integer boardId = saved.getId();
 
         // when
-        boardRepository.deleteById(boardId);
+        boardRepository.deleteByBoardId(boardId);
 
         // eye
-        Board board = boardRepository.findById(boardId).orElse(null);
+        Board board = boardRepository.findByBoardId(boardId).orElse(null);
 
         if (board == null) {
             System.out.println("삭제 성공: board is null");
