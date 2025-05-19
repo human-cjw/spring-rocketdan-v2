@@ -26,7 +26,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(new CompanyInterceptor())
-                .addPathPatterns("/job/**")
+                .addPathPatterns("/s/api/job")
+                .addPathPatterns("/s/api/job/{jobId}")
                 .excludePathPatterns("/job")
                 .excludePathPatterns("/job/{id:\\d+}")
                 .excludePathPatterns("/job/{id:\\d+}/bookmark");

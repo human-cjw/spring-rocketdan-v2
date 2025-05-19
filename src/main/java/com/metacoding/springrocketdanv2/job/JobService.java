@@ -24,13 +24,13 @@ public class JobService {
     private final ApplicationRepository applicationRepository;
     private final JobTechStackRepository jobTechStackRepository;
 
-    public JobResponse.ListDTO 글목록보기(Integer userId) {
+    public JobResponse.ListDTO 글목록보기(Integer sessionUserId) {
         List<Job> jobsPS = jobRepository.findAll();
 
         List<JobBookmark> jobBookmarks = new ArrayList<>();
 
-        if (userId != null) {
-            jobBookmarks = jobBookmarkRepository.findByUserId(userId);
+        if (sessionUserId != null) {
+            jobBookmarks = jobBookmarkRepository.findByUserId(sessionUserId);
         }
 
         return new JobResponse.ListDTO(jobsPS, jobBookmarks);
