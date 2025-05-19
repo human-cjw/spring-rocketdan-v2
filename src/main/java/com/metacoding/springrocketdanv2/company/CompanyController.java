@@ -24,7 +24,9 @@ public class CompanyController {
     public ResponseEntity<?> detail(@PathVariable Integer companyId) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
-        CompanyResponse.DetailDTO respDTO = companyService.기업상세(companyId, sessionUser.getCompanyId());
+        Integer sessionUserCompanyId = sessionUser != null ? sessionUser.getCompanyId() : null;
+
+        CompanyResponse.DetailDTO respDTO = companyService.기업상세(companyId, sessionUserCompanyId);
 
         log.debug("기업상세: ", respDTO);
 
@@ -99,3 +101,4 @@ public class CompanyController {
         return Resp.ok(respDTO);
     }
 }
+
