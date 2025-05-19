@@ -40,7 +40,13 @@ public class JobService {
         Job jobPS = jobRepository.findByJobIdJoinFetchAll(jobId)
                 .orElseThrow(() -> new ExceptionApi400("해당 공고는 존재하지 않습니다"));
 
-        Optional<JobBookmark> jobBookmarkOP = jobBookmarkRepository.findByUserIdAndJobId(sessionUser.getId(), jobId);
+        Optional<JobBookmark> jobBookmarkOP;
+
+        if (sessionUser == null) {
+            jobBookmarkOP = jobBookmarkRepository.findByUserIdAndJobId(null, jobId);
+        } else {
+            jobBookmarkOP = jobBookmarkRepository.findByUserIdAndJobId(sessionUser.getId(), jobId);
+        }
 
         Integer jobBookmarkId = null;
 
@@ -52,8 +58,8 @@ public class JobService {
     }
 
     @Transactional
-    public JobResponse.SaveDTO 등록하기(JobRequest.SaveDTO reqDTO, Integer companyId) {
-        Job job = reqDTO.toEntity(companyId);
+    public JobResponse.SaveDTO 등록하기(JobRequest.SaveDTO reqDTO, Integer sessionUserCompanyId) {
+        Job job = reqDTO.toEntity(sessionUserCompanyId);
 
         Job jobPS = jobRepository.save(job);
 
@@ -84,12 +90,12 @@ public class JobService {
     }
 
     @Transactional
-    public void 삭제하기(Integer jobId, Integer companyId) {
+    public void 삭제하기(Integer jobId, Integer sessionUserCompanyId) {
         Job jobPS = jobRepository.findByJobId(jobId)
                 .orElseThrow(() -> new ExceptionApi400("해당 공고는 존재하지 않습니다"));
 
         // 0. 권한 체크
-        if (!jobPS.getCompany().getId().equals(companyId)) {
+        if (!jobPS.getCompany().getId().equals(sessionUserCompanyId)) {
             throw new ExceptionApi403("권한이 없습니다");
         }
 
