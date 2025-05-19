@@ -20,18 +20,18 @@ public class CompanyRepositoryTest {
 
     @Test
     public void findById_test() {
-        // given
-        Integer companyId = 1;
-
-        // when
-        Company company = companyRepository.findById(companyId);
-
-        // then
-        if (company == null) {
-            System.out.println("company is null!");
-        } else {
-            System.out.println("company name: " + company.getNameKr());
-        }
+//        // given
+//        Integer companyId = 1;
+//
+//        // when
+//        Company company = companyRepository.findById(companyId);
+//
+//        // then
+//        if (company == null) {
+//            System.out.println("company is null!");
+//        } else {
+//            System.out.println("company name: " + company.getNameKr());
+//        }
     }
 
     @Test

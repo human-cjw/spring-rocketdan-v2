@@ -52,6 +52,6 @@ public class User {
 
     public void typeUpdate(Integer companyId) {
         this.companyId = companyId;
-        this.userType = User.UserType.COMPANY;  // ← 이렇게 접근해야 함!
+//        this.userType = User.UserType.COMPANY;  // ← 이렇게 접근해야 함!
     }
 }

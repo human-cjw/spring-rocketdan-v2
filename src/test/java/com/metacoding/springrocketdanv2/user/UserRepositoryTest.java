@@ -1,5 +1,6 @@
 package com.metacoding.springrocketdanv2.user;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -11,20 +12,34 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EntityManager em;
+
     @Test
     public void save_test() {
         // given
         User user = User.builder()
-                .username("testname")
+                .username("이름")
                 .password("1234")
                 .email("testname@nate.com")
+                .userType("user")
                 .build();
 
         // when
-        User userPS = userRepository.save(user);
+        userRepository.save(user);
+        em.flush();
+        em.clear();
 
         // eye
-        System.out.println(userPS);
+        User result = userRepository.findById(user.getId()).orElseThrow();
+        System.out.println("ID: " + result.getId());
+        System.out.println("Username: " + result.getUsername());
+        System.out.println("Password: " + result.getPassword());
+        System.out.println("Email: " + result.getEmail());
+        System.out.println("FileUrl: " + result.getFileUrl());
+        System.out.println("UserType: " + result.getUserType());
+        System.out.println("CompanyId: " + result.getCompanyId());
+        System.out.println("CreatedAt: " + result.getCreatedAt());
     }
 
     @Test
