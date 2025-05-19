@@ -1,17 +1,14 @@
 package com.metacoding.springrocketdanv2.company;
 
 import com.metacoding.springrocketdanv2.application.Application;
-import com.metacoding.springrocketdanv2.career.Career;
 import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
-import com.metacoding.springrocketdanv2.resume.Resume;
-import com.metacoding.springrocketdanv2.techstack.TechStack;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
 import com.metacoding.springrocketdanv2.techstack.TechStackResponse;
 import com.metacoding.springrocketdanv2.workfield.WorkFieldResponse;
 import lombok.Data;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CompanyResponse {
 
@@ -236,12 +233,12 @@ public class CompanyResponse {
         }
     }
 
-    //---------------------------------여기까지 완료 ------------------------------------------------------------
     @Data
-    public static class CompanyacceptanceDTO {
+    public static class ApplicationDetailDTO {
         private Integer applicationId;
-        private String username;
-        private String resumeTitle;
+        private String createdAt;
+        private Integer resumeId;
+        private String title;
         private String summary;
         private String gender;
         private String careerLevel;
@@ -251,33 +248,35 @@ public class CompanyResponse {
         private String graduationType;
         private String phone;
         private String portfolioUrl;
+        private String enrollmentDate;
+        private String graduationDate;
+        private String username;
+        private SalaryRangeResponse.DTO salaryRange;
+        private JobGroupResponse.DTO jobGroup;
+        private List<TechStackResponse.DTO> techStacks;
 
-        private List<String> careerCompanyNames; // 커리어 회사명 리스트
-        private List<String> techStackNames; // 기술스택 이름 리스트
-
-        public CompanyacceptanceDTO(Resume resume, List<Career> careers, List<TechStack> techStacks, Integer applicationId) {
-            this.applicationId = applicationId;
-            this.username = resume.getUser().getUsername();
-            this.resumeTitle = resume.getTitle();
-            this.summary = resume.getSummary();
-            this.gender = resume.getGender();
-            this.careerLevel = resume.getCareerLevel();
-            this.education = resume.getEducation();
-            this.birthdate = resume.getBirthdate();
-            this.major = resume.getMajor();
-            this.graduationType = resume.getGraduationType();
-            this.phone = resume.getPhone();
-            this.portfolioUrl = resume.getPortfolioUrl();
-
-            // 커리어 회사명만 뽑아오기
-            this.careerCompanyNames = careers.stream()
-                    .map(Career::getCompanyName)
-                    .collect(Collectors.toList());
-
-            // 기술스택 이름만 뽑아오기
-            this.techStackNames = techStacks.stream()
-                    .map(TechStack::getName)
-                    .collect(Collectors.toList());
+        public ApplicationDetailDTO(Application application) {
+            this.applicationId = application.getId();
+            this.createdAt = application.getCreatedAt().toString().substring(0, 10);
+            this.resumeId = application.getResume().getId();
+            this.title = application.getResume().getTitle();
+            this.summary = application.getResume().getSummary();
+            this.gender = application.getResume().getGender();
+            this.careerLevel = application.getResume().getCareerLevel();
+            this.education = application.getResume().getEducation();
+            this.birthdate = application.getResume().getBirthdate();
+            this.major = application.getResume().getMajor();
+            this.graduationType = application.getResume().getGraduationType();
+            this.phone = application.getResume().getPhone();
+            this.portfolioUrl = application.getResume().getPortfolioUrl();
+            this.enrollmentDate = application.getResume().getEnrollmentDate();
+            this.graduationDate = application.getResume().getGraduationDate();
+            this.username = application.getUser().getUsername();
+            this.salaryRange = new SalaryRangeResponse.DTO(application.getResume().getSalaryRange());
+            this.jobGroup = new JobGroupResponse.DTO(application.getResume().getJobGroup());
+            this.techStacks = application.getResume().getResumeTechStacks().stream()
+                    .map(resumeTechStack -> new TechStackResponse.DTO(resumeTechStack.getTechStack()))
+                    .toList();
         }
     }
 }

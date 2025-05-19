@@ -33,7 +33,6 @@ public class User {
     @CreationTimestamp
     private Timestamp createdAt;
 
-
     @Builder
     public User(Integer id, String username, String password, String email, String fileUrl, String userType, Integer companyId, Timestamp createdAt) {
         this.id = id;
@@ -46,12 +45,8 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public static enum UserType {
-        USER, COMPANY
-    }
-
     public void typeUpdate(Integer companyId) {
         this.companyId = companyId;
-        this.userType = User.UserType.COMPANY;  // ← 이렇게 접근해야 함!
+        this.userType = UserTypeEnum.COMPANY.value;
     }
 }
