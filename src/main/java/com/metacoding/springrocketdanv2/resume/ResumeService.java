@@ -8,12 +8,8 @@ import com.metacoding.springrocketdanv2.career.Career;
 import com.metacoding.springrocketdanv2.career.CareerRepository;
 import com.metacoding.springrocketdanv2.certification.Certification;
 import com.metacoding.springrocketdanv2.certification.CertificationRepository;
-import com.metacoding.springrocketdanv2.jobgroup.JobGroupRepository;
-import com.metacoding.springrocketdanv2.resume.bookmark.ResumeBookmarkRepository;
 import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackRepository;
 import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackRequest;
-import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeRepository;
-import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,13 +25,8 @@ public class ResumeService {
     private final CertificationRepository certificationRepository;
     private final ResumeTechStackRepository resumeTechStackRepository;
     private final CareerRepository careerRepository;
-    private final TechStackRepository techStackRepository;
-    private final SalaryRangeRepository salaryRangeRepository;
-    private final JobGroupRepository jobGroupRepository;
     private final ApplicationRepository applicationRepository;
-    private final ResumeBookmarkRepository resumeBookmarkRepository;
-
-
+    
     public ResumeResponse.DetailDTO 이력서상세보기(Integer resumeId, Integer sessionUserId) {
         Resume resumePS = resumeRepository.findByResumeIdJoinFetchAll(resumeId)
                 .orElseThrow(() -> new ExceptionApi400("존재하지 않는 이력서 입니다"));

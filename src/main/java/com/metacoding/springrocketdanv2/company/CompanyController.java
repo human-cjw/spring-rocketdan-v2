@@ -1,10 +1,13 @@
 package com.metacoding.springrocketdanv2.company;
 
+import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -67,46 +70,29 @@ public class CompanyController {
     }
 
     @GetMapping("/s/api/company/job/{jobId}/application")
-    public String manageDetail(@PathVariable Integer jobId,
-                               @RequestParam(value = "status", defaultValue = "접수") String status) {
+    public String companyApplicationList(@PathVariable Integer jobId,
+                                         @RequestParam(value = "status", defaultValue = "접수") String status) {
+
+        // 유효성 검사: null 또는 허용된 값만 통과
+        if (status != null && !List.of("접수", "검토", "합격", "불합격").contains(status)) {
+            throw new ExceptionApi400("지원 상태는 '접수', '검토', '합격', '불합격' 중 하나여야 합니다.");
+        }
+
         CompanyResponse.ApplicationListDTO respDTO = companyService.지원자조회(jobId, status);
 
         log.debug("지원자 확인: ", respDTO);
 
         return null;
     }
+
+    @GetMapping("/s/api/company/application/{applicationId}")
+    public String companyApplication(@PathVariable("applicationId") Integer applicationId) {
+        Integer sessionUserCompanyId = null;
+        CompanyResponse.ApplicationDetailDTO respDTO = companyService.지원서상세보기(applicationId, sessionUserCompanyId);
+
+        log.debug("지원서상세보기-기업" + respDTO);
+
+        return null;
+    }
 }
 
-//--------------------------------------여기까지 완료-----------------------------------------------------
-//    @GetMapping("/s/api/company/application/{applicationId}")
-//    public String acceptance(@PathVariable("applicationId") Integer applicationId) {
-//        companyService.지원서상세보기(applicationId);
-//        return null;
-//    }
-//
-//    @PostMapping("/company/application/{applicationId}/accept")
-//    public String accept(@PathVariable("applicationId") Integer applicationId) {
-//        System.out.println("컨트롤러 확인용 합격" + applicationId);
-//        Integer jobId = companyService.지원상태수정(applicationId, "합격");
-//        return "redirect:/company/job/" + jobId;
-//    }
-//
-//    @PostMapping("/company/application/{applicationId}/reject")
-//    public String reject(@PathVariable("applicationId") Integer applicationId) {
-//        System.out.println("컨트롤러 확인용 불합격" + applicationId);
-//        Integer jobId = companyService.지원상태수정(applicationId, "불합격");
-//        return "redirect:/company/job/" + jobId;
-//    }
-//
-//    @PostMapping("/company/job/{jobId}/delete")
-//    public String deleteJob(@PathVariable Integer jobId, HttpSession session) {
-/// /        UserResponse.SessionUserDTO sessionUser = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-/// /        if (sessionUser == null || !"company".equals(sessionUser.getUserType())) {
-/// /            return "redirect:/login-form";
-/// /        }
-//
-//        companyService.공고삭제(jobId);
-//
-//        return "redirect:/company/job";
-//    }
-//}

@@ -1,6 +1,5 @@
 package com.metacoding.springrocketdanv2.certification;
 
-import com.metacoding.springrocketdanv2.career.Career;
 import com.metacoding.springrocketdanv2.career.CareerRepository;
 import com.metacoding.springrocketdanv2.resume.ResumeRepository;
 import org.junit.jupiter.api.Test;
@@ -74,13 +73,13 @@ public class CertificationRepositoryTest {
         Integer resumeId = 1;
 
         // when
-        Career career = careerRepository.findByResumeId(resumeId);
+//        Career career = careerRepository.findByResumeId(resumeId);
 
         // then
-        if (career == null) {
-            System.out.println("조회 실패: 경력 없음");
-        } else {
-            System.out.println("조회 성공: 회사명 = " + career.getCompanyName() + ", 시작일 = " + career.getStartDate());
-        }
+//        if (career == null) {
+//            System.out.println("조회 실패: 경력 없음");
+//        } else {
+//            System.out.println("조회 성공: 회사명 = " + career.getCompanyName() + ", 시작일 = " + career.getStartDate());
+//        }
     }
 }

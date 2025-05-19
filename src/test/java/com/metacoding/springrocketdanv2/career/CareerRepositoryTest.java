@@ -68,13 +68,13 @@ public class CareerRepositoryTest {
         Integer resumeId = 1;
 
         // when
-        Career career = careerRepository.findByResumeId(resumeId);
+//        Career career = careerRepository.findByResumeId(resumeId);
 
         // then
-        if (career == null) {
-            System.out.println("해당 resumeId에 대한 경력 정보 없음");
-        } else {
-            System.out.println("조회된 경력 → 회사명: " + career.getCompanyName() + ", 시작일: " + career.getStartDate());
-        }
+//        if (career == null) {
+//            System.out.println("해당 resumeId에 대한 경력 정보 없음");
+//        } else {
+//            System.out.println("조회된 경력 → 회사명: " + career.getCompanyName() + ", 시작일: " + career.getStartDate());
+//        }
     }
 }

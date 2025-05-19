@@ -2,19 +2,15 @@ package com.metacoding.springrocketdanv2.company;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi403;
+import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi404;
 import com.metacoding.springrocketdanv2.application.Application;
 import com.metacoding.springrocketdanv2.application.ApplicationRepository;
-import com.metacoding.springrocketdanv2.career.CareerRepository;
 import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStackRepository;
 import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStackRequest;
 import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.job.JobRepository;
-import com.metacoding.springrocketdanv2.job.bookmark.JobBookmarkRepository;
-import com.metacoding.springrocketdanv2.job.techstack.JobTechStackRepository;
-import com.metacoding.springrocketdanv2.resume.ResumeRepository;
-import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackRepository;
-import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
-import com.metacoding.springrocketdanv2.workfield.WorkFieldRepository;
+import com.metacoding.springrocketdanv2.user.User;
+import com.metacoding.springrocketdanv2.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,16 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CompanyService {
     private final CompanyRepository companyRepository;
-    private final WorkFieldRepository workFieldRepository;
     private final CompanyTechStackRepository companyTechStackRepository;
-    private final TechStackRepository techStackRepository;
     private final ApplicationRepository applicationRepository;
-    private final ResumeRepository resumeRepository;
     private final JobRepository jobRepository;
-    private final CareerRepository careerRepository;
-    private final ResumeTechStackRepository resumeTechStackRepository;
-    private final JobBookmarkRepository jobBookmarkRepository;
-    private final JobTechStackRepository jobTechStackRepository;
+    private final UserRepository userRepository;
 
     // 기업 상세보기
     public CompanyResponse.DetailDTO 기업상세(Integer companyId, Integer sessionUserCompanyId) {
@@ -56,6 +46,13 @@ public class CompanyService {
         Company company = reqDTO.toEntity(sessionUserId);
 
         Company companyPS = companyRepository.save(company);
+
+        User userPS = userRepository.findById(sessionUserId)
+                .orElseThrow(() -> new ExceptionApi404("존재하지 않는 유저 입니다"));
+
+        userPS.typeUpdate(companyPS.getId());
+
+        // 토큰 재발행
 
         return new CompanyResponse.SaveDTO(companyPS);
     }
@@ -98,72 +95,21 @@ public class CompanyService {
 
     // 지원자 조회
     public CompanyResponse.ApplicationListDTO 지원자조회(Integer jobId, String status) {
-        List<Application> applicationsPS = applicationRepository.findByJobIdJoinFetchAll(jobId, status);
+        List<Application> applicationsPS = applicationRepository.findAllByJobIdJoinFetchAllNotNull(jobId, status);
 
         return new CompanyResponse.ApplicationListDTO(applicationsPS);
     }
 
-    // -------------------------여기까지 완료 옵셔널 처리 해야함-------------------------------------------------------
-//    @Transactional
-//    public CompanyResponse.CompanyacceptanceDTO 지원서상세보기(Integer applicationId) {
-//        // 1. 지원서 조회
-//        Application application = applicationRepository.findById(applicationId);
-//
-//        if (application == null) {
-//            throw new ExceptionApi400("잘못된 요청입니다");
-//        }
-
-//        // 2. 상태가 "접수"면 "검토"로 변경
-//        if ("접수".equals(application.getStatus())) {
-//            application.updateStatus("검토");
-//        }
-
-    // 3. 이력서 조회
-//        Resume resume = resumeRepository.findById(application.getResume().getId());
-//
-//        // 4. 커리어 조회
-//        List<Career> careers = careerRepository.findCareersByResumeId(resume.getId());
-//
-//        // 5. 이력서 기술스택 조회
-//        List<TechStack> techStacks = resumeTechStackRepository.findAllByResumeIdWithTechStack(resume.getId());
-//
-//        // 6. DTO 조립
-//        return new CompanyResponse.CompanyacceptanceDTO(resume, careers, techStacks, applicationId);
-//    }
-
     @Transactional
-    public Integer 지원상태수정(Integer applicationId, String newStatus) {
-        Application applicationPS = applicationRepository.findById(applicationId);
-        if (applicationPS == null) {
-            throw new ExceptionApi400("잘못된 요청입니다");
+    public CompanyResponse.ApplicationDetailDTO 지원서상세보기(Integer applicationId, Integer sessionUserCompanyId) {
+
+        Application applicationPS = applicationRepository.findByApplicationIdJoinResumeAndUser(applicationId)
+                .orElseThrow(() -> new ExceptionApi400("잘못된 요청입니다"));
+
+        if (!applicationPS.getCompany().getId().equals(sessionUserCompanyId)) {
+            throw new ExceptionApi403("권한이 없습니다");
         }
-//        applicationPS.updateStatus(newStatus);
-        return applicationPS.getJob().getId();
-    }
 
-    @Transactional
-    public void 공고삭제(Integer jobId) {
-        // 1. 지원 내역 삭제
-//        Job jobPS = jobRepository.findById(jobId);
-//        if (jobPS == null) {
-//            throw new ExceptionApi400("잘못된 요청입니다");
-//        }
-//        applicationRepository.deleteApplicationsByJobId(jobId);
-//
-//        // 2. 북마크 삭제
-//        jobBookmarkRepository.deleteJobBookmarksByJobId(jobId);
-//
-//        // 3. 기술스택 연결 삭제
-//        jobTechStackRepository.deleteJobTechStacksByJobId(jobId);
-//
-//        // 4. 최종 공고 삭제
-//        jobRepository.deleteJobById(jobId);
+        return new CompanyResponse.ApplicationDetailDTO(applicationPS);
     }
-
-//    public CompanyResponse.CompanySaveFormDTO 등록보기() {
-//        List<WorkField> workFields = workFieldRepository.findAll();
-//        List<TechStack> techStacks = techStackRepository.findAll();
-//
-//        return new CompanyResponse.CompanySaveFormDTO(workFields, techStacks);
-//    }
 }

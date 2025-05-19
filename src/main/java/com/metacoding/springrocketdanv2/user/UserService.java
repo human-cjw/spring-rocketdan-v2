@@ -3,17 +3,21 @@ package com.metacoding.springrocketdanv2.user;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi401;
 import com.metacoding.springrocketdanv2._core.util.JwtUtil;
+import com.metacoding.springrocketdanv2.application.Application;
+import com.metacoding.springrocketdanv2.application.ApplicationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final ApplicationRepository applicationRepository;
 
     @Transactional
     public UserResponse.DTO 회원가입(UserRequest.JoinDTO reqDTO) {
@@ -42,4 +46,15 @@ public class UserService {
 
         return UserResponse.TokenDTO.builder().accessToken(accessToken).refreshToken(refreshToken).build();
     }
+
+
+    public UserResponse.ListForUserDTO 내지원목록보기(Integer sessionUserId, String status) {
+        List<Application> applicationsPS = applicationRepository.findAllByUserIdAndStatus(sessionUserId, status);
+
+        return new UserResponse.ListForUserDTO(applicationsPS);
+    }
+
+//    public void 내지원보기(Integer applicationId, Integer sessionUserId) {
+//        applicationRepository
+//    }
 }
