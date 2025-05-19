@@ -52,19 +52,33 @@ public class UserRepositoryTest {
                 .orElseThrow(() -> new RuntimeException("해당 username에 대한 유저가 없다"));
 
         // eye
-        System.out.println(userPS);
+        if (userPS == null) {
+            System.out.println("User not found!!!!");
+        } else {
+            System.out.println("Id:" + userPS.getId() + ", password: " + userPS.getPassword()
+                    + ", email: " + userPS.getEmail() + ", fileUrl: " + userPS.getFileUrl()
+                    + ", userType: " + userPS.getUserType() + ", companyId: " + userPS.getCompanyId()
+                    + ", createdAt: " + userPS.getCreatedAt());
+        }
     }
 
     @Test
     public void findById_test() {
         // given
-        Integer userId = 1;
+        Integer userId = 2;
 
         // when
         User userPS = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("해당 유저가 없다"));
 
         // eye
-        System.out.println(userPS);
+        if (userPS == null) {
+            System.out.println("User not found!!!!");
+        } else {
+            System.out.println("username: " + userPS.getUsername() + ", password: " + userPS.getPassword()
+                    + ", email: " + userPS.getEmail() + ", fileUrl: " + userPS.getFileUrl()
+                    + ", userType: " + userPS.getUserType() + ", companyId: " + userPS.getCompanyId()
+                    + ", createdAt: " + userPS.getCreatedAt());
+        }
     }
 }
