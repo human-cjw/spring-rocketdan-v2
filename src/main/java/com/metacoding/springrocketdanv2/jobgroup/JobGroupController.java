@@ -7,4 +7,5 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class JobGroupController {
     private final JobGroupService jobGroupService;
+
 }
