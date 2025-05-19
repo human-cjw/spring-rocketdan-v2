@@ -20,7 +20,6 @@ public class CompanyRepositoryTest {
 
     @Test
     public void findById_test() {
- 
     }
 
     @Test

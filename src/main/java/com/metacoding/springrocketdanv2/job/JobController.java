@@ -19,8 +19,14 @@ public class JobController {
 
     @GetMapping({"/", "/api/job"})
     public ResponseEntity<?> list() {
-        JobResponse.ListDTO respDTO = jobService.글목록보기(null);
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        Integer sessionUserId = sessionUser != null ? sessionUser.getId() : null;
+
+        JobResponse.ListDTO respDTO = jobService.글목록보기(sessionUserId);
+
         log.debug("공고목록보기" + respDTO);
+
         return Resp.ok(respDTO);
     }
 
@@ -28,6 +34,7 @@ public class JobController {
     public ResponseEntity<?> detail(@PathVariable("jobId") Integer jobId) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
+        // service에서 sessionUser null 체크함
         JobResponse.DetailDTO respDTO = jobService.글상세보기(jobId, sessionUser);
 
         log.debug("공고상세보기" + respDTO);

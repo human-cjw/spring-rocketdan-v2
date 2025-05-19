@@ -21,14 +21,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResolver(new PathResourceResolver());
     }
 
-    @Deprecated
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
         registry.addInterceptor(new CompanyInterceptor())
-                .addPathPatterns("/job/**")
-                .excludePathPatterns("/job")
-                .excludePathPatterns("/job/{id:\\d+}")
-                .excludePathPatterns("/job/{id:\\d+}/bookmark");
+                .addPathPatterns("/s/api/job")
+                .addPathPatterns("/s/api/job/*")
+                .addPathPatterns("/s/api/company/*")
+                .addPathPatterns("/s/api/company/job")
+                .addPathPatterns("/s/api/company/job/*/application")
+                .addPathPatterns("/s/api/company/application/*")
+                .addPathPatterns("/s/api/application/*/status");
     }
 }

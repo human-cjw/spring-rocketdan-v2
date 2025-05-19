@@ -1,7 +1,6 @@
 package com.metacoding.springrocketdanv2.career;
 
 import com.metacoding.springrocketdanv2.resume.Resume;
-import com.metacoding.springrocketdanv2.resume.ResumeRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +9,11 @@ import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
-@Import({CareerRepository.class, ResumeRepository.class})
+@Import({CareerRepository.class})
 @DataJpaTest
 public class CareerRepositoryTest {
     @Autowired
     private CareerRepository careerRepository;
-
-    @Autowired
-    private ResumeRepository resumeRepository;
 
     @Autowired
     private EntityManager em;

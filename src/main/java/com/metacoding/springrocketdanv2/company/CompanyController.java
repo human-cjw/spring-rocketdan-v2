@@ -24,7 +24,9 @@ public class CompanyController {
     public ResponseEntity<?> detail(@PathVariable Integer companyId) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
-        CompanyResponse.DetailDTO respDTO = companyService.기업상세(companyId, sessionUser.getCompanyId());
+        Integer sessionUserCompanyId = sessionUser != null ? sessionUser.getCompanyId() : null;
+
+        CompanyResponse.DetailDTO respDTO = companyService.기업상세(companyId, sessionUserCompanyId);
 
         log.debug("기업상세: ", respDTO);
 
@@ -53,9 +55,9 @@ public class CompanyController {
 
     @PutMapping("/s/api/company/{companyId}")
     public ResponseEntity<?> update(@RequestParam("companyId") Integer companyId, CompanyRequest.UpdateDTO reqDTO, Errors errors) {
-        Integer sessionUserCompanyId = null;
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        CompanyResponse.UpdateDTO respDTO = companyService.기업수정(reqDTO, companyId, sessionUserCompanyId);
+        CompanyResponse.UpdateDTO respDTO = companyService.기업수정(reqDTO, companyId, sessionUser.getCompanyId());
 
         log.debug("기업수정", respDTO);
 
@@ -64,9 +66,9 @@ public class CompanyController {
 
     @GetMapping("/s/api/company/job")
     public ResponseEntity<?> manage() {
-        Integer sessionUserCompanyId = null;
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        CompanyResponse.JobListDTO respDTO = companyService.기업공고관리(sessionUserCompanyId);
+        CompanyResponse.JobListDTO respDTO = companyService.기업공고관리(sessionUser.getCompanyId());
 
         log.debug("기업 공고 관리 목록: ", respDTO);
 
@@ -91,11 +93,13 @@ public class CompanyController {
 
     @GetMapping("/s/api/company/application/{applicationId}")
     public ResponseEntity<?> companyApplication(@PathVariable("applicationId") Integer applicationId) {
-        Integer sessionUserCompanyId = null;
-        CompanyResponse.ApplicationDetailDTO respDTO = companyService.지원서상세보기(applicationId, sessionUserCompanyId);
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        CompanyResponse.ApplicationDetailDTO respDTO = companyService.지원서상세보기(applicationId, sessionUser.getCompanyId());
 
         log.debug("지원서상세보기-기업" + respDTO);
 
         return Resp.ok(respDTO);
     }
 }
+
