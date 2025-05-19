@@ -1,9 +1,11 @@
 package com.metacoding.springrocketdanv2.application;
 
+import com.metacoding.springrocketdanv2._core.util.Resp;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,22 +20,24 @@ public class ApplicationController {
     private final HttpSession session;
 
     @PostMapping("/s/api/application")
-    public String save(@Valid ApplicationRequest.SaveDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> save(@Valid ApplicationRequest.SaveDTO reqDTO, Errors errors) {
         Integer sessionUserId = null;
 
-        applicationService.지원하기(reqDTO, sessionUserId);
+        ApplicationResponse.SaveDTO respDTO = applicationService.지원하기(reqDTO, sessionUserId);
 
-        return null;
+        log.debug("지원하기" + respDTO);
+
+        return Resp.ok(respDTO);
     }
 
     @PutMapping("/s/api/application/{applicationId}/status")
-    public String updateStatus(@PathVariable("applicationId") Integer applicationId, ApplicationRequest.UpdateDTO reqDTO) {
+    public ResponseEntity<?> updateStatus(@PathVariable("applicationId") Integer applicationId, ApplicationRequest.UpdateDTO reqDTO) {
         Integer sessionUserCompanyId = null;
 
         ApplicationResponse.UpdateDTO respDTO = applicationService.지원상태변경(applicationId, reqDTO, sessionUserCompanyId);
 
         log.debug("지원상태변경" + respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 }

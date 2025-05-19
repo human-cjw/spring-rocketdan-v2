@@ -1,9 +1,12 @@
 package com.metacoding.springrocketdanv2.resume;
 
+import com.metacoding.springrocketdanv2._core.util.Resp;
+import com.metacoding.springrocketdanv2.user.User;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,55 +18,56 @@ public class ResumeController {
     private final HttpSession session;
 
     @GetMapping("/api/resume/{resumeId}")
-    public String detail(@PathVariable("resumeId") Integer resumeId) {
-        Integer userId = null; // null or user
+    public ResponseEntity<?> detail(@PathVariable("resumeId") Integer resumeId) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Integer sessionUserId = sessionUser == null ? null : sessionUser.getId();
 
-        ResumeResponse.DetailDTO respDTO = resumeService.이력서상세보기(resumeId, userId);
+        ResumeResponse.DetailDTO respDTO = resumeService.이력서상세보기(resumeId, sessionUserId);
         log.debug("이력서상세보기" + respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @PutMapping("/s/api/resume/{resumeId}")
-    public String update(@PathVariable("resumeId") Integer resumeId, @Valid ResumeRequest.UpdateDTO reqDTO, Errors errors) {
-        Integer sessionUserId = null;
+    public ResponseEntity<?> update(@PathVariable("resumeId") Integer resumeId, @Valid ResumeRequest.UpdateDTO reqDTO, Errors errors) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        ResumeResponse.UpdateDTO respDTO = resumeService.이력서수정하기(resumeId, reqDTO, sessionUserId);
+        ResumeResponse.UpdateDTO respDTO = resumeService.이력서수정하기(resumeId, reqDTO, sessionUser.getId());
 
         log.debug("이력서수정하기" + respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
 
     @GetMapping("/s/api/user/resume")
-    public String list(@RequestParam(required = false, value = "isDefault", defaultValue = "false") boolean isDefault) {
-        Integer sessionUserId = null;
+    public ResponseEntity<?> list(@RequestParam(required = false, value = "isDefault", defaultValue = "false") boolean isDefault) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        ResumeResponse.ListDTO respDTO = resumeService.이력서목록보기(sessionUserId, isDefault);
+        ResumeResponse.ListDTO respDTO = resumeService.이력서목록보기(sessionUser.getId(), isDefault);
 
         log.debug("이력서목록보기" + respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 
     @DeleteMapping("/s/api/resume/{resumeId}")
-    public String delete(@PathVariable("resumeId") Integer resumeId) {
-        Integer sessionUserId = null;
+    public ResponseEntity<?> delete(@PathVariable("resumeId") Integer resumeId) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        resumeService.이력서삭제(resumeId, sessionUserId);
+        resumeService.이력서삭제(resumeId, sessionUser.getId());
 
-        return null;
+        return Resp.ok(null);
     }
 
     @PostMapping("/s/api/resume/")
-    public String save(@Valid ResumeRequest.SaveDTO reqDTO, Errors errors) {
-        Integer sessionUserId = null;
+    public ResponseEntity<?> save(@Valid ResumeRequest.SaveDTO reqDTO, Errors errors) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        ResumeResponse.SaveDTO respDTO = resumeService.이력서등록(reqDTO, sessionUserId);
+        ResumeResponse.SaveDTO respDTO = resumeService.이력서등록(reqDTO, sessionUser.getId());
 
         log.debug("이력서등록" + respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 }
