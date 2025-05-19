@@ -13,7 +13,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     public BoardResponse.VerifyDTO verifyPassword(Integer boardId, String password) {
-        Board boardPS = boardRepository.findById(boardId)
+        Board boardPS = boardRepository.findByBoardId(boardId)
                 .orElseThrow(() -> new ExceptionApi400("존재하지 않는 글입니다"));
 
         if (boardPS.getPassword().equals(password)) {
@@ -22,7 +22,7 @@ public class BoardService {
             return new BoardResponse.VerifyDTO(false, "비밀번호가 틀렸습니다.");
         }
     }
-    
+
     public BoardResponse.ListDTO 글목록보기() {
         List<Board> boardsPS = boardRepository.findAll();
         BoardResponse.ListDTO respDTO = new BoardResponse.ListDTO(boardsPS);
@@ -41,7 +41,7 @@ public class BoardService {
 
     @Transactional
     public BoardResponse.DTO 글수정하기(BoardRequest.UpdateDTO reqDTO, Integer boardId) {
-        Board boardPS = boardRepository.findById(boardId)
+        Board boardPS = boardRepository.findByBoardId(boardId)
                 .orElseThrow(() -> new ExceptionApi400("잘못된 요청입니다"));
 
         boardPS.update(reqDTO.getTitle(), reqDTO.getContent());
@@ -50,9 +50,9 @@ public class BoardService {
 
     @Transactional
     public void 글삭제하기(Integer boardId) {
-        boardRepository.findById(boardId)
+        boardRepository.findByBoardId(boardId)
                 .orElseThrow(() -> new ExceptionApi400("존재하지 않는 글입니다"));
 
-        boardRepository.deleteById(boardId);
+        boardRepository.deleteByBoardId(boardId);
     }
 }
