@@ -24,12 +24,12 @@ public class BoardRepository {
         return board;
     }
 
-    public Optional<Board> findById(Integer id) {
+    public Optional<Board> findByBoardId(Integer id) {
         Board boardPS = em.find(Board.class, id);
         return Optional.ofNullable(boardPS);
     }
 
-    public void deleteById(Integer id) {
+    public void deleteByBoardId(Integer id) {
         em.createQuery("delete from Board b where b.id = :id")
                 .setParameter("id", id)
                 .executeUpdate();
