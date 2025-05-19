@@ -59,7 +59,7 @@ public class Application {
         this.company = company;
     }
 
-    public void updateStatus(ApplicationEnum newStatus) {
-        this.status = newStatus.value;
+    public void updateStatus(String newStatus) {
+        this.status = newStatus;
     }
 }

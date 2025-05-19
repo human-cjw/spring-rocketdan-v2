@@ -56,4 +56,15 @@ public class ApplicationResponse {
             }
         }
     }
+
+    @Data
+    public static class UpdateDTO {
+        private Integer applicationId;
+        private String status;
+
+        public UpdateDTO(Application application) {
+            this.applicationId = application.getId();
+            this.status = application.getStatus();
+        }
+    }
 }

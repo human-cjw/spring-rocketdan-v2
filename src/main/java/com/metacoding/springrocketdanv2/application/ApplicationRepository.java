@@ -88,8 +88,8 @@ public class ApplicationRepository {
                 .executeUpdate();
     }
 
-    public Application findById(Integer id) {
-        return em.find(Application.class, id);
+    public Optional<Application> findById(Integer id) {
+        return Optional.ofNullable(em.find(Application.class, id));
     }
 
     public Application findByCompanyIdWithUserId(Integer companyId, Integer userId) {

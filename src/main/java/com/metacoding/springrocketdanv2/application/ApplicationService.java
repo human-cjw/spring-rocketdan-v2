@@ -1,6 +1,7 @@
 package com.metacoding.springrocketdanv2.application;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
+import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi403;
 import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.job.JobRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,16 @@ public class ApplicationService {
     }
 
     @Transactional
-    public void 지원상태변경() {
-        
+    public ApplicationResponse.UpdateDTO 지원상태변경(Integer applicationId, ApplicationRequest.UpdateDTO reqDTO, Integer sessionUserCompanyId) {
+        Application applicationPS = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ExceptionApi400("잘못된 요청입니다"));
+
+        if (!applicationPS.getCompany().getId().equals(sessionUserCompanyId)) {
+            throw new ExceptionApi403("권한이 없습니다");
+        }
+
+        applicationPS.updateStatus(reqDTO.getStatus());
+
+        return new ApplicationResponse.UpdateDTO(applicationPS);
     }
 }
