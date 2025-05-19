@@ -7,7 +7,7 @@ public class UserResponse {
 
     @Data
     public static class DTO {
-        private Integer id;
+        private Integer userId;
         private String username;
         private String email;
         private String fileUrl;
@@ -16,7 +16,7 @@ public class UserResponse {
         private String createdAt;
 
         public DTO(User user) {
-            this.id = user.getId();
+            this.userId = user.getId();
             this.username = user.getUsername();
             this.email = user.getEmail();
             this.fileUrl = user.getFileUrl();

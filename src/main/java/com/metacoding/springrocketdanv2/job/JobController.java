@@ -32,8 +32,9 @@ public class JobController {
 
     @PostMapping("/s/api/job")
     public String save(@Valid JobRequest.SaveDTO reqDTO, Errors errors) {
-//        UserResponse.SessionUserDTO sessionUserDTO = (UserResponse.SessionUserDTO) session.getAttribute("sessionUser");
-        JobResponse.SaveDTO respDTO = jobService.등록하기(reqDTO, null);
+        Integer companyId = null;
+
+        JobResponse.SaveDTO respDTO = jobService.등록하기(reqDTO, companyId);
 
         log.debug("공고등록" + respDTO);
 
@@ -43,9 +44,20 @@ public class JobController {
     @PutMapping("/s/api/job/{jobId}")
     public String update(@PathVariable("jobId") Integer jobId,
                          @Valid JobRequest.UpdateDTO reqDTO, Errors errors) {
-        JobResponse.UpdateDTO respDTO = jobService.수정하기(jobId, reqDTO);
+        Integer sessionUserCompanyId = null;
+
+        JobResponse.UpdateDTO respDTO = jobService.수정하기(jobId, reqDTO, sessionUserCompanyId);
 
         log.debug("공고수정" + respDTO);
+
+        return null;
+    }
+
+    @DeleteMapping("/s/api/job/{jobId}")
+    public String delete(@PathVariable("jobId") Integer jobId) {
+        Integer companyId = null;
+
+        jobService.삭제하기(jobId, companyId);
 
         return null;
     }

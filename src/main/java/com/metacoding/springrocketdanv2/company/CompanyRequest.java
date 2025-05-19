@@ -3,7 +3,6 @@ package com.metacoding.springrocketdanv2.company;
 import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStack;
 import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.user.User;
-import com.metacoding.springrocketdanv2.user.UserResponse;
 import com.metacoding.springrocketdanv2.workfield.WorkField;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -14,7 +13,7 @@ import java.util.List;
 public class CompanyRequest {
 
     @Data
-    public static class CompanySaveDTO {
+    public static class SaveDTO {
         @NotBlank(message = "한글 이름은 필수입니다.")
         @Size(min = 2, max = 20, message = "한글 이름은 2자 이상 20자 이하여야 합니다.")
         private String nameKr;
@@ -43,7 +42,7 @@ public class CompanyRequest {
         private String businessNumber;
 
         @NotEmpty(message = "기술 스택은 하나 이상 선택해야 합니다.")
-        private List<@NotBlank(message = "기술 스택 항목은 비어 있을 수 없습니다.") String> techStack;
+        private List<@NotBlank(message = "기술 스택 항목은 비어 있을 수 없습니다.") Integer> techStackIds;
 
         @NotBlank(message = "이메일은 필수입니다.")
         @Email(message = "이메일 형식이 올바르지 않습니다.")
@@ -67,9 +66,9 @@ public class CompanyRequest {
 
         @NotBlank(message = "업무 분야는 필수입니다.")
         @Size(max = 50, message = "업무 분야는 50자 이내여야 합니다.")
-        private String workFieldName;
+        private Integer workFieldId;
 
-        public Company toEntity(UserResponse.SessionUserDTO sessionUserDTO, WorkField workField, List<TechStack> techStackList) {
+        public Company toEntity(Integer userId) {
             Company company = Company.builder()
                     .nameKr(nameKr)
                     .nameEn(nameEn)
@@ -80,27 +79,26 @@ public class CompanyRequest {
                     .email(email)
                     .contactManager(contactManager)
                     .address(address)
-                    .user(User.builder()
-                            .id(sessionUserDTO.getId())
-                            .build())
-                    .workField(workField)
+                    .user(User.builder().id(userId).build())
+                    .workField(WorkField.builder().id(workFieldId).build())
                     .phone(phone)
                     .ceo(ceo)
                     .build();
 
-            for (TechStack techStack : techStackList) {
-                CompanyTechStack cts = new CompanyTechStack(company, techStack);
-                company.getTechStackList().add(cts);
+            for (Integer techStackId : techStackIds) {
+                company.getCompanyTechStacks().add(
+                        CompanyTechStack.builder()
+                                .company(company)
+                                .techStack(TechStack.builder().id(techStackId).build())
+                                .build()
+                );
             }
-
             return company;
         }
     }
 
     @Data
     public static class UpdateDTO {
-        private Integer id;
-
         @NotBlank(message = "한글 이름은 필수입니다.")
         @Size(min = 2, max = 20, message = "한글 이름은 2자 이상 20자 이하여야 합니다.")
         private String nameKr;
@@ -149,6 +147,6 @@ public class CompanyRequest {
         private Integer workFieldId;
 
         @NotEmpty(message = "기술 스택은 하나 이상 입력되어야 합니다.")
-        private List<@NotBlank(message = "기술 스택 항목은 비어 있을 수 없습니다.") String> techStack;
+        private List<@NotBlank(message = "기술 스택 항목은 비어 있을 수 없습니다.") Integer> techStackIds;
     }
 }

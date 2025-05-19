@@ -1,10 +1,13 @@
 package com.metacoding.springrocketdanv2.resume;
 
+import com.metacoding.springrocketdanv2.career.CareerRequest;
+import com.metacoding.springrocketdanv2.certification.CertificationRequest;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStack;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
 import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.user.User;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -83,43 +86,14 @@ public class ResumeRequest {
         )
         private String careerLevel;
 
+        @NotNull(message = "isDefault 값은 필수입니다.")
         private Boolean isDefault;
 
-        @Pattern(
-                regexp = "^[가-힣]{2,20}$",
-                message = "회사명은 한글 2자 이상 20자 이하로 입력해 주세요."
-        )
-        private String careerCompanyName;
+        @Valid
+        private List<CareerRequest.UpdateDTO> careers;
 
-        @Pattern(
-                regexp = "^\\d{4}-\\d{2}-\\d{2}$",
-                message = "경력 시작일은 yyyy-MM-dd 형식으로 입력해 주세요."
-        )
-        private String careerStartDate;
-
-        @Pattern(
-                regexp = "^\\d{4}-\\d{2}-\\d{2}$",
-                message = "경력 종료일은 yyyy-MM-dd 형식으로 입력해 주세요."
-        )
-        private String careerEndDate;
-
-        @Pattern(
-                regexp = "^[가-힣]{2,50}$",
-                message = "자격증명은 한글 2자 이상 50자 이하로 입력해 주세요."
-        )
-        private String certificationName;
-
-        @Pattern(
-                regexp = "^[가-힣]{2,50}$",
-                message = "발급기관명은 한글 2자 이상 50자 이하로 입력해 주세요."
-        )
-        private String certificationIssuer;
-
-        @Pattern(
-                regexp = "^\\d{4}-\\d{2}-\\d{2}$",
-                message = "발급일은 yyyy-MM-dd 형식으로 입력해 주세요."
-        )
-        private String certificationIssuedDate;
+        @Valid
+        private List<CertificationRequest.UpdateDTO> certifications;
 
         private Integer salaryRangeId;
 
@@ -201,41 +175,11 @@ public class ResumeRequest {
 
         private Boolean isDefault;
 
-        @Pattern(
-                regexp = "^[가-힣]{2,20}$",
-                message = "회사명은 한글 2자 이상 20자 이하로 입력해 주세요."
-        )
-        private String careerCompanyName;
+        @Valid
+        private List<CareerRequest.UpdateDTO> careers;
 
-        @Pattern(
-                regexp = "^\\d{4}-\\d{2}-\\d{2}$",
-                message = "경력 시작일은 yyyy-MM-dd 형식으로 입력해 주세요."
-        )
-        private String careerStartDate;
-
-        @Pattern(
-                regexp = "^\\d{4}-\\d{2}-\\d{2}$",
-                message = "경력 종료일은 yyyy-MM-dd 형식으로 입력해 주세요."
-        )
-        private String careerEndDate;
-
-        @Pattern(
-                regexp = "^[가-힣]{2,50}$",
-                message = "자격증명은 한글 2자 이상 50자 이하로 입력해 주세요."
-        )
-        private String certificationName;
-
-        @Pattern(
-                regexp = "^[가-힣]{2,50}$",
-                message = "발급기관명은 한글 2자 이상 50자 이하로 입력해 주세요."
-        )
-        private String certificationIssuer;
-
-        @Pattern(
-                regexp = "^\\d{4}-\\d{2}-\\d{2}$",
-                message = "발급일은 yyyy-MM-dd 형식으로 입력해 주세요."
-        )
-        private String certificationIssuedDate;
+        @Valid
+        private List<CertificationRequest.UpdateDTO> certifications;
 
         @NotNull(message = "연봉 범위 선택은 필수입니다.")
         private Integer salaryRangeId;
@@ -266,7 +210,6 @@ public class ResumeRequest {
                     .jobGroup(JobGroup.builder().id(jobGroupId).build())
                     .build();
 
-            resume.getResumeTechStacks().clear();
             for (Integer techStackId : techStackIds) {
                 resume.getResumeTechStacks().add(
                         ResumeTechStack.builder()

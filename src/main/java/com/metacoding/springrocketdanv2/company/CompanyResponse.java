@@ -1,36 +1,51 @@
 package com.metacoding.springrocketdanv2.company;
 
+import com.metacoding.springrocketdanv2.application.Application;
 import com.metacoding.springrocketdanv2.career.Career;
+import com.metacoding.springrocketdanv2.job.Job;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
 import com.metacoding.springrocketdanv2.resume.Resume;
 import com.metacoding.springrocketdanv2.techstack.TechStack;
-import com.metacoding.springrocketdanv2.workfield.WorkField;
-import lombok.AllArgsConstructor;
+import com.metacoding.springrocketdanv2.techstack.TechStackResponse;
+import com.metacoding.springrocketdanv2.workfield.WorkFieldResponse;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CompanyResponse {
 
     @Data
-    public static class CompanySaveFormDTO {
-        private List<WorkField> workFields;
-        private List<TechStack> techStacks;
+    public static class JobListDTO {
+        private List<ItemDTO> jobs;
 
-        public CompanySaveFormDTO(List<WorkField> workFields, List<TechStack> techStacks) {
-            this.workFields = workFields;
-            this.techStacks = techStacks;
+        public JobListDTO(List<Job> jobs) {
+            this.jobs = jobs.stream()
+                    .map((job -> new ItemDTO(job)))
+                    .toList();
+        }
+
+        @Data
+        class ItemDTO {
+            private Integer jobId;
+            private String title;
+            private String careerLevel;
+            private String createdAt;
+            private JobGroupResponse.DTO jobGroup;
+
+            public ItemDTO(Job job) {
+                this.jobId = job.getId();
+                this.title = job.getTitle();
+                this.careerLevel = job.getCareerLevel();
+                this.createdAt = job.getCreatedAt().toString().substring(0, 10);
+                this.jobGroup = new JobGroupResponse.DTO(job.getJobGroup());
+            }
         }
     }
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class CompanyResponseDTO {
+    @Data
+    public static class UpdateDTO {
+        private Integer companyId;
         private String nameKr;
         private String nameEn;
         private String ceo;
@@ -45,109 +60,183 @@ public class CompanyResponse {
         private String infoImageUrl;
         private String contactManager;
         private String startDate;
-        private String workFieldName;
-        private List<String> techStackList;
-        private boolean isOwner;
+        private String createdAt;
+        private WorkFieldResponse.DTO workField;
+        private List<TechStackResponse.DTO> techStacks;
+
+        public UpdateDTO(Company company) {
+            this.companyId = company.getId();
+            this.nameKr = company.getNameKr();
+            this.nameEn = company.getNameEn();
+            this.ceo = company.getCeo();
+            this.businessNumber = company.getBusinessNumber();
+            this.email = company.getEmail();
+            this.phone = company.getPhone();
+            this.address = company.getAddress();
+            this.introduction = company.getIntroduction();
+            this.oneLineIntro = company.getOneLineIntro();
+            this.homepageUrl = company.getHomepageUrl();
+            this.logoImageUrl = company.getLogoImageUrl();
+            this.infoImageUrl = company.getInfoImageUrl();
+            this.contactManager = company.getContactManager();
+            this.startDate = company.getStartDate();
+            this.createdAt = company.getCreatedAt().toString().substring(0, 10);
+            this.workField = new WorkFieldResponse.DTO(company.getWorkField());
+            this.techStacks = company.getCompanyTechStacks().stream()
+                    .map(companyTechStack -> new TechStackResponse.DTO(companyTechStack.getTechStack()))
+                    .toList();
+        }
     }
 
     @Data
-    public static class UpdateFormDTO {
+    public static class SaveDTO {
+        private Integer companyId;
+        private String nameKr;
+        private String nameEn;
+        private String ceo;
+        private String businessNumber;
+        private String email;
+        private String phone;
+        private String address;
+        private String introduction;
+        private String oneLineIntro;
+        private String homepageUrl;
+        private String logoImageUrl;
+        private String infoImageUrl;
+        private String contactManager;
+        private String startDate;
+        private String createdAt;
+        private WorkFieldResponse.DTO workField;
+        private List<TechStackResponse.DTO> techStacks;
+
+        public SaveDTO(Company company) {
+            this.companyId = company.getId();
+            this.nameKr = company.getNameKr();
+            this.nameEn = company.getNameEn();
+            this.ceo = company.getCeo();
+            this.businessNumber = company.getBusinessNumber();
+            this.email = company.getEmail();
+            this.phone = company.getPhone();
+            this.address = company.getAddress();
+            this.introduction = company.getIntroduction();
+            this.oneLineIntro = company.getOneLineIntro();
+            this.homepageUrl = company.getHomepageUrl();
+            this.logoImageUrl = company.getLogoImageUrl();
+            this.infoImageUrl = company.getInfoImageUrl();
+            this.contactManager = company.getContactManager();
+            this.startDate = company.getStartDate();
+            this.createdAt = company.getCreatedAt().toString().substring(0, 10);
+            this.workField = new WorkFieldResponse.DTO(company.getWorkField());
+            this.techStacks = company.getCompanyTechStacks().stream()
+                    .map(companyTechStack -> new TechStackResponse.DTO(companyTechStack.getTechStack()))
+                    .toList();
+        }
+    }
+
+    @Data
+    public static class DetailDTO {
         private Integer id;
         private String nameKr;
         private String nameEn;
-        private String oneLineIntro;
-        private String introduction;
-        private String startDate;
+        private String ceo;
         private String businessNumber;
         private String email;
-        private String contactManager;
-        private String address;
-        private String workFieldName;
-        private List<CompanyResponse.TechStackDTO> techStacks;
-        private List<CompanyResponse.WorkFieldDTO> workFields;
         private String phone;
-        private String ceo;
-    }
-
-    @Data
-    public static class TechStackDTO {
-        private String name;
-        private boolean isChecked;
-
-        public TechStackDTO(String name, boolean isChecked) {
-            this.name = name;
-            this.isChecked = isChecked;
-        }
-    }
-
-    @Data
-    public static class WorkFieldDTO {
-        private Integer id;
-        private String name;
-        private boolean isChecked;
-
-        public WorkFieldDTO(Integer id, String name, boolean isChecked) {
-            this.id = id;
-            this.name = name;
-            this.isChecked = isChecked;
-        }
-    }
-
-    @Getter
-    public static class CompanyManageJobDTO {
-        private Integer id;
-        private String title;
-        private String careerLevel;
+        private String address;
+        private String introduction;
+        private String oneLineIntro;
+        private String homepageUrl;
+        private String logoImageUrl;
+        private String infoImageUrl;
+        private String contactManager;
+        private String startDate;
         private String createdAt;
-        private String jobGroupName;
+        private WorkFieldResponse.DTO workField; // ManyToOne → 이름만
+        private List<TechStackResponse.DTO> techStacks; // OneToMany → 이름만
+        private boolean isOwner;
 
-        public CompanyManageJobDTO(Integer id, String title, String careerLevel, LocalDateTime createdAt, String jobGroupName) {
-            this.id = id;
-            this.title = title;
-            this.careerLevel = careerLevel;
-            this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-            this.jobGroupName = jobGroupName;
-        }
-    }
-
-    @Getter
-    public static class CompanyManageResumeDTO {
-        private Integer applicationId;
-        private String username;
-        private String resumeTitle;
-        private String careerLevel;
-        private String createdAt;
-        private String status;
-        private boolean isAccepted; // 합격
-        private boolean isRejected; // 탈락
-        private boolean isPending;  // 접수 or 검토중
-
-        public CompanyManageResumeDTO(Integer applicationId, String username, String resumeTitle, String careerLevel, LocalDateTime createdAt, String status) {
-            this.applicationId = applicationId;
-            this.username = username;
-            this.resumeTitle = resumeTitle;
-            this.careerLevel = careerLevel;
-            this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-            this.status = status;
-            this.isAccepted = "합격".equals(status);
-            this.isRejected = "불합격".equals(status);
-            this.isPending = "접수".equals(status) || "검토".equals(status);
+        public DetailDTO(Company company, Integer sessionUserCompanyId) {
+            this.id = company.getId();
+            this.nameKr = company.getNameKr();
+            this.nameEn = company.getNameEn();
+            this.ceo = company.getCeo();
+            this.businessNumber = company.getBusinessNumber();
+            this.email = company.getEmail();
+            this.phone = company.getPhone();
+            this.address = company.getAddress();
+            this.introduction = company.getIntroduction();
+            this.oneLineIntro = company.getOneLineIntro();
+            this.homepageUrl = company.getHomepageUrl();
+            this.logoImageUrl = company.getLogoImageUrl();
+            this.infoImageUrl = company.getInfoImageUrl();
+            this.contactManager = company.getContactManager();
+            this.startDate = company.getStartDate();
+            this.createdAt = company.getCreatedAt().toString().substring(0, 10);
+            this.workField = new WorkFieldResponse.DTO(company.getWorkField());
+            this.techStacks = company.getCompanyTechStacks().stream()
+                    .map(companyTechStack -> new TechStackResponse.DTO(companyTechStack.getTechStack()))
+                    .toList();
+            this.isOwner = company.getId().equals(sessionUserCompanyId);
         }
     }
 
     @Data
-    public static class CompanyManageResumePageDTO {
+    public static class ListDTO {
+        private List<ItemDTO> companies;
+
+        public ListDTO(List<Company> companyList) {
+            this.companies = companyList.stream()
+                    .map(company -> new ItemDTO(company))
+                    .toList();
+        }
+
+        @Data
+        class ItemDTO {
+            private Integer id;
+            private String nameKr;
+            private String logoImageUrl;
+
+            public ItemDTO(Company company) {
+                this.id = company.getId();
+                this.nameKr = company.getNameKr();
+                this.logoImageUrl = company.getLogoImageUrl();
+            }
+        }
+    }
+
+    @Data
+    public static class ApplicationListDTO {
         private Integer jobId;
         private String jobTitle;
-        private List<CompanyManageResumeDTO> applications;
+        private List<ItemDTO> applications;
 
-        public CompanyManageResumePageDTO(Integer jobId, String jobTitle, List<CompanyManageResumeDTO> applications) {
-            this.jobId = jobId;
-            this.jobTitle = jobTitle;
-            this.applications = applications;
+        public ApplicationListDTO(List<Application> applications) {
+            this.jobId = applications.getFirst().getJob().getId();
+            this.jobTitle = applications.getFirst().getJob().getTitle();
+            this.applications = applications.stream()
+                    .map(application -> new ItemDTO(application))
+                    .toList();
+        }
+
+        @Data
+        class ItemDTO {
+            private Integer applicationId;
+            private String username;
+            private String title;
+            private String careerLevel;
+            private String ApplyCreatedAt;
+
+            public ItemDTO(Application application) {
+                this.applicationId = application.getId();
+                this.username = application.getUser().getUsername();
+                this.title = application.getResume().getTitle();
+                this.careerLevel = application.getResume().getCareerLevel();
+                this.ApplyCreatedAt = application.getCreatedAt().toString().substring(0, 10);
+            }
         }
     }
 
+    //---------------------------------여기까지 완료 ------------------------------------------------------------
     @Data
     public static class CompanyacceptanceDTO {
         private Integer applicationId;

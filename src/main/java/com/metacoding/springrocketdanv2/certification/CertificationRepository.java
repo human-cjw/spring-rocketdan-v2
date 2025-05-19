@@ -11,7 +11,7 @@ import java.util.List;
 public class CertificationRepository {
     private final EntityManager em;
 
-    public List<Certification> findCertificationsByResumeId(Integer resumeId) {
+    public List<Certification> findAllByResumeId(Integer resumeId) {
         String q = "SELECT c FROM Certification c WHERE c.resume.id = :resumeId";
         return em.createQuery(q, Certification.class)
                 .setParameter("resumeId", resumeId)
@@ -24,8 +24,9 @@ public class CertificationRepository {
                 .executeUpdate();
     }
 
-    public void save(Certification certification) {
+    public Certification save(Certification certification) {
         em.persist(certification);
+        return certification;
     }
 
     public Certification findByResumeId(Integer resumeId) {

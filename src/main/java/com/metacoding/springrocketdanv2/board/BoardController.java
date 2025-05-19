@@ -22,21 +22,27 @@ public class BoardController {
     @GetMapping("/api/board")
     public String list() {
         BoardResponse.ListDTO respDTO = boardService.글목록보기();
-        log.debug("글목록보기" + respDTO);
+
+        log.debug("글목록보기: " + respDTO);
+
         return null;
     }
 
     @PostMapping("/api/board")
     public String writeBoard(BoardRequest.SaveDTO reqDTO) {
         BoardResponse.DTO respDTO = boardService.글쓰기(reqDTO);
-        log.debug("글쓰기" + respDTO);
+
+        log.debug("글쓰기: " + respDTO);
+
         return null;
     }
 
     @PutMapping("/api/board/{boardId}")
     public String update(@PathVariable("boardId") Integer boardId, BoardRequest.UpdateDTO reqDTO) { // <- form 에서 boardId와 title, content 가져와야함
         BoardResponse.DTO respDTO = boardService.글수정하기(reqDTO, boardId);
-        log.debug("글수정하기" + respDTO);
+
+        log.debug("글수정하기: " + respDTO);
+
         return null;
     }
 

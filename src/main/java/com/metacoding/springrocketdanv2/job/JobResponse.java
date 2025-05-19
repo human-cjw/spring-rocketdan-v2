@@ -10,7 +10,6 @@ import com.metacoding.springrocketdanv2.workfield.WorkFieldResponse;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Optional;
 
 public class JobResponse {
 
@@ -20,49 +19,49 @@ public class JobResponse {
         private Integer bookmarkCount;
 
         public ListDTO(List<Job> jobs, List<JobBookmark> jobBookmarks) {
-            if (jobBookmarks.size() == 0) {
+            if (jobBookmarks.isEmpty()) {
+                this.jobs = jobs.stream()
+                        .map(job -> new ItemDTO(job, null))
+                        .toList();
+            } else {
                 this.jobs = jobs.stream()
                         .map(job -> {
-                            return new ItemDTO(job, false);
+                            Integer bookmarkId = null;
+                            for (JobBookmark jobBookmark : jobBookmarks) {
+                                if (jobBookmark.getJob().getId().equals(job.getId())) {
+                                    bookmarkId = jobBookmark.getId();
+                                    break;
+                                }
+                            }
+                            return new ItemDTO(job, bookmarkId);
                         })
                         .toList();
             }
-            List<Integer> jobBookmarkJobIds = jobBookmarks.stream()
-                    .map(jobBookmark -> jobBookmark.getJob().getId())
-                    .toList();
-
-            this.jobs = jobs.stream()
-                    .map(job -> {
-                        boolean isBookmarked = jobBookmarkJobIds.contains(job.getId());
-
-                        return new ItemDTO(job, isBookmarked);
-                    })
-                    .toList();
 
             this.bookmarkCount = jobBookmarks.size();
         }
 
         @Data
         public class ItemDTO {
-            private Integer id;
+            private Integer jobId;
             private String title;
             private String careerLevel;
             private String companyName;
-            private boolean isBookmarked;
+            private Integer bookmarkId;
 
-            public ItemDTO(Job job, boolean isBookmarked) {
-                this.id = job.getId();
+            public ItemDTO(Job job, Integer bookmarkId) {
+                this.jobId = job.getId();
                 this.title = job.getTitle();
                 this.careerLevel = job.getCareerLevel();
                 this.companyName = job.getCompany().getNameKr();
-                this.isBookmarked = isBookmarked;
+                this.bookmarkId = bookmarkId;
             }
         }
     }
 
     @Data
     public static class DetailDTO {
-        private Integer id;
+        private Integer jobId;
         private String title;
         private String description;
         private String location;
@@ -78,10 +77,10 @@ public class JobResponse {
         private JobGroupResponse.DTO jobGroup;
         private List<TechStackResponse.DTO> techStacks;
         private boolean isOwner;
-        private boolean isBookmarked;
+        private Integer jobBookmarkId;
 
-        public DetailDTO(Job job, User sessionUser, Optional<JobBookmark> jobBookmark) {
-            this.id = job.getId();
+        public DetailDTO(Job job, User sessionUser, Integer jobBookmarkId) {
+            this.jobId = job.getId();
             this.title = job.getTitle();
             this.description = job.getDescription();
             this.location = job.getLocation();
@@ -99,18 +98,18 @@ public class JobResponse {
                     .map(jobTechStack -> new TechStackResponse.DTO(jobTechStack.getTechStack()))
                     .toList();
             this.isOwner = sessionUser.getCompanyId() != null && sessionUser.getCompanyId().equals(job.getCompany().getId());
-            this.isBookmarked = jobBookmark.isPresent();
+            this.jobBookmarkId = jobBookmarkId;
         }
 
         @Data
         class CompanyDTO {
-            private Integer id;
+            private Integer companyId;
             private String name;
             private String phone;
             private String contactManager;
 
             public CompanyDTO(Company company) {
-                this.id = company.getId();
+                this.companyId = company.getId();
                 this.name = company.getNameKr();
                 this.phone = company.getPhone();
                 this.contactManager = company.getContactManager();
@@ -153,7 +152,7 @@ public class JobResponse {
 
     @Data
     public static class UpdateDTO {
-        private Integer id;
+        private Integer jobId;
         private String title;
         private String description;
         private String location;
@@ -167,7 +166,7 @@ public class JobResponse {
         private List<TechStackResponse.DTO> techStacks;
 
         public UpdateDTO(Job job) {
-            this.id = job.getId();
+            this.jobId = job.getId();
             this.title = job.getTitle();
             this.description = job.getDescription();
             this.location = job.getLocation();
@@ -186,7 +185,7 @@ public class JobResponse {
 
     @Data
     public static class DTO {
-        private Integer id;
+        private Integer jobId;
         private String title;
         private String description;
         private String location;
@@ -201,10 +200,9 @@ public class JobResponse {
         private SalaryRangeResponse.DTO salaryRange;
         private WorkFieldResponse.DTO workField;
         private JobGroupResponse.DTO jobGroup;
-        private List<TechStackResponse.DTO> jobTechStacks;
 
         public DTO(Job job) {
-            this.id = job.getId();
+            this.jobId = job.getId();
             this.title = job.getTitle();
             this.description = job.getDescription();
             this.location = job.getLocation();
@@ -219,9 +217,6 @@ public class JobResponse {
             this.salaryRange = new SalaryRangeResponse.DTO(job.getSalaryRange());
             this.workField = new WorkFieldResponse.DTO(job.getWorkField());
             this.jobGroup = new JobGroupResponse.DTO(job.getJobGroup());
-            this.jobTechStacks = job.getJobTechStacks().stream()
-                    .map(jobTechStack -> new TechStackResponse.DTO(jobTechStack.getTechStack()))
-                    .toList();
         }
     }
 }

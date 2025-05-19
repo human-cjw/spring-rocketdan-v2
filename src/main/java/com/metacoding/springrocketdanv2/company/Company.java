@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class Company {
     private WorkField workField;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.PERSIST)
-    private List<CompanyTechStack> techStackList = new ArrayList<>();
+    private List<CompanyTechStack> companyTechStacks = new ArrayList<>();
 
     @Builder
     public Company(Integer id, String nameKr, String nameEn, String ceo, String businessNumber,
@@ -80,19 +81,18 @@ public class Company {
         this.workField = workField;
     }
 
-    public void update(CompanyRequest.UpdateDTO dto, WorkField workField) {
-        this.nameKr = dto.getNameKr();
-        this.nameEn = dto.getNameEn();
-        this.oneLineIntro = dto.getOneLineIntro();
-        this.introduction = dto.getIntroduction();
-        this.startDate = dto.getStartDate();
-        this.businessNumber = dto.getBusinessNumber();
-        this.email = dto.getEmail();
-        this.contactManager = dto.getContactManager();
-        this.phone = dto.getPhone();
-        this.ceo = dto.getCeo();
-        this.address = dto.getAddress();
-        this.workField = workField;
-    }
+    public void typeUpdate(Object user) {
+        try {
+            Field userTypeField = user.getClass().getDeclaredField("userType");
+            userTypeField.setAccessible(true);
+            userTypeField.set(user, "company");
 
+            Field companyIdField = user.getClass().getDeclaredField("companyId");
+            companyIdField.setAccessible(true);
+            companyIdField.set(user, this.id);
+
+        } catch (Exception e) {
+            throw new RuntimeException("User 상태 변경 실패", e);
+        }
+    }
 }

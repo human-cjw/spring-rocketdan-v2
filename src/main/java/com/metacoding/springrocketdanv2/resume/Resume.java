@@ -82,30 +82,7 @@ public class Resume {
         this.jobGroup = jobGroup;
     }
 
-    public void update(ResumeRequest.UpdateDTO requestDTO, List<ResumeTechStack> resumeResumeTechStacks) {
-        this.title = requestDTO.getTitle();
-        this.summary = requestDTO.getSummary();
-        this.portfolioUrl = requestDTO.getPortfolioUrl();
-        this.gender = requestDTO.getGender();
-        this.education = requestDTO.getEducation();
-        this.birthdate = requestDTO.getBirthdate();
-        this.major = requestDTO.getMajor();
-        this.graduationType = requestDTO.getGraduationType();
-        this.phone = requestDTO.getPhone();
-        this.enrollmentDate = requestDTO.getEnrollmentDate();
-        this.graduationDate = requestDTO.getGraduationDate();
-        this.careerLevel = requestDTO.getCareerLevel();
-        this.isDefault = requestDTO.getIsDefault() != null ? requestDTO.getIsDefault() : false;
-        this.salaryRange = SalaryRange.builder().id(requestDTO.getSalaryRangeId()).build();
-        this.jobGroup = JobGroup.builder().id(requestDTO.getJobGroupId()).build();
-        this.resumeTechStacks.clear();
-
-        for (ResumeTechStack resumeTechStack : resumeResumeTechStacks) {
-            this.resumeTechStacks.add(resumeTechStack);
-        }
-    }
-
-    public void setIsDefaultFalse() {
-        this.isDefault = false;
+    public void setIsDefault(boolean isDefault) {
+        this.isDefault = isDefault;
     }
 }
