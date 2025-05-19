@@ -97,7 +97,7 @@ public class JobResponse {
             this.techStacks = job.getJobTechStacks().stream()
                     .map(jobTechStack -> new TechStackResponse.DTO(jobTechStack.getTechStack()))
                     .toList();
-            this.isOwner = sessionUser.getCompanyId() != null && sessionUser.getCompanyId().equals(job.getCompany().getId());
+            this.isOwner = sessionUser != null && sessionUser.getCompanyId() != null && sessionUser.getCompanyId().equals(job.getCompany().getId());
             this.jobBookmarkId = jobBookmarkId;
         }
 
