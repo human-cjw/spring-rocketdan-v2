@@ -145,11 +145,20 @@ public class JobRepositoryTest {
         // given
         Integer jobId = 1;
 
+        // 자식 테이블부터 삭제
         em.createQuery("DELETE FROM Application a WHERE a.job.id = :jobId")
                 .setParameter("jobId", jobId)
                 .executeUpdate();
 
-        // when
+        em.createQuery("DELETE FROM JobBookmark b WHERE b.job.id = :jobId")
+                .setParameter("jobId", jobId)
+                .executeUpdate();
+
+        em.createQuery("DELETE FROM JobTechStack jts WHERE jts.job.id = :jobId")
+                .setParameter("jobId", jobId)
+                .executeUpdate();
+
+        // 부모 삭제
         jobRepository.deleteByJobId(jobId);
         em.flush();
         em.clear();
@@ -160,6 +169,63 @@ public class JobRepositoryTest {
             System.out.println("삭제 성공: Job이 존재하지 않습니다.");
         } else {
             System.out.println("삭제 실패: Job이 아직 존재합니다.");
+        }
+    }
+
+    @Test
+    public void updateByJobId_test() {
+        // given
+        Integer jobId = 1;
+
+        JobRequest.UpdateDTO reqDTO = new JobRequest.UpdateDTO();
+        reqDTO.setTitle("수정된 제목");
+        reqDTO.setDescription("수정된 설명");
+        reqDTO.setLocation("서울");
+        reqDTO.setEmploymentType("정규직");
+        reqDTO.setDeadline("2025-12-31");
+        reqDTO.setStatus("open");
+        reqDTO.setCareerLevel("경력");
+        reqDTO.setSalaryRangeId(1);
+        reqDTO.setWorkFieldId(1);
+        reqDTO.setJobGroupId(1);
+
+        // when
+        jobRepository.updateByJobId(jobId, reqDTO);
+        em.flush();
+        em.clear();
+
+        // eye
+        Job job = em.find(Job.class, jobId);
+        System.out.println("제목: " + job.getTitle());
+        System.out.println("설명: " + job.getDescription());
+        System.out.println("위치: " + job.getLocation());
+        System.out.println("고용형태: " + job.getEmploymentType());
+        System.out.println("마감일: " + job.getDeadline());
+        System.out.println("상태: " + job.getStatus());
+        System.out.println("경력: " + job.getCareerLevel());
+        System.out.println("연봉 라벨: " + job.getSalaryRange().getLabel());
+        System.out.println("업무: " + job.getWorkField().getName());
+        System.out.println("직무: " + job.getJobGroup().getName());
+    }
+
+    @Test
+    public void findAllByCompanyId_test() {
+        // given
+        Integer companyId = 1;
+
+        // when
+        List<Job> jobs = jobRepository.findAllByCompanyId(companyId);
+
+        // then
+        for (Job job : jobs) {
+            System.out.println("=================================");
+            System.out.println("Job ID: " + job.getId());
+            System.out.println("제목: " + job.getTitle());
+            System.out.println("기업명: " + job.getCompany().getNameKr());
+            System.out.println("마감일: " + job.getDeadline());
+            System.out.println("상태: " + job.getStatus());
+            System.out.println("총 개수: " + jobs.size());
+            System.out.println("=================================");
         }
     }
 }
