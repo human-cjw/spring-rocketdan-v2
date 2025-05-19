@@ -31,7 +31,7 @@ public class UserRepositoryTest {
         em.clear();
 
         // eye
-        User result = userRepository.findById(user.getId()).orElseThrow();
+        User result = userRepository.findByUserId(user.getId()).orElseThrow();
         System.out.println("ID: " + result.getId());
         System.out.println("Username: " + result.getUsername());
         System.out.println("Password: " + result.getPassword());
@@ -68,7 +68,7 @@ public class UserRepositoryTest {
         Integer userId = 2;
 
         // when
-        User userPS = userRepository.findById(userId)
+        User userPS = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("해당 유저가 없다"));
 
         // eye
