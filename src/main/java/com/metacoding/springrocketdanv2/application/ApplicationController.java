@@ -45,7 +45,10 @@ public class ApplicationController {
     @PutMapping("/s/api/application/{applicationId}/status")
     public String updateStatus(@PathVariable("applicationId") Integer applicationId, ApplicationRequest.UpdateDTO reqDTO) {
         Integer sessionUserCompanyId = null;
-        applicationService.지원상태변경(applicationId, reqDTO, sessionUserCompanyId);
+
+        ApplicationResponse.UpdateDTO respDTO = applicationService.지원상태변경(applicationId, reqDTO, sessionUserCompanyId);
+
+        log.debug("지원상태변경" + respDTO);
 
         return null;
     }
