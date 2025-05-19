@@ -5,19 +5,12 @@ import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi403;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi404;
 import com.metacoding.springrocketdanv2.application.Application;
 import com.metacoding.springrocketdanv2.application.ApplicationRepository;
-import com.metacoding.springrocketdanv2.career.CareerRepository;
 import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStackRepository;
 import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStackRequest;
 import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.job.JobRepository;
-import com.metacoding.springrocketdanv2.job.bookmark.JobBookmarkRepository;
-import com.metacoding.springrocketdanv2.job.techstack.JobTechStackRepository;
-import com.metacoding.springrocketdanv2.resume.ResumeRepository;
-import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackRepository;
-import com.metacoding.springrocketdanv2.techstack.TechStackRepository;
 import com.metacoding.springrocketdanv2.user.User;
 import com.metacoding.springrocketdanv2.user.UserRepository;
-import com.metacoding.springrocketdanv2.workfield.WorkFieldRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,16 +21,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CompanyService {
     private final CompanyRepository companyRepository;
-    private final WorkFieldRepository workFieldRepository;
     private final CompanyTechStackRepository companyTechStackRepository;
-    private final TechStackRepository techStackRepository;
     private final ApplicationRepository applicationRepository;
-    private final ResumeRepository resumeRepository;
     private final JobRepository jobRepository;
-    private final CareerRepository careerRepository;
-    private final ResumeTechStackRepository resumeTechStackRepository;
-    private final JobBookmarkRepository jobBookmarkRepository;
-    private final JobTechStackRepository jobTechStackRepository;
     private final UserRepository userRepository;
 
     // 기업 상세보기
