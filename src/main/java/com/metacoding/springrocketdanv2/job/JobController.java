@@ -34,6 +34,7 @@ public class JobController {
     public ResponseEntity<?> detail(@PathVariable("jobId") Integer jobId) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
+        // service에서 sessionUser null 체크함
         JobResponse.DetailDTO respDTO = jobService.글상세보기(jobId, sessionUser);
 
         log.debug("공고상세보기" + respDTO);
