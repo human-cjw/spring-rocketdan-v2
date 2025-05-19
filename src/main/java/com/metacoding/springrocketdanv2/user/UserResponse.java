@@ -25,7 +25,7 @@ public class UserResponse {
             this.fileUrl = user.getFileUrl();
             this.userType = user.getUserType();
             this.companyId = user.getCompanyId();
-            this.createdAt = user.getCreatedAt().toString();
+            this.createdAt = user.getCreatedAt().toString().substring(0, 10);
         }
     }
 
