@@ -3,7 +3,6 @@ package com.metacoding.springrocketdanv2.job.bookmark;
 import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.user.User;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,7 +17,7 @@ public class JobBookmarkRepositoryTest {
     @Autowired
     private JobBookmarkRepository jobBookmarkRepository;
 
-    @PersistenceContext
+    @Autowired
     private EntityManager em;
 
     @Test

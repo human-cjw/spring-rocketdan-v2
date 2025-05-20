@@ -51,11 +51,11 @@ public class UserController {
 
     @GetMapping("/s/api/user/application/{applicationId}")
     public ResponseEntity<?> userApplication(@PathVariable("applicationId") Integer applicationId) {
-        Integer sessionUserId = null;
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-//        userService.내지원보기(applicationId, sessionUserId);
+        UserResponse.ApplicationDetailDTO respDTO = userService.내지원보기(applicationId, sessionUser.getId());
 
-//        log.debug("내지원목록보기" + respDTO);
+        log.debug("내지원보기" + respDTO);
 
         return null;
     }

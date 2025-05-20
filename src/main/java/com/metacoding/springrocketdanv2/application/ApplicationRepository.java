@@ -74,7 +74,7 @@ public class ApplicationRepository {
                 .executeUpdate();
     }
 
-    public Optional<Application> findById(Integer id) {
+    public Optional<Application> findByApplicationId(Integer id) {
         return Optional.ofNullable(em.find(Application.class, id));
     }
 
@@ -111,7 +111,25 @@ public class ApplicationRepository {
                     JOIN FETCH a.resume r
                     JOIN FETCH a.user u
                     WHERE a.job.id = :applicationId
-                    AND a.status = :status
+                """;
+
+        Query query = em.createQuery(q, Application.class)
+                .setParameter("applicationId", applicationId);
+
+        try {
+            return Optional.ofNullable((Application) query.getSingleResult());
+        } catch (Exception e) {
+            return Optional.ofNullable(null);
+        }
+    }
+
+    public Optional<Application> findByApplicationIdJoinJobAndCompany(Integer applicationId) {
+        String q = """
+                    SELECT a
+                    FROM Application a
+                    JOIN FETCH a.job j
+                    JOIN FETCH a.company c
+                    WHERE a.job.id = :applicationId
                 """;
 
         Query query = em.createQuery(q, Application.class)

@@ -3,6 +3,7 @@ package com.metacoding.springrocketdanv2.company;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi403;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi404;
+import com.metacoding.springrocketdanv2._core.util.JwtUtil;
 import com.metacoding.springrocketdanv2.application.Application;
 import com.metacoding.springrocketdanv2.application.ApplicationRepository;
 import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStackRepository;
@@ -11,6 +12,7 @@ import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.job.JobRepository;
 import com.metacoding.springrocketdanv2.user.User;
 import com.metacoding.springrocketdanv2.user.UserRepository;
+import com.metacoding.springrocketdanv2.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,15 +48,23 @@ public class CompanyService {
         Company company = reqDTO.toEntity(sessionUserId);
 
         Company companyPS = companyRepository.save(company);
+        Company companyPS2 = companyRepository.findByCompanyIdJoinFetchAll(companyPS.getId())
+                .orElseThrow(() -> new ExceptionApi404("존재하지 않는 기업입니다"));
 
-        User userPS = userRepository.findById(sessionUserId)
+        User userPS = userRepository.findByUserId(sessionUserId)
                 .orElseThrow(() -> new ExceptionApi404("존재하지 않는 유저 입니다"));
 
         userPS.typeUpdate(companyPS.getId());
 
         // 토큰 재발행
+        String accessToken = JwtUtil.create(userPS);
+        String refreshToken = JwtUtil.createRefresh(userPS);
+        UserResponse.TokenDTO tokenDTO = UserResponse.TokenDTO.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
 
-        return new CompanyResponse.SaveDTO(companyPS);
+        return new CompanyResponse.SaveDTO(companyPS2, tokenDTO);
     }
 
     // 기업 수정

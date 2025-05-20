@@ -5,6 +5,7 @@ import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
 import com.metacoding.springrocketdanv2.techstack.TechStackResponse;
+import com.metacoding.springrocketdanv2.user.UserResponse;
 import com.metacoding.springrocketdanv2.workfield.WorkFieldResponse;
 import lombok.Data;
 
@@ -105,8 +106,9 @@ public class CompanyResponse {
         private String createdAt;
         private WorkFieldResponse.DTO workField;
         private List<TechStackResponse.DTO> techStacks;
+        private UserResponse.TokenDTO token;
 
-        public SaveDTO(Company company) {
+        public SaveDTO(Company company, UserResponse.TokenDTO token) {
             this.companyId = company.getId();
             this.nameKr = company.getNameKr();
             this.nameEn = company.getNameEn();
@@ -127,6 +129,7 @@ public class CompanyResponse {
             this.techStacks = company.getCompanyTechStacks().stream()
                     .map(companyTechStack -> new TechStackResponse.DTO(companyTechStack.getTechStack()))
                     .toList();
+            this.token = token;
         }
     }
 
