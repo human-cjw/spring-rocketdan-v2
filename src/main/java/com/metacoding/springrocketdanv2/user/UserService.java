@@ -2,6 +2,7 @@ package com.metacoding.springrocketdanv2.user;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi401;
+import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi403;
 import com.metacoding.springrocketdanv2._core.util.JwtUtil;
 import com.metacoding.springrocketdanv2.application.Application;
 import com.metacoding.springrocketdanv2.application.ApplicationRepository;
@@ -54,7 +55,14 @@ public class UserService {
         return new UserResponse.ListForUserDTO(applicationsPS);
     }
 
-//    public void 내지원보기(Integer applicationId, Integer sessionUserId) {
-//        applicationRepository
-//    }
+    public UserResponse.ApplicationDetailDTO 내지원보기(Integer applicationId, Integer sessionUserId) {
+        Application applicationPS = applicationRepository.findByApplicationIdJoinJobAndCompany(applicationId)
+                .orElseThrow(() -> new ExceptionApi400("잘못된 요청입니다"));
+
+        if (!applicationPS.getUser().getId().equals(sessionUserId)) {
+            throw new ExceptionApi403("권한이 없습니다");
+        }
+
+        return new UserResponse.ApplicationDetailDTO(applicationPS);
+    }
 }
