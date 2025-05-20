@@ -216,7 +216,7 @@ public class JobRepositoryTest {
         // when
         List<Job> jobs = jobRepository.findAllByCompanyId(companyId);
 
-        // then
+        // eye
         for (Job job : jobs) {
             System.out.println("=================================");
             System.out.println("Job ID: " + job.getId());
