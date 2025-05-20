@@ -126,11 +126,11 @@ public class JobResponse {
         private String employmentType;
         private String deadline;
         private String status;
-        private JobGroupResponse.DTO jobGroup;
-        private WorkFieldResponse.DTO workField;
+        private Integer jobGroupId;
+        private Integer workFieldId;
         private String careerLevel;
-        private SalaryRangeResponse.DTO salaryRange;
-        private List<TechStackResponse.DTO> techStacks;
+        private Integer salaryRangeId;
+        private List<Integer> techStackIds;
 
         public SaveDTO(Job job) {
             this.id = job.getId();
@@ -140,12 +140,12 @@ public class JobResponse {
             this.employmentType = job.getEmploymentType();
             this.deadline = job.getDeadline();
             this.status = job.getStatus();
-            this.jobGroup = new JobGroupResponse.DTO(job.getJobGroup());
-            this.workField = new WorkFieldResponse.DTO(job.getWorkField());
+            this.jobGroupId = job.getJobGroup().getId();
+            this.workFieldId = job.getWorkField().getId();
             this.careerLevel = job.getCareerLevel();
-            this.salaryRange = new SalaryRangeResponse.DTO(job.getSalaryRange());
-            this.techStacks = job.getJobTechStacks().stream()
-                    .map(jobTechStack -> new TechStackResponse.DTO(jobTechStack.getTechStack()))
+            this.salaryRangeId = job.getSalaryRange().getId();
+            this.techStackIds = job.getJobTechStacks().stream()
+                    .map(jobTechStack -> jobTechStack.getTechStack().getId())
                     .toList();
         }
     }
@@ -159,11 +159,11 @@ public class JobResponse {
         private String employmentType;
         private String deadline;
         private String status;
-        private JobGroupResponse.DTO jobGroup;
-        private WorkFieldResponse.DTO workField;
+        private Integer jobGroupId;
+        private Integer workFieldId;
         private String careerLevel;
-        private SalaryRangeResponse.DTO salaryRange;
-        private List<TechStackResponse.DTO> techStacks;
+        private Integer salaryRangeId;
+        private List<Integer> techStackIds;
 
         public UpdateDTO(Job job) {
             this.jobId = job.getId();
@@ -173,12 +173,12 @@ public class JobResponse {
             this.employmentType = job.getEmploymentType();
             this.deadline = job.getDeadline();
             this.status = job.getStatus();
-            this.jobGroup = new JobGroupResponse.DTO(job.getJobGroup());
-            this.workField = new WorkFieldResponse.DTO(job.getWorkField());
+            this.jobGroupId = job.getJobGroup().getId();
+            this.workFieldId = job.getWorkField().getId();
             this.careerLevel = job.getCareerLevel();
-            this.salaryRange = new SalaryRangeResponse.DTO(job.getSalaryRange());
-            this.techStacks = job.getJobTechStacks().stream()
-                    .map(jobTechStack -> new TechStackResponse.DTO(jobTechStack.getTechStack()))
+            this.salaryRangeId = job.getSalaryRange().getId();
+            this.techStackIds = job.getJobTechStacks().stream()
+                    .map(jobTechStack -> jobTechStack.getTechStack().getId())
                     .toList();
         }
     }
