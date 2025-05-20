@@ -1,6 +1,5 @@
 package com.metacoding.springrocketdanv2.job.bookmark;
 
-
 import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.user.User;
 import jakarta.persistence.EntityManager;
