@@ -59,8 +59,8 @@ public class CompanyResponse {
         private String contactManager;
         private String startDate;
         private String createdAt;
-        private WorkFieldResponse.DTO workField;
-        private List<TechStackResponse.DTO> techStacks;
+        private Integer workFieldId;
+        private List<Integer> techStackIds;
 
         public UpdateDTO(Company company) {
             this.companyId = company.getId();
@@ -79,9 +79,9 @@ public class CompanyResponse {
             this.contactManager = company.getContactManager();
             this.startDate = company.getStartDate();
             this.createdAt = company.getCreatedAt().toString().substring(0, 10);
-            this.workField = new WorkFieldResponse.DTO(company.getWorkField());
-            this.techStacks = company.getCompanyTechStacks().stream()
-                    .map(companyTechStack -> new TechStackResponse.DTO(companyTechStack.getTechStack()))
+            this.workFieldId = company.getWorkField().getId();
+            this.techStackIds = company.getCompanyTechStacks().stream()
+                    .map(companyTechStack -> companyTechStack.getTechStack().getId())
                     .toList();
         }
     }
@@ -104,8 +104,8 @@ public class CompanyResponse {
         private String contactManager;
         private String startDate;
         private String createdAt;
-        private WorkFieldResponse.DTO workField;
-        private List<TechStackResponse.DTO> techStacks;
+        private Integer workFieldId;
+        private List<Integer> techStackIds;
         private UserResponse.TokenDTO token;
 
         public SaveDTO(Company company, UserResponse.TokenDTO token) {
@@ -125,9 +125,9 @@ public class CompanyResponse {
             this.contactManager = company.getContactManager();
             this.startDate = company.getStartDate();
             this.createdAt = company.getCreatedAt().toString().substring(0, 10);
-            this.workField = new WorkFieldResponse.DTO(company.getWorkField());
-            this.techStacks = company.getCompanyTechStacks().stream()
-                    .map(companyTechStack -> new TechStackResponse.DTO(companyTechStack.getTechStack()))
+            this.workFieldId = company.getWorkField().getId();
+            this.techStackIds = company.getCompanyTechStacks().stream()
+                    .map(companyTechStack -> companyTechStack.getTechStack().getId())
                     .toList();
             this.token = token;
         }
