@@ -20,14 +20,14 @@ public class UserController {
     private final HttpSession session;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid UserRequest.LoginDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> login(@Valid @RequestBody UserRequest.LoginDTO reqDTO, Errors errors) {
         UserResponse.TokenDTO respDTO = userService.로그인(reqDTO);
         log.debug("로그인한 유저" + respDTO);
         return Resp.ok(respDTO);
     }
 
     @PostMapping("/join")
-    public ResponseEntity<?> join(@Valid UserRequest.JoinDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> join(@Valid @RequestBody UserRequest.JoinDTO reqDTO, Errors errors) {
         UserResponse.DTO respDTO = userService.회원가입(reqDTO);
         log.debug("회원가입한 유저" + respDTO);
         return Resp.ok(respDTO);

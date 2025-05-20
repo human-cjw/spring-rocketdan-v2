@@ -29,7 +29,7 @@ public class ResumeController {
     }
 
     @PutMapping("/s/api/resume/{resumeId}")
-    public ResponseEntity<?> update(@PathVariable("resumeId") Integer resumeId, @Valid ResumeRequest.UpdateDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> update(@PathVariable("resumeId") Integer resumeId, @Valid @RequestBody ResumeRequest.UpdateDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         ResumeResponse.UpdateDTO respDTO = resumeService.이력서수정하기(resumeId, reqDTO, sessionUser.getId());
@@ -61,7 +61,7 @@ public class ResumeController {
     }
 
     @PostMapping("/s/api/resume/")
-    public ResponseEntity<?> save(@Valid ResumeRequest.SaveDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> save(@Valid @RequestBody ResumeRequest.SaveDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         ResumeResponse.SaveDTO respDTO = resumeService.이력서등록(reqDTO, sessionUser.getId());
