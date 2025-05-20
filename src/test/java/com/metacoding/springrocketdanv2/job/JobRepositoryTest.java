@@ -109,9 +109,9 @@ public class JobRepositoryTest {
         Job result = em.find(Job.class, saved.getId());
         System.out.println("ID: " + result.getId());
         System.out.println("제목: " + result.getTitle());
-        System.out.println("연봉: " + result.getSalaryRange().getLabel());
-        System.out.println("업무: " + result.getWorkField().getName());
-        System.out.println("직무: " + result.getJobGroup().getName());
+        System.out.println("연봉" + result.getSalaryRange().getLabel());
+        System.out.println("업무" + result.getWorkField().getName());
+        System.out.println("직무" + result.getJobGroup().getName());
     }
 
     @Test
@@ -146,7 +146,7 @@ public class JobRepositoryTest {
         // given
         Integer jobId = 1;
 
-        // 자식 테이블부터 삭제
+        // 연관 테이블부터 삭제
         em.createQuery("DELETE FROM Application a WHERE a.job.id = :jobId")
                 .setParameter("jobId", jobId)
                 .executeUpdate();
@@ -217,7 +217,7 @@ public class JobRepositoryTest {
         // when
         List<Job> jobs = jobRepository.findAllByCompanyId(companyId);
 
-        // then
+        // eye
         for (Job job : jobs) {
             System.out.println("=================================");
             System.out.println("Job ID: " + job.getId());
