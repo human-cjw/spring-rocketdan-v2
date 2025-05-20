@@ -24,15 +24,13 @@ public class UserRequest {
         @NotBlank(message = "이메일은 필수입니다.")
         @Email(message = "유효한 이메일 주소를 입력해 주세요.")
         private String email;
-
-        private String userType;
-
+        
         public User toEntity() {
             return User.builder()
                     .username(username)
                     .password(password)
                     .email(email)
-                    .userType(userType)
+                    .userType(UserTypeEnum.USER.value)
                     .build();
         }
     }
