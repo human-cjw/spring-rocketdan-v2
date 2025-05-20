@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -21,7 +18,8 @@ public class ApplicationController {
     private final HttpSession session;
 
     @PostMapping("/s/api/application")
-    public ResponseEntity<?> save(@Valid ApplicationRequest.SaveDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> save(@Valid @RequestBody ApplicationRequest.SaveDTO reqDTO, Errors errors) {
+
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         ApplicationResponse.SaveDTO respDTO = applicationService.지원하기(reqDTO, sessionUser.getId());
@@ -32,7 +30,7 @@ public class ApplicationController {
     }
 
     @PutMapping("/s/api/application/{applicationId}/status")
-    public ResponseEntity<?> updateStatus(@PathVariable("applicationId") Integer applicationId, ApplicationRequest.UpdateDTO reqDTO) {
+    public ResponseEntity<?> updateStatus(@PathVariable("applicationId") Integer applicationId, @Valid @RequestBody ApplicationRequest.UpdateDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         ApplicationResponse.UpdateDTO respDTO = applicationService.지원상태변경(applicationId, reqDTO, sessionUser.getCompanyId());

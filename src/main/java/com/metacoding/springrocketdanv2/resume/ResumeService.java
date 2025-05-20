@@ -3,7 +3,6 @@ package com.metacoding.springrocketdanv2.resume;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi403;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi404;
-import com.metacoding.springrocketdanv2.application.Application;
 import com.metacoding.springrocketdanv2.application.ApplicationRepository;
 import com.metacoding.springrocketdanv2.career.Career;
 import com.metacoding.springrocketdanv2.career.CareerRepository;
@@ -122,11 +121,8 @@ public class ResumeService {
         // 경력 삭제
         careerRepository.deleteByResumeId(resumeId);
 
-        // 지원 업데이트 resume_id -> null, user_id -> null
-        List<Application> applicationsPS = applicationRepository.findAllByResumeId(resumeId);
-        if (applicationsPS.size() > 0) {
-            applicationRepository.updateResumeNullByResumeId(resumeId);
-        }
+        // 지원 삭제
+        applicationRepository.deleteByResumeId(resumeId);
 
         // 이력서가 가지고 있는 resume_tech_stack 전부 삭제
         resumeTechStackRepository.deleteByResumeId(resumeId);
