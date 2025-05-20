@@ -5,6 +5,7 @@ import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import com.metacoding.springrocketdanv2._core.util.Resp;
 import com.metacoding.springrocketdanv2.user.User;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,7 @@ public class CompanyController {
     }
 
     @PostMapping("/s/api/company")
-    public ResponseEntity<?> save(CompanyRequest.SaveDTO reqDTO) {
+    public ResponseEntity<?> save(@Valid @RequestBody CompanyRequest.SaveDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         CompanyResponse.SaveDTO respDTO = companyService.기업등록(reqDTO, sessionUser.getId());
@@ -54,7 +55,7 @@ public class CompanyController {
     }
 
     @PutMapping("/s/api/company/{companyId}")
-    public ResponseEntity<?> update(@RequestParam("companyId") Integer companyId, CompanyRequest.UpdateDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> update(@RequestParam("companyId") Integer companyId, @Valid @RequestBody CompanyRequest.UpdateDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         CompanyResponse.UpdateDTO respDTO = companyService.기업수정(reqDTO, companyId, sessionUser.getCompanyId());
