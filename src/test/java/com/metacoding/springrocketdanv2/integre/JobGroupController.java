@@ -6,8 +6,11 @@ import com.metacoding.springrocketdanv2._core.util.JwtUtil;
 import com.metacoding.springrocketdanv2.user.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -34,5 +37,19 @@ public class JobGroupController extends MyRestDoc {
     public void tearDown() { // 끝나고 나서 마무리 함수
         // 테스트 후 정리할 코드
         System.out.println("tearDown");
+    }
+
+    @Test
+    public void jobGroupList_test() throws Exception {
+        // when
+        ResultActions actions = mvc.perform(
+                MockMvcRequestBuilders
+                        .get("/jobGroup")
+                        .header("Authorization", "Bearer " + accessToken)
+        );
+
+        // eye
+        String responseBody = actions.andReturn().getResponse().getContentAsString();
+        System.out.println("responseBody = " + responseBody);
     }
 }
