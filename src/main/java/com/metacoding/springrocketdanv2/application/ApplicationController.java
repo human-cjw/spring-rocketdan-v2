@@ -1,6 +1,7 @@
 package com.metacoding.springrocketdanv2.application;
 
 import com.metacoding.springrocketdanv2._core.util.Resp;
+import com.metacoding.springrocketdanv2.user.User;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,9 @@ public class ApplicationController {
 
     @PostMapping("/s/api/application")
     public ResponseEntity<?> save(@Valid ApplicationRequest.SaveDTO reqDTO, Errors errors) {
-        Integer sessionUserId = null;
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        ApplicationResponse.SaveDTO respDTO = applicationService.지원하기(reqDTO, sessionUserId);
+        ApplicationResponse.SaveDTO respDTO = applicationService.지원하기(reqDTO, sessionUser.getId());
 
         log.debug("지원하기" + respDTO);
 
@@ -32,9 +33,9 @@ public class ApplicationController {
 
     @PutMapping("/s/api/application/{applicationId}/status")
     public ResponseEntity<?> updateStatus(@PathVariable("applicationId") Integer applicationId, ApplicationRequest.UpdateDTO reqDTO) {
-        Integer sessionUserCompanyId = null;
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        ApplicationResponse.UpdateDTO respDTO = applicationService.지원상태변경(applicationId, reqDTO, sessionUserCompanyId);
+        ApplicationResponse.UpdateDTO respDTO = applicationService.지원상태변경(applicationId, reqDTO, sessionUser.getCompanyId());
 
         log.debug("지원상태변경" + respDTO);
 
