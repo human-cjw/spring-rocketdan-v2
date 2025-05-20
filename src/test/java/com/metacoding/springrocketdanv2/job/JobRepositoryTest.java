@@ -146,8 +146,8 @@ public class JobRepositoryTest {
         // given
         Integer jobId = 1;
 
-
         // 연관 테이블부터 삭제
+
         em.createQuery("DELETE FROM Application a WHERE a.job.id = :jobId")
                 .setParameter("jobId", jobId)
                 .executeUpdate();
@@ -217,6 +217,7 @@ public class JobRepositoryTest {
 
         // when
         List<Job> jobs = jobRepository.findAllByCompanyId(companyId);
+
 
         // eye
         for (Job job : jobs) {
