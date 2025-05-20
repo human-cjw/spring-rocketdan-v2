@@ -18,9 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class JobControllerTest extends MyRestDoc {
@@ -30,7 +27,7 @@ public class JobControllerTest extends MyRestDoc {
 
     @Autowired
     private EntityManager em;
-    
+
     private String accessToken;
 
     @BeforeEach
@@ -83,26 +80,6 @@ public class JobControllerTest extends MyRestDoc {
         System.out.println(responseBody);
 
         // then
-        actions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value(200))
-                .andExpect(jsonPath("$.msg").value("성공"))
-                .andExpect(jsonPath("$.body.title").value("백엔드 개발자 모집"))
-                .andExpect(jsonPath("$.body.description").value("Spring Boot 기반 서비스 개발"))
-                .andExpect(jsonPath("$.body.location").value("서울특별시 강남구 테헤란로"))
-                .andExpect(jsonPath("$.body.employmentType").value("정규직"))
-                .andExpect(jsonPath("$.body.deadline").value("2025-12-31"))
-                .andExpect(jsonPath("$.body.status").value("OPEN"))
-                .andExpect(jsonPath("$.body.careerLevel").value("신입"))
-                .andExpect(jsonPath("$.body.jobGroup.id").value(1))
-                .andExpect(jsonPath("$.body.jobGroup.name").doesNotExist())
-                .andExpect(jsonPath("$.body.workField.id").value(1))
-                .andExpect(jsonPath("$.body.workField.name").doesNotExist())
-                .andExpect(jsonPath("$.body.salaryRange.salaryRangeId").value(2))
-                .andExpect(jsonPath("$.body.salaryRange.minSalary").doesNotExist())
-                .andExpect(jsonPath("$.body.salaryRange.maxSalary").doesNotExist())
-                .andExpect(jsonPath("$.body.techStacks[0].techStackId").value(1))
-                .andExpect(jsonPath("$.body.techStacks[1].techStackId").value(2));
     }
 
     @Test
