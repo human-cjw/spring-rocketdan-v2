@@ -19,6 +19,7 @@ public class ApplicationController {
 
     @PostMapping("/s/api/application")
     public ResponseEntity<?> save(@Valid @RequestBody ApplicationRequest.SaveDTO reqDTO, Errors errors) {
+
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         ApplicationResponse.SaveDTO respDTO = applicationService.지원하기(reqDTO, sessionUser.getId());
