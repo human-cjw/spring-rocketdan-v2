@@ -112,7 +112,6 @@ public class JobRepositoryTest {
         System.out.println("연봉" + result.getSalaryRange().getLabel());
         System.out.println("업무" + result.getWorkField().getName());
         System.out.println("직무" + result.getJobGroup().getName());
-
     }
 
     @Test
