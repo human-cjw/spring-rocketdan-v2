@@ -105,7 +105,7 @@ public class CompanyService {
 
     // 지원자 조회
     public CompanyResponse.ApplicationListDTO 지원자조회(Integer jobId, String status) {
-        List<Application> applicationsPS = applicationRepository.findAllByJobIdJoinFetchAllNotNull(jobId, status);
+        List<Application> applicationsPS = applicationRepository.findAllByJobIdJoinFetchAll(jobId, status);
 
         return new CompanyResponse.ApplicationListDTO(applicationsPS);
     }
