@@ -2,6 +2,9 @@ package com.metacoding.springrocketdanv2.job;
 
 import com.metacoding.springrocketdanv2.company.Company;
 import com.metacoding.springrocketdanv2.job.techstack.JobTechStack;
+import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
+import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
+import com.metacoding.springrocketdanv2.workfield.WorkField;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +67,6 @@ public class JobRepositoryTest {
             Job job = jobOP.get();
             System.out.println("ID: " + job.getId());
             System.out.println("제목: " + job.getTitle());
-            System.out.println("회사명: " + job.getCompany().getNameKr());
         } else {
             System.out.println("해당 ID의 Job을 찾을 수 없습니다.");
         }
@@ -80,6 +82,10 @@ public class JobRepositoryTest {
                 .build();
         em.persist(company);
 
+        SalaryRange salaryRangeRef = em.getReference(SalaryRange.class, 1);
+        WorkField workFieldRef = em.getReference(WorkField.class, 1);
+        JobGroup jobGroupRef = em.getReference(JobGroup.class, 1);
+
         Job job = Job.builder()
                 .title("백엔드 개발자")
                 .description("스프링 부트 기반 백엔드 개발")
@@ -89,9 +95,9 @@ public class JobRepositoryTest {
                 .status("공개")
                 .careerLevel("3년 이상")
                 .company(company)
-                .salaryRange(null)
-                .workField(null)
-                .jobGroup(null)
+                .salaryRange(salaryRangeRef)
+                .workField(workFieldRef)
+                .jobGroup(jobGroupRef)
                 .build();
 
         // when
@@ -103,14 +109,10 @@ public class JobRepositoryTest {
         Job result = em.find(Job.class, saved.getId());
         System.out.println("ID: " + result.getId());
         System.out.println("제목: " + result.getTitle());
-        System.out.println(result.getDescription());
-        System.out.println(result.getLocation());
-        System.out.println(result.getEmploymentType());
-        System.out.println(result.getDeadline());
-        System.out.println(result.getStatus());
-        System.out.println(result.getCareerLevel());
-        System.out.println(result.getCreatedAt());
-        System.out.println(result.getUpdatedAt());
+        System.out.println("연봉" + result.getSalaryRange().getLabel());
+        System.out.println("업무" + result.getWorkField().getName());
+        System.out.println("직무" + result.getJobGroup().getName());
+
     }
 
     @Test
@@ -145,7 +147,7 @@ public class JobRepositoryTest {
         // given
         Integer jobId = 1;
 
-        // 자식 테이블부터 삭제
+        // 연관 테이블부터 삭제
         em.createQuery("DELETE FROM Application a WHERE a.job.id = :jobId")
                 .setParameter("jobId", jobId)
                 .executeUpdate();
