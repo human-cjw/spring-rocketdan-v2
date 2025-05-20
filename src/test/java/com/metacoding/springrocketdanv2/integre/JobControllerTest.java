@@ -104,7 +104,7 @@ public class JobControllerTest extends MyRestDoc {
     @Test
     public void update_test() throws Exception {
         // given
-        Integer jobId = 51;
+        Integer jobId = 1;
 
         JobRequest.UpdateDTO reqDTO = new JobRequest.UpdateDTO();
         reqDTO.setTitle("백엔드 개발자 채용 수정");
@@ -113,14 +113,15 @@ public class JobControllerTest extends MyRestDoc {
         reqDTO.setEmploymentType("계약직");
         reqDTO.setDeadline("2026-01-31");
         reqDTO.setStatus("CLOSED");
-        reqDTO.setCareerLevel("경력");
         reqDTO.setJobGroupId(1);
         reqDTO.setWorkFieldId(1);
+        reqDTO.setCareerLevel("경력");
         reqDTO.setSalaryRangeId(2);
         reqDTO.setTechStackIds(List.of(1, 2));
 
         String requestBody = om.writeValueAsString(reqDTO);
         System.out.println("requestBody = " + requestBody);
+        System.out.println("jobId" + jobId);
 
         // when
         ResultActions actions = mvc.perform(
@@ -134,5 +135,6 @@ public class JobControllerTest extends MyRestDoc {
         // eye
         String responseBody = actions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
+
     }
 }
