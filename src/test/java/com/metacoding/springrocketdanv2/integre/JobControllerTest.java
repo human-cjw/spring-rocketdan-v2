@@ -3,12 +3,22 @@ package com.metacoding.springrocketdanv2.integre;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metacoding.springrocketdanv2.MyRestDoc;
 import com.metacoding.springrocketdanv2._core.util.JwtUtil;
+import com.metacoding.springrocketdanv2.job.JobRequest;
 import com.metacoding.springrocketdanv2.user.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -21,11 +31,11 @@ public class JobControllerTest extends MyRestDoc {
 
     @BeforeEach
     public void setUp() {
-        // 테스트 시작 전에 실행할 코드
         System.out.println("setUp");
         User ssar = User.builder()
-                .id(1)
-                .username("ssar")
+                .id(51)
+                .username("company01")
+                .companyId(1)
                 .build();
         accessToken = JwtUtil.create(ssar);
     }
@@ -34,5 +44,95 @@ public class JobControllerTest extends MyRestDoc {
     public void tearDown() { // 끝나고 나서 마무리 함수
         // 테스트 후 정리할 코드
         System.out.println("tearDown");
+    }
+
+    @Test
+    public void save_test() throws Exception {
+        // given
+        JobRequest.SaveDTO reqDTO = new JobRequest.SaveDTO();
+        reqDTO.setTitle("백엔드 개발자 모집");
+        reqDTO.setDescription("Spring Boot 기반 서비스 개발");
+        reqDTO.setLocation("서울특별시 강남구 테헤란로");
+        reqDTO.setEmploymentType("정규직");
+        reqDTO.setDeadline("2025-12-31");
+        reqDTO.setStatus("OPEN");
+        reqDTO.setCareerLevel("신입");
+        reqDTO.setJobGroupId(1);
+        reqDTO.setWorkFieldId(1);
+        reqDTO.setSalaryRangeId(2);
+        reqDTO.setTechStackIds(List.of(1, 2));
+
+        String requestBody = om.writeValueAsString(reqDTO);
+        System.out.println(requestBody);
+
+        // when
+        ResultActions actions = mvc.perform(
+                MockMvcRequestBuilders
+                        .post("/s/api/job")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + accessToken)
+        );
+
+        // eye
+        String responseBody = actions.andReturn().getResponse().getContentAsString();
+        System.out.println(responseBody);
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value(200))
+                .andExpect(jsonPath("$.msg").value("성공"))
+                .andExpect(jsonPath("$.body.title").value("백엔드 개발자 모집"))
+                .andExpect(jsonPath("$.body.description").value("Spring Boot 기반 서비스 개발"))
+                .andExpect(jsonPath("$.body.location").value("서울특별시 강남구 테헤란로"))
+                .andExpect(jsonPath("$.body.employmentType").value("정규직"))
+                .andExpect(jsonPath("$.body.deadline").value("2025-12-31"))
+                .andExpect(jsonPath("$.body.status").value("OPEN"))
+                .andExpect(jsonPath("$.body.careerLevel").value("신입"))
+                .andExpect(jsonPath("$.body.jobGroup.id").value(1))
+                .andExpect(jsonPath("$.body.jobGroup.name").doesNotExist())
+                .andExpect(jsonPath("$.body.workField.id").value(1))
+                .andExpect(jsonPath("$.body.workField.name").doesNotExist())
+                .andExpect(jsonPath("$.body.salaryRange.salaryRangeId").value(2))
+                .andExpect(jsonPath("$.body.salaryRange.minSalary").doesNotExist())
+                .andExpect(jsonPath("$.body.salaryRange.maxSalary").doesNotExist())
+                .andExpect(jsonPath("$.body.techStacks[0].techStackId").value(1))
+                .andExpect(jsonPath("$.body.techStacks[1].techStackId").value(2));
+    }
+
+    @Test
+    public void update_test() throws Exception {
+        // given
+        Integer jobId = 51;
+
+        JobRequest.UpdateDTO reqDTO = new JobRequest.UpdateDTO();
+        reqDTO.setTitle("백엔드 개발자 채용 수정");
+        reqDTO.setDescription("Spring 기반 백엔드 개발");
+        reqDTO.setLocation("서울시 마포구 독막로");
+        reqDTO.setEmploymentType("계약직");
+        reqDTO.setDeadline("2026-01-31");
+        reqDTO.setStatus("CLOSED");
+        reqDTO.setCareerLevel("경력");
+        reqDTO.setJobGroupId(1);
+        reqDTO.setWorkFieldId(1);
+        reqDTO.setSalaryRangeId(2);
+        reqDTO.setTechStackIds(List.of(1, 2));
+
+        String requestBody = om.writeValueAsString(reqDTO);
+        System.out.println("requestBody = " + requestBody);
+
+        // when
+        ResultActions actions = mvc.perform(
+                MockMvcRequestBuilders
+                        .put("/s/api/job/" + jobId)
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + accessToken)
+        );
+
+        // eye
+        String responseBody = actions.andReturn().getResponse().getContentAsString();
+        System.out.println("responseBody = " + responseBody);
     }
 }

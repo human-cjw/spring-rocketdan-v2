@@ -43,7 +43,7 @@ public class JobController {
     }
 
     @PostMapping("/s/api/job")
-    public ResponseEntity<?> save(@Valid JobRequest.SaveDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> save(@Valid @RequestBody JobRequest.SaveDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         JobResponse.SaveDTO respDTO = jobService.등록하기(reqDTO, sessionUser.getCompanyId());
@@ -55,7 +55,7 @@ public class JobController {
 
     @PutMapping("/s/api/job/{jobId}")
     public ResponseEntity<?> update(@PathVariable("jobId") Integer jobId,
-                                    @Valid JobRequest.UpdateDTO reqDTO, Errors errors) {
+                                    @Valid @RequestBody JobRequest.UpdateDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         JobResponse.UpdateDTO respDTO = jobService.수정하기(jobId, reqDTO, sessionUser.getCompanyId());
