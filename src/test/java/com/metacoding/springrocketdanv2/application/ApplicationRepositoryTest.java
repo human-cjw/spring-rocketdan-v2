@@ -9,4 +9,8 @@ import org.springframework.context.annotation.Import;
 public class ApplicationRepositoryTest {
     @Autowired
     private ApplicationRepository applicationRepository;
+
+    public void findAllByUserIdAndStatus_test() {
+
+    }
 }
