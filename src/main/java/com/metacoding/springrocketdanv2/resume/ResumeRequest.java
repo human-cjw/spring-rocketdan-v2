@@ -95,8 +95,10 @@ public class ResumeRequest {
         @Valid
         private List<CertificationRequest.UpdateDTO> certifications;
 
+        @NotNull(message = "salaryRangeId 값은 필수입니다.")
         private Integer salaryRangeId;
 
+        @NotNull(message = "jobGroupId 값은 필수입니다.")
         private Integer jobGroupId;
 
         @NotEmpty(message = "기술 스택을 하나 이상 선택해 주세요.")

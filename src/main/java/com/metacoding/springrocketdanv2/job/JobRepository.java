@@ -88,6 +88,8 @@ public class JobRepository {
                 .setParameter("jobGroup", jobGroupRef)
                 .setParameter("jobId", jobId)
                 .executeUpdate();
+        em.flush();
+        em.clear();
     }
 
     public List<Job> findAllByCompanyId(Integer companyId) {

@@ -30,6 +30,7 @@ public class CompanyRepository {
                                 c.phone = :phone,
                                 c.ceo = :ceo,
                                 c.address = :address,
+                                c.homepageUrl = :homepageUrl,
                                 c.workField = :workField
                             WHERE c.id = :companyId
                         """)
@@ -44,9 +45,12 @@ public class CompanyRepository {
                 .setParameter("phone", reqDTO.getPhone())
                 .setParameter("ceo", reqDTO.getCeo())
                 .setParameter("address", reqDTO.getAddress())
+                .setParameter("homepageUrl", reqDTO.getHomepageUrl())
                 .setParameter("workField", workFieldRef)
                 .setParameter("companyId", companyId)
                 .executeUpdate();
+        em.flush();
+        em.clear();
     }
 
     public Optional<Company> findByCompanyIdJoinFetchAll(Integer companyId) {
