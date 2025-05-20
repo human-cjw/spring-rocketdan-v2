@@ -135,7 +135,7 @@ public class ApplicationRepositoryTest {
         applicationRepository.deleteByJobId(jobId);
 
         // eye
-        List<Application> applicationsPS = em.createQuery("SELECT a FROM Application a WHERE a.job.id = : jobId", Application.class)
+        List<Application> applicationsPS = em.createQuery("SELECT a FROM Application a WHERE a.job.id = :jobId", Application.class)
                 .setParameter("jobId", jobId)
                 .getResultList();
 
@@ -169,11 +169,20 @@ public class ApplicationRepositoryTest {
     @Test
     public void findByApplicationIdJoinJobAndCompany_test() {
         // given
+        Integer applicationId = 1;
 
         // when
+        Optional<Application> applicationOP = applicationRepository.findByApplicationIdJoinJobAndCompany(applicationId);
 
         // eye
-
+        if (applicationOP.isPresent()) {
+            Application application = applicationOP.get();
+            System.out.println("Application ID : " + application.getId());
+            System.out.println("Company ID : " + application.getCompany().getId());
+            System.out.println("Job ID : " + application.getJob().getId());
+        } else {
+            System.out.println("해당 지원서를 찾을 수 없습니다!!!");
+        }
     }
 
     @Test
