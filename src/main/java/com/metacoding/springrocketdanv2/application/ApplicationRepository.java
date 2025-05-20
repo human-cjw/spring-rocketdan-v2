@@ -95,7 +95,7 @@ public class ApplicationRepository {
                     FROM Application a
                     JOIN FETCH a.resume r
                     JOIN FETCH a.user u
-                    WHERE a.job.id = :applicationId
+                    WHERE a.id = :applicationId
                 """;
 
         Query query = em.createQuery(q, Application.class)
@@ -114,7 +114,7 @@ public class ApplicationRepository {
                     FROM Application a
                     JOIN FETCH a.job j
                     JOIN FETCH a.company c
-                    WHERE a.job.id = :applicationId
+                    WHERE a.id = :applicationId
                 """;
 
         Query query = em.createQuery(q, Application.class)
