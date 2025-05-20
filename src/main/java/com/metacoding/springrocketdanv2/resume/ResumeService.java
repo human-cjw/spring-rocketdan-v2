@@ -2,6 +2,7 @@ package com.metacoding.springrocketdanv2.resume;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi403;
+import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi404;
 import com.metacoding.springrocketdanv2.application.Application;
 import com.metacoding.springrocketdanv2.application.ApplicationRepository;
 import com.metacoding.springrocketdanv2.career.Career;
@@ -26,7 +27,7 @@ public class ResumeService {
     private final ResumeTechStackRepository resumeTechStackRepository;
     private final CareerRepository careerRepository;
     private final ApplicationRepository applicationRepository;
-    
+
     public ResumeResponse.DetailDTO 이력서상세보기(Integer resumeId, Integer sessionUserId) {
         Resume resumePS = resumeRepository.findByResumeIdJoinFetchAll(resumeId)
                 .orElseThrow(() -> new ExceptionApi400("존재하지 않는 이력서 입니다"));
@@ -148,6 +149,8 @@ public class ResumeService {
 
         // 이력서 등록
         Resume resumePS = resumeRepository.save(resume);
+        Resume resumePS2 = resumeRepository.findByResumeIdJoinFetchAll(resumePS.getId())
+                .orElseThrow(() -> new ExceptionApi404("존재하지 않는 이력서입니다"));
 
         List<Certification> certificationsPS = reqDTO.getCertifications().stream()
                 .map(certification -> certificationRepository.save(certification.toEntity(resumePS)))
@@ -157,7 +160,7 @@ public class ResumeService {
                 .map(career -> careerRepository.save(career.toEntity(resumePS)))
                 .toList();
 
-        return new ResumeResponse.SaveDTO(resumePS, certificationsPS, careersPS);
+        return new ResumeResponse.SaveDTO(resumePS2, certificationsPS, careersPS);
     }
 }
 
