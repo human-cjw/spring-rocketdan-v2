@@ -18,7 +18,7 @@ public class JobBookmarkController {
     private final HttpSession session;
 
     @PostMapping("/s/api/job-bookmark")
-    public ResponseEntity<?> save(@Valid JobBookmarkRequest.SaveDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> save(@Valid @RequestBody JobBookmarkRequest.SaveDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         JobBookmarkResponse.SaveDTO respDTO = jobBookmarkService.북마크등록(reqDTO, sessionUser.getId());

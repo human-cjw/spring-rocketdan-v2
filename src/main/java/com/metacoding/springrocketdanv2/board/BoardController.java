@@ -15,12 +15,12 @@ public class BoardController {
 
     @GetMapping("/api/check-board-password/{boardId}")
     public ResponseEntity<?> verifyPassword(@PathVariable("boardId") Integer boardId,
-                                            BoardRequest.VerifyDTO reqDTO) {
+                                            @RequestBody BoardRequest.VerifyDTO reqDTO) {
 
         BoardResponse.VerifyDTO respDTO = boardService.verifyPassword(boardId, reqDTO.getPassword());
 
         log.debug("비밀번호 검증 결과: ", respDTO);
-        
+
         return Resp.ok(respDTO);
     }
 
@@ -34,7 +34,7 @@ public class BoardController {
     }
 
     @PostMapping("/api/board")
-    public ResponseEntity<?> writeBoard(BoardRequest.SaveDTO reqDTO) {
+    public ResponseEntity<?> writeBoard(@RequestBody BoardRequest.SaveDTO reqDTO) {
         BoardResponse.DTO respDTO = boardService.글쓰기(reqDTO);
 
         log.debug("글쓰기: " + respDTO);
@@ -43,7 +43,7 @@ public class BoardController {
     }
 
     @PutMapping("/api/board/{boardId}")
-    public ResponseEntity<?> update(@PathVariable("boardId") Integer boardId, BoardRequest.UpdateDTO reqDTO) { // <- form 에서 boardId와 title, content 가져와야함
+    public ResponseEntity<?> update(@PathVariable("boardId") Integer boardId, @RequestBody BoardRequest.UpdateDTO reqDTO) { // <- form 에서 boardId와 title, content 가져와야함
         BoardResponse.DTO respDTO = boardService.글수정하기(reqDTO, boardId);
 
         log.debug("글수정하기: " + respDTO);
