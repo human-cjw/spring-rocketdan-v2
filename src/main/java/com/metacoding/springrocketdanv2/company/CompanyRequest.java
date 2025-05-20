@@ -42,7 +42,7 @@ public class CompanyRequest {
         private String businessNumber;
 
         @NotEmpty(message = "기술 스택은 하나 이상 선택해야 합니다.")
-        private List<@NotBlank(message = "기술 스택 항목은 비어 있을 수 없습니다.") Integer> techStackIds;
+        private List<@NotNull(message = "기술 스택 항목은 null일 수 없습니다.") Integer> techStackIds;
 
         @NotBlank(message = "이메일은 필수입니다.")
         @Email(message = "이메일 형식이 올바르지 않습니다.")
@@ -64,8 +64,7 @@ public class CompanyRequest {
         @Size(max = 100, message = "주소는 100자 이내여야 합니다.")
         private String address;
 
-        @NotBlank(message = "업무 분야는 필수입니다.")
-        @Size(max = 50, message = "업무 분야는 50자 이내여야 합니다.")
+        @NotNull(message = "업무 분야는 필수입니다.")
         private Integer workFieldId;
 
         public Company toEntity(Integer userId) {
@@ -127,6 +126,13 @@ public class CompanyRequest {
         @Email(message = "올바른 이메일 형식이 아닙니다.")
         private String email;
 
+        @NotBlank(message = "홈페이지 URL은 필수입니다.")
+        @Pattern(
+                regexp = "^(https?://)?([\\w.-]+)+(:\\d+)?(/\\S*)?$",
+                message = "올바른 URL 형식이 아닙니다."
+        )
+        private String homepageUrl;
+
         @NotBlank(message = "담당자 이름은 필수입니다.")
         @Pattern(regexp = "^[가-힣a-zA-Z]{2,30}$", message = "대표명은 2자 이상 30자 이하로 한글, 영문만 가능합니다.")
         private String contactManager; // 담당자 이름
@@ -147,6 +153,6 @@ public class CompanyRequest {
         private Integer workFieldId;
 
         @NotEmpty(message = "기술 스택은 하나 이상 입력되어야 합니다.")
-        private List<@NotBlank(message = "기술 스택 항목은 비어 있을 수 없습니다.") Integer> techStackIds;
+        private List<@NotNull(message = "기술 스택 항목은 비어 있을 수 없습니다.") Integer> techStackIds;
     }
 }
