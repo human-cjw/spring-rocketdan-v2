@@ -56,7 +56,7 @@ public class CompanyController {
     }
 
     @PutMapping("/s/api/company/{companyId}")
-    public ResponseEntity<?> update(@RequestParam("companyId") Integer companyId, @Valid @RequestBody CompanyRequest.UpdateDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> update(@PathVariable("companyId") Integer companyId, @Valid @RequestBody CompanyRequest.UpdateDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         CompanyResponse.UpdateDTO respDTO = companyService.기업수정(reqDTO, companyId, sessionUser.getCompanyId());

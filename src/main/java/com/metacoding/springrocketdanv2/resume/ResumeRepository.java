@@ -118,5 +118,7 @@ public class ResumeRepository {
                 .setParameter("jobGroup", jobGroupRef)
                 .setParameter("resumeId", resumeId)
                 .executeUpdate();
+        em.flush();
+        em.clear();
     }
 }
