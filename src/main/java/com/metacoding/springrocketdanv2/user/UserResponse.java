@@ -25,7 +25,7 @@ public class UserResponse {
             this.fileUrl = user.getFileUrl();
             this.userType = user.getUserType();
             this.companyId = user.getCompanyId();
-            this.createdAt = user.getCreatedAt().toString();
+            this.createdAt = user.getCreatedAt().toString().substring(0, 10);
         }
     }
 
@@ -72,6 +72,31 @@ public class UserResponse {
                 this.careerLevel = application.getJob().getCareerLevel();
                 this.resumeId = application.getResume().getId();
             }
+        }
+    }
+
+    @Data
+    public static class ApplicationDetailDTO {
+        private Integer applicationId;
+        private String createdAt;
+        private String status;
+        private Integer resumeId;
+        private String resumeTitle;
+        private String companyName;
+        private String careerLevel;
+        private Integer jobId;
+        private String jobTitle;
+
+        public ApplicationDetailDTO(Application application) {
+            this.applicationId = application.getId();
+            this.createdAt = application.getCreatedAt().toString().substring(0, 10);
+            this.status = application.getStatus();
+            this.resumeId = application.getResume().getId();
+            this.resumeTitle = application.getResume().getTitle();
+            this.companyName = application.getCompany().getNameKr();
+            this.jobId = application.getJob().getId();
+            this.jobTitle = application.getJob().getTitle();
+            this.careerLevel = application.getJob().getCareerLevel();
         }
     }
 }
