@@ -105,6 +105,8 @@ public class JobService {
         // 2. jobTechStack 삭제
         jobTechStackRepository.deleteByJobId(jobId);
 
+        // jobBookmark 삭제 추가
+
         // 3. 공고 삭제
         jobRepository.deleteByJobId(jobId);
     }
