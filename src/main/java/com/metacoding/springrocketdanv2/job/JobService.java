@@ -74,7 +74,7 @@ public class JobService {
         Job jobPS1 = jobRepository.findByJobId(jobId)
                 .orElseThrow(() -> new ExceptionApi400("해당 공고는 존재하지 않습니다"));
 
-        if (!jobPS1.getCompany().equals(sessionUserCompanyId)) {
+        if (!jobPS1.getCompany().getId().equals(sessionUserCompanyId)) {
             throw new ExceptionApi403("권한이 없습니다");
         }
 

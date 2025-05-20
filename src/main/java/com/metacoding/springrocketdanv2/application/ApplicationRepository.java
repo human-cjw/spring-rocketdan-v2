@@ -50,7 +50,7 @@ public class ApplicationRepository {
     }
 
 
-    public List<Application> findAllByJobIdJoinFetchAllNotNull(Integer jobId, String status) {
+    public List<Application> findAllByJobIdJoinFetchAll(Integer jobId, String status) {
         String q = """
                     SELECT a
                     FROM Application a
@@ -59,19 +59,11 @@ public class ApplicationRepository {
                     JOIN FETCH a.job j
                     WHERE a.job.id = :jobId
                     AND a.status = :status
-                    AND a.resume IS NOT NULL
                 """;
         return em.createQuery(q, Application.class)
                 .setParameter("jobId", jobId)
                 .setParameter("status", status)
                 .getResultList();
-    }
-
-
-    public void updateResumeNullByResumeId(Integer resumeId) {
-        em.createQuery("UPDATE Application a SET a.resume = null, a.user = null WHERE a.resume.id = :resumeId")
-                .setParameter("resumeId", resumeId)
-                .executeUpdate();
     }
 
     public Optional<Application> findByApplicationId(Integer id) {
@@ -88,13 +80,6 @@ public class ApplicationRepository {
         } catch (Exception e) {
             return Optional.ofNullable(null);
         }
-    }
-
-    public List<Application> findAllByResumeId(Integer resumeId) {
-        String q = "SELECT a FROM Application a WHERE a.resume.id = :resumeId";
-        return em.createQuery(q, Application.class)
-                .setParameter("resumeId", resumeId)
-                .getResultList();
     }
 
     public void deleteByJobId(Integer jobId) {
@@ -140,5 +125,12 @@ public class ApplicationRepository {
         } catch (Exception e) {
             return Optional.ofNullable(null);
         }
+    }
+
+    public void deleteByResumeId(Integer resumeId) {
+        String q = "DELETE FROM Application a WHERE a.resume.id = :resumeId";
+        em.createQuery(q)
+                .setParameter("resumeId", resumeId)
+                .executeUpdate();
     }
 }
