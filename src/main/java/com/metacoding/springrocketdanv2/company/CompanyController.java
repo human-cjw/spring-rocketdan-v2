@@ -44,9 +44,9 @@ public class CompanyController {
 
     @PostMapping("/s/api/company")
     public ResponseEntity<?> save(CompanyRequest.SaveDTO reqDTO) {
-        Integer sessionUserId = null;
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        CompanyResponse.SaveDTO respDTO = companyService.기업등록(reqDTO, sessionUserId);
+        CompanyResponse.SaveDTO respDTO = companyService.기업등록(reqDTO, sessionUser.getId());
 
         log.debug("기업등록" + respDTO);
 
