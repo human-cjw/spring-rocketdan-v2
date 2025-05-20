@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
+import java.util.Optional;
 
 @Import(ApplicationRepository.class)
 @DataJpaTest
@@ -59,62 +60,70 @@ public class ApplicationRepositoryTest {
     }
 
     @Test
-    public void findAllByJobIdJoinFetchAllNotNull_test() {
+    public void findAllByJobIdJoinFetchAll_test() {
         // given
         Integer jobId = 1;
         String status = "접수";
 
         // when
-        List<Application> applicationOp = applicationRepository.findAllByJobIdJoinFetchAllNotNull(jobId, status);
+        List<Application> applicationsPS = applicationRepository.findAllByJobIdJoinFetchAll(jobId, status);
+
         // eye
-        if (applicationOp.isEmpty()) {
-            System.out.println("채용 공고 ID: (" + jobId + ")에 지원한 데이터가 없습니다.");
+        if (applicationsPS.isEmpty()) {
+            System.out.println("채용 공고 ID : " + jobId + "에 해당하는 데이터가 없습니다!!!");
         } else {
-            for (Application application : applicationOp) {
-                System.out.println("지원 ID: " + application.getUser().getId());
-                System.out.println("이력서 ID: " + application.getResume().getId());
-                System.out.println("지원 상태: " + application.getStatus());
-                System.out.println("지원자 이름 : " + application.getUser().getUsername());
+            for (Application application : applicationsPS) {
+                System.out.println("Application ID : " + application.getId());
+                System.out.println("Resume ID : " + application.getResume().getId());
+                System.out.println("User ID : " + application.getUser().getId());
+                System.out.println("Job ID : " + application.getJob().getId());
+                System.out.println("Status : " + application.getStatus());
             }
         }
     }
 
     @Test
-    public void updateResumeNullByResumeId_test() {
-        // given
-
-        // when
-
-        // eye
-
-    }
-
-    @Test
     public void findByApplicationId_test() {
         // given
+        Integer applicationId = 1;
 
         // when
+        Optional<Application> applicationOP = applicationRepository.findByApplicationId(applicationId);
 
         // eye
+        if (applicationOP.isPresent()) {
+            Application application = applicationOP.get();
+            System.out.println("Application ID : " + application.getId());
+            System.out.println("Resume ID : " + application.getResume().getId());
+            System.out.println("User ID : " + application.getUser().getId());
+            System.out.println("Job ID : " + application.getJob().getId());
+            System.out.println("Job Title : " + application.getJob().getTitle());
+            System.out.println("Status : " + application.getStatus());
+            System.out.println("CreatedAt : " + application.getCreatedAt());
+
+        } else {
+            System.out.println("해당 지원서를 찾을 수 없습니다.");
+        }
     }
 
     @Test
     public void findByJobIdAndUserId_test() {
         // given
+        Integer jobId = 1;
+        Integer userId = 1;
 
         // when
+        Optional<Application> applicationOP = applicationRepository.findByJobIdAndUserId(jobId, userId);
 
         // eye
-
-    }
-
-    @Test
-    public void findAllByResumeId_test() {
-        // given
-
-        // when
-
-        // eye
+        if (applicationOP.isPresent()) {
+            Application application = applicationOP.get();
+            System.out.println("Application ID : " + application.getId());
+            System.out.println("지원자 이름 : " + application.getUser().getUsername());
+            System.out.println("채용 공고 ID : " + application.getJob().getId());
+            System.out.println("채용 공고 제목 : " + application.getJob().getTitle());
+            System.out.println("지원 상태 : " + application.getStatus());
+        }
     }
 
     @Test
@@ -133,17 +142,28 @@ public class ApplicationRepositoryTest {
         if (applicationsPS.isEmpty()) {
             System.out.println("삭제 성공!!!!!!!!");
         } else {
+            System.out.println("삭제 실패ㅜㅜㅜㅜㅜ");
         }
-
     }
 
     @Test
     public void findByApplicationIdJoinResumeAndUser_test() {
         // given
+        Integer applicationId = 1;
 
         // when
+        Optional<Application> applicationOP = applicationRepository.findByApplicationId(applicationId);
 
         // eye
+        if (applicationOP.isPresent()) {
+            Application application = applicationOP.get();
+            System.out.println("Application ID : " + application.getId());
+            System.out.println("Resume ID : " + application.getResume().getId());
+            System.out.println("User ID : " + application.getUser().getId());
+            System.out.println("Job ID : " + application.getJob().getId());
+        } else {
+            System.out.println("해당 지원서를 찾을 수 없습니다!!");
+        }
     }
 
     @Test
@@ -154,5 +174,25 @@ public class ApplicationRepositoryTest {
 
         // eye
 
+    }
+
+    @Test
+    public void deleteByResumeId_test() {
+        // given
+        Integer resumeId = 1;
+
+        // when
+        applicationRepository.deleteByResumeId(resumeId);
+
+        // eye
+        List<Application> applicationsPS = em.createQuery("SELECT a FROM Application a WHERE a.resume.id = :resumeId", Application.class)
+                .setParameter("resumeId", resumeId)
+                .getResultList();
+
+        if (applicationsPS.isEmpty()) {
+            System.out.println("삭제 성공!!!!!!!!");
+        } else {
+            System.out.println("삭제 실패ㅜㅜㅜㅜㅜ");
+        }
     }
 }
