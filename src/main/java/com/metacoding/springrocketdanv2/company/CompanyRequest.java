@@ -48,6 +48,13 @@ public class CompanyRequest {
         @Email(message = "이메일 형식이 올바르지 않습니다.")
         private String email;
 
+        @NotBlank(message = "홈페이지 URL은 필수입니다.")
+        @Pattern(
+                regexp = "^(https?://)?([\\w.-]+)+(:\\d+)?(/\\S*)?$",
+                message = "올바른 URL 형식이 아닙니다."
+        )
+        private String homepageUrl;
+
         @NotBlank(message = "이름은 필수입니다.")
         @Pattern(regexp = "^[가-힣a-zA-Z]{2,30}$", message = "이름은 2자 이상 30자 이하로 한글 또는 영문만 가능합니다.")
         private String contactManager;
@@ -82,6 +89,7 @@ public class CompanyRequest {
                     .workField(WorkField.builder().id(workFieldId).build())
                     .phone(phone)
                     .ceo(ceo)
+                    .homepageUrl(homepageUrl)
                     .build();
 
             for (Integer techStackId : techStackIds) {

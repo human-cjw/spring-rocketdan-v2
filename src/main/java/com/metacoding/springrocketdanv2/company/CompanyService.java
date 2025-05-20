@@ -107,7 +107,7 @@ public class CompanyService {
     public CompanyResponse.ApplicationListDTO 지원자조회(Integer jobId, String status) {
         List<Application> applicationsPS = applicationRepository.findAllByJobIdJoinFetchAll(jobId, status);
 
-        return new CompanyResponse.ApplicationListDTO(applicationsPS);
+        return new CompanyResponse.ApplicationListDTO(applicationsPS, status);
     }
 
     @Transactional
