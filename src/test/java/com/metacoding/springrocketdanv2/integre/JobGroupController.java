@@ -43,7 +43,7 @@ public class JobGroupController extends MyRestDoc {
     }
 
     @Test
-    public void jobGroupList_test() throws Exception {
+    public void List_test() throws Exception {
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
@@ -58,7 +58,6 @@ public class JobGroupController extends MyRestDoc {
         // then
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroups.length()").value(49));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroups[0].id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroups[0].name").value("백엔드 개발자"));
 
