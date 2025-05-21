@@ -183,6 +183,5 @@ public class UserControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobId").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobTitle").value("AI 백엔드 개발자 모집"));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
-
     }
 }
