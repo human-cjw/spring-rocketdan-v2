@@ -99,7 +99,7 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.user.fileUrl").doesNotExist());
         actions.andExpect(jsonPath("$.body.user.userType").value("user"));
         actions.andExpect(jsonPath("$.body.user.companyId").doesNotExist());
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
 
         actions.andExpect(jsonPath("$.body.certifications[0].certificationId").value(1));
@@ -232,7 +232,7 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.msg").value("성공"));
         actions.andExpect(jsonPath("$.body.resumes[0].resumeId").value(1));
         actions.andExpect(jsonPath("$.body.resumes[0].title").value("백엔드 개발자 이력서"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.resumes[0].createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.resumes[0].isDefault").value(true));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
@@ -360,8 +360,8 @@ public class ResumeController extends MyRestDoc {
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
         actions.andExpect(jsonPath("$.body.userId").value(1));
-        actions.andExpect(jsonPath("$.body.certificationIds[0]").value(51));
-        actions.andExpect(jsonPath("$.body.careerIds[0]").value(51));
+        actions.andExpect(jsonPath("$.body.certificationIds[0]").value(52));
+        actions.andExpect(jsonPath("$.body.careerIds[0]").value(52));
         actions.andExpect(jsonPath("$.body.salaryRangeId").value(1));
         actions.andExpect(jsonPath("$.body.jobGroupId").value(1));
         actions.andExpect(jsonPath("$.body.techStackIds[0]").value(1));
