@@ -6,9 +6,16 @@ import com.metacoding.springrocketdanv2._core.util.JwtUtil;
 import com.metacoding.springrocketdanv2.user.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -34,5 +41,31 @@ public class SalaryRangeController extends MyRestDoc {
     public void tearDown() { // 끝나고 나서 마무리 함수
         // 테스트 후 정리할 코드
         System.out.println("tearDown");
+    }
+
+    @Test
+    public void List_test() throws Exception {
+        // given
+
+        // when
+        ResultActions actions = mvc.perform(
+                MockMvcRequestBuilders
+                        .get("/salaryRange")
+                        .header("Authorization", "Bearer " + accessToken)
+        );
+
+        // eye
+        String responseBody = actions.andReturn().getResponse().getContentAsString();
+        System.out.println(responseBody);
+
+        // then
+        actions.andExpect(jsonPath("$.status").value(200));
+        actions.andExpect(jsonPath("$.msg").value("성공"));
+        actions.andExpect(jsonPath("$.body.salaryRanges[0].salaryRangeId").value(1));
+        actions.andExpect(jsonPath("$.body.salaryRanges[0].minSalary").value(3000));
+        actions.andExpect(jsonPath("$.body.salaryRanges[0].maxSalary").value(4000));
+        actions.andExpect(jsonPath("$.body.salaryRanges[0].label").value("3000-4000"));
+        actions.andDo(MockMvcResultHandlers.print());
+
     }
 }
