@@ -57,6 +57,6 @@ public class UserController {
 
         log.debug("내지원보기" + respDTO);
 
-        return null;
+        return Resp.ok(respDTO);
     }
 }
