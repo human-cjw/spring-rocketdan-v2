@@ -13,7 +13,7 @@ public class BoardController {
     private final BoardService boardService;
 
 
-    @GetMapping("/api/check-board-password/{boardId}")
+    @PostMapping("/api/check-board-password/{boardId}")
     public ResponseEntity<?> verifyPassword(@PathVariable("boardId") Integer boardId,
                                             @RequestBody BoardRequest.VerifyDTO reqDTO) {
 

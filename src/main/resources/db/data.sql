@@ -143,7 +143,8 @@ VALUES
 INSERT INTO user_tb (username, password, email, file_url, user_type, created_at, company_id)
 VALUES
 -- 일반유저 50명
-('user01', '1234', 'user01@example.com', NULL, 'user', NOW(), NULL),
+('user01', '$2a$10$vdAHYFpPrQhUXeKRTJUEw.R1zmx18K.tR0uL6v3stnZQG3AIfmYUe', 'user01@example.com', NULL, 'user', NOW(),
+ NULL),
 ('user02', '1234', 'user02@example.com', NULL, 'user', NOW(), NULL),
 ('user03', '1234', 'user03@example.com', NULL, 'user', NOW(), NULL),
 ('user04', '1234', 'user04@example.com', NULL, 'user', NOW(), NULL),
@@ -2384,11 +2385,11 @@ VALUES ('정보처리기사', '한국산업인력공단', '2020-02-01', 1, NOW()
 -- Board 더미 데이터
 -- =============================================
 INSERT INTO board_tb (title, content, created_at, password)
-VALUES ('첫 번째 게시글', '이것은 첫 번째 게시글의 내용입니다.', NOW(), 1234),
-       ('스프링 프로젝트 질문', '스프링 관련 질문이 있습니다. 답변 부탁드려요!', NOW(), 1234),
-       ('부산 개발자 모임 안내', '부산에서 열리는 개발자 모임에 초대합니다.', NOW(), 1234),
-       ('자바 공부 방법', '효과적인 자바 공부 방법을 공유합니다.', NOW(), 1234),
-       ('프로젝트 팀원 모집', '함께 프로젝트할 팀원을 모집합니다.', NOW(), 1234);
+VALUES ('첫 번째 게시글', '이것은 첫 번째 게시글의 내용입니다.', NOW(), '1234'),
+       ('스프링 프로젝트 질문', '스프링 관련 질문이 있습니다. 답변 부탁드려요!', NOW(), '1234'),
+       ('부산 개발자 모임 안내', '부산에서 열리는 개발자 모임에 초대합니다.', NOW(), '1234'),
+       ('자바 공부 방법', '효과적인 자바 공부 방법을 공유합니다.', NOW(), '1234'),
+       ('프로젝트 팀원 모집', '함께 프로젝트할 팀원을 모집합니다.', NOW(), '1234');
 
 
 -- =============================================

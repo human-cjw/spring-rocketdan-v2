@@ -80,15 +80,6 @@ public class UserControllerTest extends MyRestDoc {
 
     }
 
-//    @Test
-//    public void encode_test() {
-//        // $2a$10$FK.8elgcVFKEhK2wjTkZbe6ZKek69/oILzwBU4fu7vbovjEfqGWs2
-//        String password = "1234";
-//
-//        String encPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-//        System.out.println(encPassword);
-//    }
-
     @Test
     public void login_test() throws Exception {
         // given
@@ -114,9 +105,9 @@ public class UserControllerTest extends MyRestDoc {
         // then
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.token.accessToken",
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.accessToken",
                 matchesPattern("^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$")));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.token.refreshToken",
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.refreshToken",
                 matchesPattern("^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$")));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
@@ -173,7 +164,7 @@ public class UserControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applicationId").value(1));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.status").value("접수"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.resumeId").value(1));
