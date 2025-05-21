@@ -30,9 +30,8 @@ public class JobBookmarkController extends MyRestDoc {
     public void setUp() {
         System.out.println("setUp");
         User ssar = User.builder()
-                .id(51)
-                .username("company01")
-                .companyId(1)
+                .id(15)
+                .username("user15")
                 .build();
         accessToken = JwtUtil.create(ssar);
     }
@@ -69,6 +68,6 @@ public class JobBookmarkController extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobBookmarkId").value(25));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobBookmarkCount").value(1));
-        actions.andDo(MockMvcResultHandlers.print());
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }
