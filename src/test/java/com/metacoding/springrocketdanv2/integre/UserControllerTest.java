@@ -150,7 +150,7 @@ public class UserControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].companyName").value("에이아이랩"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].careerLevel").value("경력"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].resumeId").value(1));
-        actions.andDo(MockMvcResultHandlers.print());
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @Test
