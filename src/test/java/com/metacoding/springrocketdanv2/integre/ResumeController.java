@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -126,6 +125,15 @@ public class ResumeController extends MyRestDoc {
     public void update_test() throws Exception {
         // given
         Integer resumeId = 1;
+
+        List<CareerRequest.UpdateDTO> careers = List.of(
+                new CareerRequest.UpdateDTO("카카오", "2019-01-01", "2022-12-31")
+        );
+
+        List<CertificationRequest.UpdateDTO> certifications = List.of(
+                new CertificationRequest.UpdateDTO("정보처리기사", "한국산업인력공단", "2018-06-01")
+        );
+
         ResumeRequest.UpdateDTO reqDTO = new ResumeRequest.UpdateDTO();
         reqDTO.setTitle("백엔드 개발자 이력서");
         reqDTO.setSummary("Java와 Spring Boot 기반의 개발 경험을 보유한 백엔드 개발자입니다.");
@@ -140,8 +148,8 @@ public class ResumeController extends MyRestDoc {
         reqDTO.setGraduationDate("2018-02-01");
         reqDTO.setCareerLevel("경력");
         reqDTO.setIsDefault(true);
-        reqDTO.setCareers(List.of());
-        reqDTO.setCertifications(List.of());
+        reqDTO.setCareers(careers);
+        reqDTO.setCertifications(certifications);
         reqDTO.setSalaryRangeId(1);
         reqDTO.setJobGroupId(1);
         reqDTO.setTechStackIds(List.of(1, 2, 3));
@@ -181,12 +189,12 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
         actions.andExpect(jsonPath("$.body.createdAt").value("2025-05-21"));
         actions.andExpect(jsonPath("$.body.userId").value(1));
-        actions.andExpect(jsonPath("$.body.certificationIds").isEmpty());
-        actions.andExpect(jsonPath("$.body.careerIds").isEmpty());
+        actions.andExpect(jsonPath("$.body.certificationIds").value(51));
+        actions.andExpect(jsonPath("$.body.careerIds").value(51));
         actions.andExpect(jsonPath("$.body.salaryRangeId").value(1));
         actions.andExpect(jsonPath("$.body.jobGroupId").value(1));
         actions.andExpect(jsonPath("$.body.techStackIds[0]").value(1));
-        actions.andDo(MockMvcResultHandlers.print());
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @Test
@@ -210,7 +218,7 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.resumes[0].title").value("백엔드 개발자 이력서"));
         actions.andExpect(jsonPath("$.body.resumes[0].createdAt").value("2025-05-21"));
         actions.andExpect(jsonPath("$.body.resumes[0].isDefault").value(true));
-        actions.andDo(MockMvcResultHandlers.print());
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @Test
@@ -255,12 +263,19 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.status").value(200));
         actions.andExpect(jsonPath("$.msg").value("성공"));
         actions.andExpect(jsonPath("$.body").doesNotExist());
-        actions.andDo(MockMvcResultHandlers.print());
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @Test
     public void save_test() throws Exception {
         // given
+        List<CareerRequest.UpdateDTO> careers = List.of(
+                new CareerRequest.UpdateDTO("카카오", "2019-01-01", "2022-12-31")
+        );
+        List<CertificationRequest.UpdateDTO> certifications = List.of(
+                new CertificationRequest.UpdateDTO("정보처리기사", "한국산업인력공단", "2018-06-01")
+        );
+
         ResumeRequest.SaveDTO reqDTO = new ResumeRequest.SaveDTO();
         reqDTO.setTitle("백엔드 개발자 이력서");
         reqDTO.setSummary("Java와 Spring Boot 기반의 개발 경험을 보유한 백엔드 개발자입니다.");
@@ -275,12 +290,11 @@ public class ResumeController extends MyRestDoc {
         reqDTO.setGraduationDate("2018-02-01");
         reqDTO.setCareerLevel("경력");
         reqDTO.setIsDefault(true);
-        reqDTO.setCareers(List.of());
-        reqDTO.setCertifications(List.of());
+        reqDTO.setCareers(careers);
+        reqDTO.setCertifications(certifications);
         reqDTO.setSalaryRangeId(1);
         reqDTO.setJobGroupId(1);
         reqDTO.setTechStackIds(List.of(1, 2, 3));
-
 
         String requestBody = om.writeValueAsString(reqDTO);
 
@@ -317,13 +331,11 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.createdAt").value("2025-05-21"));
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
         actions.andExpect(jsonPath("$.body.userId").value(1));
-        actions.andExpect(jsonPath("$.body.certificationIds").isArray());
-        actions.andExpect(jsonPath("$.body.certificationIds.length()").value(0));
-        actions.andExpect(jsonPath("$.body.careerIds").isArray());
-        actions.andExpect(jsonPath("$.body.careerIds.length()").value(0));
+        actions.andExpect(jsonPath("$.body.certificationIds").value(51));
+        actions.andExpect(jsonPath("$.body.careerIds").value(51));
         actions.andExpect(jsonPath("$.body.salaryRangeId").value(1));
         actions.andExpect(jsonPath("$.body.jobGroupId").value(1));
         actions.andExpect(jsonPath("$.body.techStackIds[0]").value(1));
-        actions.andDo(MockMvcResultHandlers.print());
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }

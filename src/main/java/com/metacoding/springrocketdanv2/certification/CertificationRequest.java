@@ -8,7 +8,7 @@ import lombok.Data;
 public class CertificationRequest {
 
     @Data
-    public class UpdateDTO {
+    public static class UpdateDTO {
         @NotBlank(message = "자격증 이름은 필수입니다.")
         private String name;
 

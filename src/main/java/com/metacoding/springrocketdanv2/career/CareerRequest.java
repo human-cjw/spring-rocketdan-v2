@@ -43,6 +43,12 @@ public class CareerRequest {
             this.endDate = career.getEndDate();
         }
 
+        public UpdateDTO(String companyName, String startDate, String endDate) {
+            this.companyName = companyName;
+            this.startDate = startDate;
+            this.endDate = endDate;
+        }
+
         public Career toEntity(Resume resume) {
             return Career.builder()
                     .companyName(companyName)
