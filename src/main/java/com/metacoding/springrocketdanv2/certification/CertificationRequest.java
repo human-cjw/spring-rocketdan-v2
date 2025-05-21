@@ -8,7 +8,7 @@ import lombok.Data;
 public class CertificationRequest {
 
     @Data
-    public class UpdateDTO {
+    public static class DTO {
         @NotBlank(message = "자격증 이름은 필수입니다.")
         private String name;
 
@@ -21,12 +21,6 @@ public class CertificationRequest {
         )
         private String issuedDate;
 
-        public UpdateDTO(String name, String issuer, String issuedDate) {
-            this.name = name;
-            this.issuer = issuer;
-            this.issuedDate = issuedDate;
-        }
-
         public Certification toEntity(Resume resume) {
             return Certification.builder()
                     .name(name)
@@ -36,4 +30,5 @@ public class CertificationRequest {
                     .build();
         }
     }
+
 }

@@ -3,6 +3,7 @@ package com.metacoding.springrocketdanv2.company;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import com.metacoding.springrocketdanv2._core.util.Resp;
+import com.metacoding.springrocketdanv2.application.ApplicationStatusEnum;
 import com.metacoding.springrocketdanv2.user.User;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -78,11 +79,11 @@ public class CompanyController {
     }
 
     @GetMapping("/s/api/company/job/{jobId}/application")
-    public ResponseEntity<?> companyApplicationList(@PathVariable Integer jobId,
-                                                    @RequestParam(value = "status", defaultValue = "접수") String status) {
+    public ResponseEntity<?> applicationList(@PathVariable Integer jobId,
+                                             @RequestParam(value = "status", defaultValue = "접수") String status) {
 
         // 유효성 검사: null 또는 허용된 값만 통과
-        if (status != null && !List.of("접수", "검토", "합격", "불합격").contains(status)) {
+        if (status != null && !List.of(ApplicationStatusEnum.APPLIED.value, ApplicationStatusEnum.REVIEWING.value, ApplicationStatusEnum.PASSED.value, ApplicationStatusEnum.REJECTED.value).contains(status)) {
             throw new ExceptionApi400("지원 상태는 '접수', '검토', '합격', '불합격' 중 하나여야 합니다.");
         }
 
