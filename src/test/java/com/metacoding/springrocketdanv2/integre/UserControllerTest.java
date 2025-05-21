@@ -113,7 +113,7 @@ public class UserControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void list_test() throws Exception {
+    public void user_application_list_test() throws Exception {
         // given
         String status = "접수";
 
@@ -145,7 +145,7 @@ public class UserControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void userApplication_test() throws Exception {
+    public void user_application_test() throws Exception {
         // given
         Integer applicationId = 1;
 
