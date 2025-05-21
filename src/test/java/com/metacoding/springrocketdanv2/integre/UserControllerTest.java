@@ -9,7 +9,6 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -18,8 +17,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.hamcrest.Matchers.matchesPattern;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -105,7 +102,7 @@ public class UserControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void user_application_list_test() throws Exception {
+    public void list_test() throws Exception {
         // given
         String status = "접수";
 
@@ -136,7 +133,7 @@ public class UserControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void user_application_detail_test() throws Exception {
+    public void detail_test() throws Exception {
         // given
         Integer applicationId = 1;
 
