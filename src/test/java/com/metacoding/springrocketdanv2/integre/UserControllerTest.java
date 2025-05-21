@@ -9,7 +9,6 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -82,15 +81,6 @@ public class UserControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void encode_test() {
-        // $2a$10$FK.8elgcVFKEhK2wjTkZbe6ZKek69/oILzwBU4fu7vbovjEfqGWs2
-        String password = "1234";
-
-        String encPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        System.out.println(encPassword);
-    }
-
-    @Test
     public void login_test() throws Exception {
         // given
         UserRequest.LoginDTO reqDTO = new UserRequest.LoginDTO();
@@ -115,9 +105,9 @@ public class UserControllerTest extends MyRestDoc {
         // then
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.token.accessToken",
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.accessToken",
                 matchesPattern("^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$")));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.token.refreshToken",
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.refreshToken",
                 matchesPattern("^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$")));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
