@@ -44,7 +44,7 @@ public class JobBookmarkController extends MyRestDoc {
     }
 
     @Test
-    public void save_bookmark_test() throws Exception {
+    public void save_test() throws Exception {
         // given
         JobBookmarkRequest.SaveDTO reqDTO = new JobBookmarkRequest.SaveDTO();
         reqDTO.setJobId(1);
