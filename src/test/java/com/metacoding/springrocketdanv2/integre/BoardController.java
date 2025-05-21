@@ -2,11 +2,8 @@ package com.metacoding.springrocketdanv2.integre;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metacoding.springrocketdanv2.MyRestDoc;
-import com.metacoding.springrocketdanv2._core.util.JwtUtil;
 import com.metacoding.springrocketdanv2.board.BoardRequest;
-import com.metacoding.springrocketdanv2.user.User;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,19 +20,6 @@ public class BoardController extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;
-
-    private String accessToken;
-
-    @BeforeEach
-    public void setUp() {
-        // 테스트 시작 전에 실행할 코드
-        System.out.println("setUp");
-        User user01 = User.builder()
-                .id(1)
-                .username("user01")
-                .build();
-        accessToken = JwtUtil.create(user01);
-    }
 
     @AfterEach
     public void tearDown() { // 끝나고 나서 마무리 함수
@@ -59,7 +43,6 @@ public class BoardController extends MyRestDoc {
                         .post("/api/check-board-password/{boardId}", boardId)
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + accessToken)
         );
 
         // eye
@@ -119,7 +102,6 @@ public class BoardController extends MyRestDoc {
                         .post("/api/board")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + accessToken)
         );
 
         // eye
@@ -153,7 +135,6 @@ public class BoardController extends MyRestDoc {
                         .put("/api/board/{boardId}", boardId)
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + accessToken)
         );
 
         // eye
@@ -180,7 +161,6 @@ public class BoardController extends MyRestDoc {
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
                         .delete("/api/board/{boardId}", boardId)
-                        .header("Authorization", "Bearer " + accessToken)
         );
 
         // eye
