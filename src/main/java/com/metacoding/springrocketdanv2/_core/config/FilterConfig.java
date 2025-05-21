@@ -1,6 +1,8 @@
 package com.metacoding.springrocketdanv2._core.config;
 
 import com.metacoding.springrocketdanv2._core.filter.AuthorizationFilter;
+import com.metacoding.springrocketdanv2._core.filter.CorsFilter;
+import com.metacoding.springrocketdanv2._core.filter.LogFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -11,22 +13,29 @@ import org.springframework.context.annotation.Configuration;
 public class FilterConfig {
 
     @Bean
-    public FilterRegistrationBean<AuthorizationFilter> authorizationFilter() {
-        FilterRegistrationBean<AuthorizationFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new AuthorizationFilter());
-        registrationBean.addUrlPatterns("/s/*"); // 모든 요청에 적용
-        registrationBean.setOrder(1); // 필터 순서 설정
+    public FilterRegistrationBean<CorsFilter> corsFilter() {
+        FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new CorsFilter());
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.setOrder(1);
         return registrationBean;
     }
 
-/*  일단 보류. 컴퍼니 아이디가 있는 유저만 인가 하도록 설정
+    @Bean
+    public FilterRegistrationBean<LogFilter> loggingFilter() {
+        FilterRegistrationBean<LogFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new LogFilter());
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.setOrder(2);
+        return registrationBean;
+    }
+
     @Bean
     public FilterRegistrationBean<AuthorizationFilter> authorizationFilter() {
         FilterRegistrationBean<AuthorizationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new AuthorizationFilter());
-        registrationBean.addUrlPatterns("/s/*"); // 모든 요청에 적용
-        registrationBean.setOrder(2); // 필터 순서 설정
+        registrationBean.addUrlPatterns("/s/*");
+        registrationBean.setOrder(3);
         return registrationBean;
     }
-*/
 }
