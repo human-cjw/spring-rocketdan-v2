@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.hamcrest.Matchers.matchesPattern;
+
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class UserControllerTest extends MyRestDoc {
@@ -72,9 +74,20 @@ public class UserControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.fileUrl").doesNotExist()); // 또는 nullValue()도 가능
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.userType").value("user"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.companyId").value(Matchers.nullValue()));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt").value("2025-05-20"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
 
     }
+
+//    @Test
+//    public void encode_test() {
+//        // $2a$10$FK.8elgcVFKEhK2wjTkZbe6ZKek69/oILzwBU4fu7vbovjEfqGWs2
+//        String password = "1234";
+//
+//        String encPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+//        System.out.println(encPassword);
+//    }
 
     @Test
     public void login_test() throws Exception {
@@ -99,6 +112,13 @@ public class UserControllerTest extends MyRestDoc {
         System.out.println(responseBody);
 
         // then
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.token.accessToken",
+                matchesPattern("^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$")));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.token.refreshToken",
+                matchesPattern("^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$")));
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @Test
@@ -123,17 +143,18 @@ public class UserControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].applicationId").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].status").value("접수"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt").value("2025-05-20"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].jobId").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].jobTitle").value("AI 백엔드 개발자 모집"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].companyName").value("에이아이랩"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].careerLevel").value("경력"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].resumeId").value(1));
-        actions.andDo(MockMvcResultHandlers.print());
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @Test
-    public void detail_test() throws Exception {
+    public void userApplication_test() throws Exception {
         // given
         Integer applicationId = 1;
 
@@ -146,9 +167,21 @@ public class UserControllerTest extends MyRestDoc {
 
         // eye
         String responseBody = actions.andReturn().getResponse().getContentAsString();
-        System.out.println(">>> 응답: " + responseBody);
+        System.out.println(responseBody);
 
         // then
-
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applicationId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.status").value("접수"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.resumeId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.resumeTitle").value("백엔드 개발자 이력서"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.companyName").value("에이아이랩"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.careerLevel").value("경력"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobTitle").value("AI 백엔드 개발자 모집"));
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }
