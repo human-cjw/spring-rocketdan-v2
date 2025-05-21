@@ -94,7 +94,7 @@ public class ApplicationController extends MyRestDoc {
     }
 
     @Test
-    public void updateStatus_test() throws Exception {
+    public void update_status_test() throws Exception {
 
         // given
         Integer applicationId = 1;
