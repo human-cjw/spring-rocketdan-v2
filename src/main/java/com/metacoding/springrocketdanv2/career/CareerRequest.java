@@ -8,20 +8,7 @@ import lombok.Data;
 public class CareerRequest {
 
     @Data
-    public static class SaveDTO {
-        private String companyName;
-        private String startDate;
-        private String endDate;
-
-        public SaveDTO(Career career) {
-            this.companyName = career.getCompanyName();
-            this.startDate = career.getStartDate();
-            this.endDate = career.getEndDate();
-        }
-    }
-
-    @Data
-    public static class UpdateDTO {
+    public static class DTO {
         @NotBlank(message = "회사 이름은 필수입니다.")
         private String companyName;
 
@@ -36,18 +23,6 @@ public class CareerRequest {
                 message = "시작일은 yyyy-MM-dd 형식이어야 합니다."
         )
         private String endDate;
-
-        public UpdateDTO(Career career) {
-            this.companyName = career.getCompanyName();
-            this.startDate = career.getStartDate();
-            this.endDate = career.getEndDate();
-        }
-
-        public UpdateDTO(String companyName, String startDate, String endDate) {
-            this.companyName = companyName;
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
 
         public Career toEntity(Resume resume) {
             return Career.builder()

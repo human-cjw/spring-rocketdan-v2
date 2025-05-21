@@ -64,6 +64,8 @@ public class ResumeController {
     public ResponseEntity<?> save(@Valid @RequestBody ResumeRequest.SaveDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
+        System.out.println("컨트롤러에서 dto 받는거 확인" + reqDTO);
+
         ResumeResponse.SaveDTO respDTO = resumeService.이력서등록(reqDTO, sessionUser.getId());
 
         log.debug("이력서등록" + respDTO);

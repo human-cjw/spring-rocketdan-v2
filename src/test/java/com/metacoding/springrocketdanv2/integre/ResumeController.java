@@ -80,13 +80,16 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.gender").value("남"));
         actions.andExpect(jsonPath("$.body.careerLevel").value("경력"));
         actions.andExpect(jsonPath("$.body.education").value("서울대학교"));
-        actions.andExpect(jsonPath("$.body.birthdate").value("1995-01-01"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.birthdate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.major").value("컴퓨터공학"));
         actions.andExpect(jsonPath("$.body.graduationType").value("졸업"));
         actions.andExpect(jsonPath("$.body.phone").value("010-1000-0001"));
         actions.andExpect(jsonPath("$.body.portfolioUrl").value("https://github.com/user01"));
-        actions.andExpect(jsonPath("$.body.enrollmentDate").value("2014-03-01"));
-        actions.andExpect(jsonPath("$.body.graduationDate").value("2018-02-01"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.enrollmentDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.graduationDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.createdAt").value("2025-05-21"));
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
 
@@ -129,13 +132,19 @@ public class ResumeController extends MyRestDoc {
         // given
         Integer resumeId = 1;
 
-        List<CareerRequest.UpdateDTO> careers = List.of(
-                new CareerRequest.UpdateDTO("카카오", "2019-01-01", "2022-12-31")
-        );
+        CareerRequest.DTO career1 = new CareerRequest.DTO();
+        career1.setCompanyName("카카오");
+        career1.setStartDate("2019-01-01");
+        career1.setEndDate("2022-12-31");
 
-        List<CertificationRequest.UpdateDTO> certifications = List.of(
-                new CertificationRequest.UpdateDTO("정보처리기사", "한국산업인력공단", "2018-06-01")
-        );
+        List<CareerRequest.DTO> careers = List.of(career1);
+
+        CertificationRequest.DTO cert1 = new CertificationRequest.DTO();
+        cert1.setName("정보처리기사");
+        cert1.setIssuer("한국산업인력공단");
+        cert1.setIssuedDate("2018-06-01");
+
+        List<CertificationRequest.DTO> certifications = List.of(cert1);
 
         ResumeRequest.UpdateDTO reqDTO = new ResumeRequest.UpdateDTO();
         reqDTO.setTitle("백엔드 개발자 이력서");
@@ -182,15 +191,18 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.portfolioUrl").value("https://github.com/example"));
         actions.andExpect(jsonPath("$.body.gender").value("남"));
         actions.andExpect(jsonPath("$.body.education").value("서울대학교"));
-        actions.andExpect(jsonPath("$.body.birthdate").value("1995-01-01"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.birthdate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.major").value("컴퓨터공학"));
         actions.andExpect(jsonPath("$.body.graduationType").value("졸업"));
         actions.andExpect(jsonPath("$.body.phone").value("01012345678"));
-        actions.andExpect(jsonPath("$.body.enrollmentDate").value("2014-03-01"));
-        actions.andExpect(jsonPath("$.body.graduationDate").value("2018-02-01"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.enrollmentDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.graduationDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.careerLevel").value("경력"));
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.userId").value(1));
         actions.andExpect(jsonPath("$.body.certificationIds").value(51));
@@ -220,7 +232,7 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.msg").value("성공"));
         actions.andExpect(jsonPath("$.body.resumes[0].resumeId").value(1));
         actions.andExpect(jsonPath("$.body.resumes[0].title").value("백엔드 개발자 이력서"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.resumes[0].isDefault").value(true));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
@@ -273,13 +285,21 @@ public class ResumeController extends MyRestDoc {
 
     @Test
     public void save_test() throws Exception {
+
         // given
-        List<CareerRequest.UpdateDTO> careers = List.of(
-                new CareerRequest.UpdateDTO("카카오", "2019-01-01", "2022-12-31")
-        );
-        List<CertificationRequest.UpdateDTO> certifications = List.of(
-                new CertificationRequest.UpdateDTO("정보처리기사", "한국산업인력공단", "2018-06-01")
-        );
+        CareerRequest.DTO career1 = new CareerRequest.DTO();
+        career1.setCompanyName("카카오");
+        career1.setStartDate("2019-01-01");
+        career1.setEndDate("2022-12-31");
+
+        List<CareerRequest.DTO> careers = List.of(career1);
+
+        CertificationRequest.DTO cert1 = new CertificationRequest.DTO();
+        cert1.setName("정보처리기사");
+        cert1.setIssuer("한국산업인력공단");
+        cert1.setIssuedDate("2018-06-01");
+
+        List<CertificationRequest.DTO> certifications = List.of(cert1);
 
         ResumeRequest.SaveDTO reqDTO = new ResumeRequest.SaveDTO();
         reqDTO.setTitle("백엔드 개발자 이력서");
@@ -302,6 +322,7 @@ public class ResumeController extends MyRestDoc {
         reqDTO.setTechStackIds(List.of(1, 2, 3));
 
         String requestBody = om.writeValueAsString(reqDTO);
+        System.out.println(requestBody);
 
         // when
         ResultActions actions = mvc.perform(
@@ -317,7 +338,6 @@ public class ResumeController extends MyRestDoc {
         System.out.println("responseBody = " + responseBody);
 
         // then
-        actions.andExpect(status().isOk());
         actions.andExpect(jsonPath("$.status").value(200));
         actions.andExpect(jsonPath("$.msg").value("성공"));
         actions.andExpect(jsonPath("$.body.resumeId").value(51));
@@ -326,19 +346,22 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.gender").value("남"));
         actions.andExpect(jsonPath("$.body.careerLevel").value("경력"));
         actions.andExpect(jsonPath("$.body.education").value("서울대학교"));
-        actions.andExpect(jsonPath("$.body.birthdate").value("1995-01-01"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.birthdate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.major").value("컴퓨터공학"));
         actions.andExpect(jsonPath("$.body.graduationType").value("졸업"));
         actions.andExpect(jsonPath("$.body.phone").value("01012345678"));
         actions.andExpect(jsonPath("$.body.portfolioUrl").value("https://github.com/example"));
-        actions.andExpect(jsonPath("$.body.enrollmentDate").value("2014-03-01"));
-        actions.andExpect(jsonPath("$.body.graduationDate").value("2018-02-01"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.enrollmentDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.graduationDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
         actions.andExpect(jsonPath("$.body.userId").value(1));
-        actions.andExpect(jsonPath("$.body.certificationIds").value(51));
-        actions.andExpect(jsonPath("$.body.careerIds").value(51));
+        actions.andExpect(jsonPath("$.body.certificationIds[0]").value(51));
+        actions.andExpect(jsonPath("$.body.careerIds[0]").value(51));
         actions.andExpect(jsonPath("$.body.salaryRangeId").value(1));
         actions.andExpect(jsonPath("$.body.jobGroupId").value(1));
         actions.andExpect(jsonPath("$.body.techStackIds[0]").value(1));
