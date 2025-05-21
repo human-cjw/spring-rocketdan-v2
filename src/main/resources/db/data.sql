@@ -143,7 +143,8 @@ VALUES
 INSERT INTO user_tb (username, password, email, file_url, user_type, created_at, company_id)
 VALUES
 -- 일반유저 50명
-('user01', '1234', 'user01@example.com', NULL, 'user', NOW(), NULL),
+('user01', '$2a$10$FK.8elgcVFKEhK2wjTkZbe6ZKek69/oILzwBU4fu7vbovjEfqGWs2', 'user01@example.com', NULL, 'user', NOW(),
+ NULL),
 ('user02', '1234', 'user02@example.com', NULL, 'user', NOW(), NULL),
 ('user03', '1234', 'user03@example.com', NULL, 'user', NOW(), NULL),
 ('user04', '1234', 'user04@example.com', NULL, 'user', NOW(), NULL),
