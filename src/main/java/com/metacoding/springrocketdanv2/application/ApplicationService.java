@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ApplicationService {
@@ -16,8 +18,11 @@ public class ApplicationService {
 
     @Transactional
     public ApplicationResponse.SaveDTO 지원하기(ApplicationRequest.SaveDTO reqDTO, Integer sessionUserId) {
-        applicationRepository.findByJobIdAndUserId(reqDTO.getJobId(), sessionUserId)
-                .orElseThrow(() -> new ExceptionApi400("잘못된 요청입니다"));
+        Optional<Application> applicationOP = applicationRepository.findByJobIdAndUserId(reqDTO.getJobId(), sessionUserId);
+
+        if (applicationOP.isPresent()) {
+            throw new ExceptionApi400("잘못된 요청입니다");
+        }
 
         Job jobPS = jobRepository.findByJobId(reqDTO.getJobId())
                 .orElseThrow(() -> new ExceptionApi400("잘못된 요청입니다"));
