@@ -3,23 +3,23 @@ package com.metacoding.springrocketdanv2.integre;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metacoding.springrocketdanv2.MyRestDoc;
 import com.metacoding.springrocketdanv2._core.util.JwtUtil;
+import com.metacoding.springrocketdanv2.job.bookmark.JobBookmarkRequest;
 import com.metacoding.springrocketdanv2.user.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class SalaryRangeController extends MyRestDoc {
+public class JobBookmarkControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;
@@ -28,11 +28,10 @@ public class SalaryRangeController extends MyRestDoc {
 
     @BeforeEach
     public void setUp() {
-        // 테스트 시작 전에 실행할 코드
         System.out.println("setUp");
         User ssar = User.builder()
-                .id(1)
-                .username("ssar")
+                .id(15)
+                .username("user15")
                 .build();
         accessToken = JwtUtil.create(ssar);
     }
@@ -44,13 +43,19 @@ public class SalaryRangeController extends MyRestDoc {
     }
 
     @Test
-    public void List_test() throws Exception {
+    public void save_test() throws Exception {
         // given
+        JobBookmarkRequest.SaveDTO reqDTO = new JobBookmarkRequest.SaveDTO();
+        reqDTO.setJobId(1);
+
+        String requestBody = om.writeValueAsString(reqDTO);
 
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
-                        .get("/salaryRange")
+                        .post("/s/api/job-bookmark")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + accessToken)
         );
 
@@ -59,13 +64,10 @@ public class SalaryRangeController extends MyRestDoc {
         System.out.println(responseBody);
 
         // then
-        actions.andExpect(jsonPath("$.status").value(200));
-        actions.andExpect(jsonPath("$.msg").value("성공"));
-        actions.andExpect(jsonPath("$.body.salaryRanges[0].salaryRangeId").value(1));
-        actions.andExpect(jsonPath("$.body.salaryRanges[0].minSalary").value(3000));
-        actions.andExpect(jsonPath("$.body.salaryRanges[0].maxSalary").value(4000));
-        actions.andExpect(jsonPath("$.body.salaryRanges[0].label").value("3000-4000"));
-        actions.andDo(MockMvcResultHandlers.print());
-
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobBookmarkId").value(25));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobBookmarkCount").value(1));
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }

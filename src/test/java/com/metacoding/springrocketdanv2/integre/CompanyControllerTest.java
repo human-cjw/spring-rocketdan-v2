@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class CompanyController extends MyRestDoc {
+public class CompanyControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;

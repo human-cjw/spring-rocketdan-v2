@@ -3,7 +3,6 @@ package com.metacoding.springrocketdanv2.integre;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metacoding.springrocketdanv2.MyRestDoc;
 import com.metacoding.springrocketdanv2._core.util.JwtUtil;
-import com.metacoding.springrocketdanv2.job.bookmark.JobBookmarkRequest;
 import com.metacoding.springrocketdanv2.user.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class JobBookmarkController extends MyRestDoc {
+public class JobGroupControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;
@@ -28,10 +27,11 @@ public class JobBookmarkController extends MyRestDoc {
 
     @BeforeEach
     public void setUp() {
+        // 테스트 시작 전에 실행할 코드
         System.out.println("setUp");
         User ssar = User.builder()
-                .id(15)
-                .username("user15")
+                .id(1)
+                .username("ssar")
                 .build();
         accessToken = JwtUtil.create(ssar);
     }
@@ -43,31 +43,24 @@ public class JobBookmarkController extends MyRestDoc {
     }
 
     @Test
-    public void save_test() throws Exception {
-        // given
-        JobBookmarkRequest.SaveDTO reqDTO = new JobBookmarkRequest.SaveDTO();
-        reqDTO.setJobId(1);
-
-        String requestBody = om.writeValueAsString(reqDTO);
-
+    public void List_test() throws Exception {
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
-                        .post("/s/api/job-bookmark")
-                        .content(requestBody)
+                        .get("/jobGroup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + accessToken)
         );
 
         // eye
         String responseBody = actions.andReturn().getResponse().getContentAsString();
-        System.out.println(responseBody);
+        System.out.println("responseBody = " + responseBody);
 
         // then
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobBookmarkId").value(25));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobBookmarkCount").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroups[0].id").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroups[0].name").value("백엔드 개발자"));
+
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }

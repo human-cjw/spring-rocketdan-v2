@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class ResumeController extends MyRestDoc {
+public class ResumeControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;
