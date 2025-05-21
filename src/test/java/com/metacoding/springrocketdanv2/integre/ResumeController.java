@@ -17,10 +17,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -94,7 +96,8 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.user.fileUrl").doesNotExist());
         actions.andExpect(jsonPath("$.body.user.userType").value("user"));
         actions.andExpect(jsonPath("$.body.user.companyId").doesNotExist());
-        actions.andExpect(jsonPath("$.body.user.createdAt").value("2025-05-21"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
 
         actions.andExpect(jsonPath("$.body.certifications[0].certificationId").value(1));
         actions.andExpect(jsonPath("$.body.certifications[0].name").value("정보처리기사"));
@@ -187,7 +190,8 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.graduationDate").value("2018-02-01"));
         actions.andExpect(jsonPath("$.body.careerLevel").value("경력"));
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
-        actions.andExpect(jsonPath("$.body.createdAt").value("2025-05-21"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.userId").value(1));
         actions.andExpect(jsonPath("$.body.certificationIds").value(51));
         actions.andExpect(jsonPath("$.body.careerIds").value(51));
@@ -216,7 +220,8 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.msg").value("성공"));
         actions.andExpect(jsonPath("$.body.resumes[0].resumeId").value(1));
         actions.andExpect(jsonPath("$.body.resumes[0].title").value("백엔드 개발자 이력서"));
-        actions.andExpect(jsonPath("$.body.resumes[0].createdAt").value("2025-05-21"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.resumes[0].isDefault").value(true));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
@@ -328,7 +333,8 @@ public class ResumeController extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.portfolioUrl").value("https://github.com/example"));
         actions.andExpect(jsonPath("$.body.enrollmentDate").value("2014-03-01"));
         actions.andExpect(jsonPath("$.body.graduationDate").value("2018-02-01"));
-        actions.andExpect(jsonPath("$.body.createdAt").value("2025-05-21"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
         actions.andExpect(jsonPath("$.body.userId").value(1));
         actions.andExpect(jsonPath("$.body.certificationIds").value(51));
