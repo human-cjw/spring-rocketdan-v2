@@ -90,10 +90,10 @@ public class ResumeRequest {
         private Boolean isDefault;
 
         @Valid
-        private List<CareerRequest.UpdateDTO> careers;
+        private List<CareerRequest.DTO> careers;
 
         @Valid
-        private List<CertificationRequest.UpdateDTO> certifications;
+        private List<CertificationRequest.DTO> certifications;
 
         @NotNull(message = "salaryRangeId 값은 필수입니다.")
         private Integer salaryRangeId;
@@ -178,10 +178,10 @@ public class ResumeRequest {
         private Boolean isDefault;
 
         @Valid
-        private List<CareerRequest.UpdateDTO> careers;
+        private List<CareerRequest.DTO> careers;
 
         @Valid
-        private List<CertificationRequest.UpdateDTO> certifications;
+        private List<CertificationRequest.DTO> certifications;
 
         @NotNull(message = "연봉 범위 선택은 필수입니다.")
         private Integer salaryRangeId;
