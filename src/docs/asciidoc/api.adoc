@@ -6,7 +6,7 @@ endif::[]
 :company: company-controller-test
 :resume: resume-controller-test
 :job: job-controller-test
-:application: job-controller-test
+:application: application-controller-test
 
 = REST API
 :toc: left
@@ -29,12 +29,19 @@ include::{snippets}/{user}/login_test/http-request.adoc[]
 ===== Response Example
 include::{snippets}/{user}/login_test/http-response.adoc[]
 
-=== 3.
+=== 3. 내지원목록
 ===== Request Example
-include::{snippets}/{user}/login_test/http-request.adoc[]
+include::{snippets}/{user}/user_application_list_test/http-request.adoc[]
 
 ===== Response Example
-include::{snippets}/{user}/login_test/http-response.adoc[]
+include::{snippets}/{user}/user_application_list_test/http-response.adoc[]
+
+=== 4. 내지원상세
+===== Request Example
+include::{snippets}/{user}/user_application_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/user_application_test/http-response.adoc[]
 
 
 
@@ -166,3 +173,19 @@ include::{snippets}/{job}/delete_test/http-request.adoc[]
 
 ===== Response Example
 include::{snippets}/{job}/delete_test/http-response.adoc[]
+
+== 지원
+
+=== 1. 지원하기
+===== Request Example
+include::{snippets}/{application}/save_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{application}/save_test/http-response.adoc[]
+
+=== 2. 지원상태변경
+===== Request Example
+include::{snippets}/{application}/update_status_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{application}/update_status_test/http-response.adoc[]
