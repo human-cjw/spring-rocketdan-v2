@@ -228,7 +228,7 @@ public class JobControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.deadline").value("2025-12-31"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.status").value("OPEN"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.careerLevel").value("경력"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.updatedAt").value(Matchers.nullValue()));
 

@@ -209,13 +209,15 @@ public class CompanyResponse {
         private Integer jobId;
         private String jobTitle;
         private List<ItemDTO> applications;
+        private String status;
 
-        public ApplicationListDTO(List<Application> applications) {
+        public ApplicationListDTO(List<Application> applications, String status) {
             this.jobId = applications.getFirst().getJob().getId();
             this.jobTitle = applications.getFirst().getJob().getTitle();
             this.applications = applications.stream()
                     .map(application -> new ItemDTO(application))
                     .toList();
+            this.status = status;
         }
 
         @Data

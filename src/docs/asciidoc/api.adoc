@@ -1,0 +1,168 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+:user: user-controller-test
+:company: company-controller-test
+:resume: resume-controller-test
+:job: job-controller-test
+:application: job-controller-test
+
+= REST API
+:toc: left
+:toclevels: 2
+:source-highlighter: highlightjs
+
+== 유저
+
+=== 1. 회원가입
+===== Request Example
+include::{snippets}/{user}/join_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/join_test/http-response.adoc[]
+
+=== 2. 로그인
+===== Request Example
+include::{snippets}/{user}/login_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/login_test/http-response.adoc[]
+
+=== 3.
+===== Request Example
+include::{snippets}/{user}/login_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/login_test/http-response.adoc[]
+
+
+
+== 기업
+
+=== 1. 기업목록
+===== Request Example
+include::{snippets}/{company}/list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{company}/list_test/http-response.adoc[]
+
+=== 2. 기업상세
+===== Request Example
+include::{snippets}/{company}/detail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{company}/detail_test/http-response.adoc[]
+
+=== 3. 기업등록
+===== Request Example
+include::{snippets}/{company}/save_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{company}/save_test/http-response.adoc[]
+
+=== 4. 기업수정
+===== Request Example
+include::{snippets}/{company}/update_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{company}/update_test/http-response.adoc[]
+
+=== 5. 기업공고목록
+===== Request Example
+include::{snippets}/{company}/manage_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{company}/manage_test/http-response.adoc[]
+
+=== 6. 기업공고지원서목록
+===== Request Example
+include::{snippets}/{company}/application_list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{company}/application_list_test/http-response.adoc[]
+
+=== 7. 기업공고지원서상세
+===== Request Example
+include::{snippets}/{company}/company_application_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{company}/company_application_test/http-response.adoc[]
+
+
+
+== 이력서
+
+=== 1. 이력서목록
+===== Request Example
+include::{snippets}/{resume}/list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{resume}/list_test/http-response.adoc[]
+
+=== 2. 이력서상세
+===== Request Example
+include::{snippets}/{resume}/detail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{resume}/detail_test/http-response.adoc[]
+
+=== 3. 이력서등록
+===== Request Example
+include::{snippets}/{resume}/save_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{resume}/save_test/http-response.adoc[]
+
+=== 4. 이력서수정
+===== Request Example
+include::{snippets}/{resume}/update_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{resume}/update_test/http-response.adoc[]
+
+=== 5. 이력서삭제
+===== Request Example
+include::{snippets}/{resume}/delete_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{resume}/delete_test/http-response.adoc[]
+
+
+
+== 공고
+
+=== 1. 공고목록
+===== Request Example
+include::{snippets}/{job}/list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{job}/list_test/http-response.adoc[]
+
+=== 2. 공고상세
+===== Request Example
+include::{snippets}/{job}/detail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{job}/detail_test/http-response.adoc[]
+
+=== 3. 공고등록
+===== Request Example
+include::{snippets}/{job}/save_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{job}/save_test/http-response.adoc[]
+
+=== 4. 공고수정
+===== Request Example
+include::{snippets}/{job}/update_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{job}/update_test/http-response.adoc[]
+
+=== 5. 공고삭제
+===== Request Example
+include::{snippets}/{job}/delete_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{job}/delete_test/http-response.adoc[]
