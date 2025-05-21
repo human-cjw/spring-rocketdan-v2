@@ -42,7 +42,7 @@ public class WorkFieldControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void get_work_field_list_test() throws Exception {
+    public void list_test() throws Exception {
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
@@ -58,6 +58,6 @@ public class WorkFieldControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.workFields[0].id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.workFields[0].name").value("IT/소프트웨어"));
-        actions.andDo(MockMvcResultHandlers.print());
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }
