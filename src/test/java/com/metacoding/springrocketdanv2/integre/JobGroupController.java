@@ -43,7 +43,7 @@ public class JobGroupController extends MyRestDoc {
     }
 
     @Test
-    public void jobGroupList_test() throws Exception {
+    public void List_test() throws Exception {
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
