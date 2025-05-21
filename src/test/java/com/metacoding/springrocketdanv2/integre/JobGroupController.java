@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -41,7 +43,7 @@ public class JobGroupController extends MyRestDoc {
     }
 
     @Test
-    public void jobGroupList_test() throws Exception {
+    public void List_test() throws Exception {
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
@@ -52,5 +54,13 @@ public class JobGroupController extends MyRestDoc {
         // eye
         String responseBody = actions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
+
+        // then
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroups[0].id").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroups[0].name").value("백엔드 개발자"));
+
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }

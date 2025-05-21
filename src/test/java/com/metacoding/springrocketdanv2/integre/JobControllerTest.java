@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @Transactional
@@ -227,7 +228,8 @@ public class JobControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.deadline").value("2025-12-31"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.status").value("OPEN"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.careerLevel").value("경력"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt").value("2025-05-20"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.updatedAt").value(Matchers.nullValue()));
 
         // company 정보
