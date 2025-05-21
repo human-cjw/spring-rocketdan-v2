@@ -19,8 +19,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.hamcrest.Matchers.matchesPattern;
-
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class UserControllerTest extends MyRestDoc {
@@ -31,12 +29,16 @@ public class UserControllerTest extends MyRestDoc {
     private String accessToken;
 
     @BeforeEach
-    public void setUp() {
-        User ssar = User.builder()
-                .id(1)
+    void setUp() {
+        String rawPassword = "1234";
+        String encPassword = BCrypt.hashpw(rawPassword, BCrypt.gensalt());
+
+        User user = User.builder()
                 .username("user01")
+                .password(encPassword)
                 .build();
-        accessToken = JwtUtil.create(ssar);
+
+        accessToken = JwtUtil.create(user);
     }
 
     @AfterEach
@@ -72,11 +74,11 @@ public class UserControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.userId").value(101));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.username").value("newuser"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.email").value("newuser@example.com"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.fileUrl").doesNotExist()); // 또는 nullValue()도 가능
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.fileUrl").doesNotExist());
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.userType").value("user"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.companyId").value(Matchers.nullValue()));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt").value("2025-05-20"));
-
+        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
     @Test
@@ -105,7 +107,7 @@ public class UserControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void user_application_list_test() throws Exception {
+    public void list_test() throws Exception {
         // given
         String status = "접수";
 
@@ -136,7 +138,7 @@ public class UserControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void user_application_detail_test() throws Exception {
+    public void detail_test() throws Exception {
         // given
         Integer applicationId = 1;
 
