@@ -47,7 +47,7 @@ public class JobGroupControllerTest extends MyRestDoc {
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
-                        .get("/jobGroup")
+                        .get("/jobgroup")
                         .contentType(MediaType.APPLICATION_JSON)
         );
 

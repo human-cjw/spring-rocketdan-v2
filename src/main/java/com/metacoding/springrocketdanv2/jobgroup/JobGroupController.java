@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class JobGroupController {
     private final JobGroupService jobGroupService;
 
-    @GetMapping("/jobGroup")
+    @GetMapping("/jobgroup")
     public ResponseEntity<?> jobGroupList() {
         JobGroupResponse.ListDTO respDTO = jobGroupService.목록보기();
 

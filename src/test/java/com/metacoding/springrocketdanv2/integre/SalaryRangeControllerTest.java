@@ -49,7 +49,7 @@ public class SalaryRangeControllerTest extends MyRestDoc {
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
-                        .get("/salaryRange")
+                        .get("/salaryrange")
                         .header("Authorization", "Bearer " + accessToken)
         );
 
