@@ -376,7 +376,7 @@ public class ResumeControllerTest extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.certifications[0].issuer").value("한국산업인력공단"));
         actions.andExpect(jsonPath("$.body.certifications[0].issuedDate",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
-        actions.andExpect(jsonPath("$.body.careers[0].id").value(51));
+        actions.andExpect(jsonPath("$.body.careers[0].id").value(52));
         actions.andExpect(jsonPath("$.body.careers[0].companyName").value("카카오"));
         actions.andExpect(jsonPath("$.body.careers[0].startDate",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
