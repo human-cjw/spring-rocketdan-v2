@@ -20,8 +20,8 @@ public class BoardRequest {
 
         @NotBlank(message = "비밀번호는 필수입니다.")
         @Pattern(
-                regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#$%^&*()_+=\\-]{4,20}$",
-                message = "비밀번호는 영문과 숫자를 포함한 4자 이상 20자 이하입니다."
+                regexp = "^[A-Za-z\\d!@#$%^&*()_+=\\-]{4,20}$",
+                message = "비밀번호는 영문 또는 숫자를 포함한 4자 이상 20자 이하입니다."
         )
         private String password;
 
@@ -50,8 +50,8 @@ public class BoardRequest {
     public static class VerifyDTO {
         @NotBlank(message = "비밀번호는 필수입니다.")
         @Pattern(
-                regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#$%^&*()_+=\\-]{4,20}$",
-                message = "비밀번호는 영문과 숫자를 포함한 4자 이상 20자 이하입니다."
+                regexp = "^[A-Za-z\\d!@#$%^&*()_+=\\-]{4,20}$",
+                message = "비밀번호는 영문 또는 숫자를 포함한 4자 이상 20자 이하입니다."
         )
         private String password;
     }
