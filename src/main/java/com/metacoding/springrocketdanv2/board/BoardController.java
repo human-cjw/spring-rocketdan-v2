@@ -1,9 +1,11 @@
 package com.metacoding.springrocketdanv2.board;
 
 import com.metacoding.springrocketdanv2._core.util.Resp;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -15,7 +17,7 @@ public class BoardController {
 
     @PostMapping("/api/check-board-password/{boardId}")
     public ResponseEntity<?> verifyPassword(@PathVariable("boardId") Integer boardId,
-                                            @RequestBody BoardRequest.VerifyDTO reqDTO) {
+                                            @Valid @RequestBody BoardRequest.VerifyDTO reqDTO) {
 
         BoardResponse.VerifyDTO respDTO = boardService.verifyPassword(boardId, reqDTO.getPassword());
 
@@ -34,7 +36,7 @@ public class BoardController {
     }
 
     @PostMapping("/api/board")
-    public ResponseEntity<?> writeBoard(@RequestBody BoardRequest.SaveDTO reqDTO) {
+    public ResponseEntity<?> writeBoard(@Valid @RequestBody BoardRequest.SaveDTO reqDTO, Errors errors) {
         BoardResponse.DTO respDTO = boardService.글쓰기(reqDTO);
 
         log.debug("글쓰기: " + respDTO);
@@ -43,7 +45,7 @@ public class BoardController {
     }
 
     @PutMapping("/api/board/{boardId}")
-    public ResponseEntity<?> update(@PathVariable("boardId") Integer boardId, @RequestBody BoardRequest.UpdateDTO reqDTO) { // <- form 에서 boardId와 title, content 가져와야함
+    public ResponseEntity<?> update(@PathVariable("boardId") Integer boardId, @Valid @RequestBody BoardRequest.UpdateDTO reqDTO, Errors errors) { // <- form 에서 boardId와 title, content 가져와야함
         BoardResponse.DTO respDTO = boardService.글수정하기(reqDTO, boardId);
 
         log.debug("글수정하기: " + respDTO);
