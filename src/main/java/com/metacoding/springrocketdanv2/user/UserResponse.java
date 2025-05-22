@@ -10,7 +10,7 @@ public class UserResponse {
 
     @Data
     public static class DTO {
-        private Integer userId;
+        private Integer id;
         private String username;
         private String email;
         private String fileUrl;
@@ -19,7 +19,7 @@ public class UserResponse {
         private String createdAt;
 
         public DTO(User user) {
-            this.userId = user.getId();
+            this.id = user.getId();
             this.username = user.getUsername();
             this.email = user.getEmail();
             this.fileUrl = user.getFileUrl();
@@ -53,7 +53,7 @@ public class UserResponse {
 
         @Data
         class ItemDTO {
-            private Integer applicationId;
+            private Integer id;
             private String status;
             private String createdAt;
             private Integer jobId;
@@ -63,7 +63,7 @@ public class UserResponse {
             private Integer resumeId;
 
             public ItemDTO(Application application) {
-                this.applicationId = application.getId();
+                this.id = application.getId();
                 this.status = application.getStatus();
                 this.createdAt = application.getCreatedAt().toString().substring(0, 10);
                 this.jobId = application.getJob().getId();
@@ -77,7 +77,7 @@ public class UserResponse {
 
     @Data
     public static class ApplicationDetailDTO {
-        private Integer applicationId;
+        private Integer id;
         private String createdAt;
         private String status;
         private Integer resumeId;
@@ -88,7 +88,7 @@ public class UserResponse {
         private String jobTitle;
 
         public ApplicationDetailDTO(Application application) {
-            this.applicationId = application.getId();
+            this.id = application.getId();
             this.createdAt = application.getCreatedAt().toString().substring(0, 10);
             this.status = application.getStatus();
             this.resumeId = application.getResume().getId();

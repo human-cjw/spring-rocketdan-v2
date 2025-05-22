@@ -43,14 +43,14 @@ public class JobResponse {
 
         @Data
         public class ItemDTO {
-            private Integer jobId;
+            private Integer id;
             private String title;
             private String careerLevel;
             private String companyName;
             private Integer bookmarkId;
 
             public ItemDTO(Job job, Integer bookmarkId) {
-                this.jobId = job.getId();
+                this.id = job.getId();
                 this.title = job.getTitle();
                 this.careerLevel = job.getCareerLevel();
                 this.companyName = job.getCompany().getNameKr();
@@ -61,7 +61,7 @@ public class JobResponse {
 
     @Data
     public static class DetailDTO {
-        private Integer jobId;
+        private Integer id;
         private String title;
         private String description;
         private String location;
@@ -80,7 +80,7 @@ public class JobResponse {
         private Integer jobBookmarkId;
 
         public DetailDTO(Job job, User sessionUser, Integer jobBookmarkId) {
-            this.jobId = job.getId();
+            this.id = job.getId();
             this.title = job.getTitle();
             this.description = job.getDescription();
             this.location = job.getLocation();
@@ -103,13 +103,13 @@ public class JobResponse {
 
         @Data
         class CompanyDTO {
-            private Integer companyId;
+            private Integer id;
             private String name;
             private String phone;
             private String contactManager;
 
             public CompanyDTO(Company company) {
-                this.companyId = company.getId();
+                this.id = company.getId();
                 this.name = company.getNameKr();
                 this.phone = company.getPhone();
                 this.contactManager = company.getContactManager();
@@ -152,7 +152,7 @@ public class JobResponse {
 
     @Data
     public static class UpdateDTO {
-        private Integer jobId;
+        private Integer id;
         private String title;
         private String description;
         private String location;
@@ -165,27 +165,25 @@ public class JobResponse {
         private Integer salaryRangeId;
         private List<Integer> techStackIds;
 
-        public UpdateDTO(Job job) {
-            this.jobId = job.getId();
-            this.title = job.getTitle();
-            this.description = job.getDescription();
-            this.location = job.getLocation();
-            this.employmentType = job.getEmploymentType();
-            this.deadline = job.getDeadline();
-            this.status = job.getStatus();
-            this.jobGroupId = job.getJobGroup().getId();
-            this.workFieldId = job.getWorkField().getId();
-            this.careerLevel = job.getCareerLevel();
-            this.salaryRangeId = job.getSalaryRange().getId();
-            this.techStackIds = job.getJobTechStacks().stream()
-                    .map(jobTechStack -> jobTechStack.getTechStack().getId())
-                    .toList();
+        public UpdateDTO(JobRequest.UpdateDTO reqDTO, Integer jobId) {
+            this.id = jobId;
+            this.title = reqDTO.getTitle();
+            this.description = reqDTO.getDescription();
+            this.location = reqDTO.getLocation();
+            this.employmentType = reqDTO.getEmploymentType();
+            this.deadline = reqDTO.getDeadline();
+            this.status = reqDTO.getStatus();
+            this.jobGroupId = reqDTO.getJobGroupId();
+            this.workFieldId = reqDTO.getWorkFieldId();
+            this.careerLevel = reqDTO.getCareerLevel();
+            this.salaryRangeId = reqDTO.getSalaryRangeId();
+            this.techStackIds = reqDTO.getTechStackIds();
         }
     }
 
     @Data
     public static class DTO {
-        private Integer jobId;
+        private Integer id;
         private String title;
         private String description;
         private String location;
@@ -202,7 +200,7 @@ public class JobResponse {
         private JobGroupResponse.DTO jobGroup;
 
         public DTO(Job job) {
-            this.jobId = job.getId();
+            this.id = job.getId();
             this.title = job.getTitle();
             this.description = job.getDescription();
             this.location = job.getLocation();

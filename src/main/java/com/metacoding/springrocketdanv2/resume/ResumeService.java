@@ -2,7 +2,6 @@ package com.metacoding.springrocketdanv2.resume;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi403;
-import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi404;
 import com.metacoding.springrocketdanv2.application.ApplicationRepository;
 import com.metacoding.springrocketdanv2.career.Career;
 import com.metacoding.springrocketdanv2.career.CareerRepository;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,11 +38,11 @@ public class ResumeService {
     @Transactional
     public ResumeResponse.UpdateDTO 이력서수정하기(Integer resumeId, ResumeRequest.UpdateDTO reqDTO, Integer sessionUserId) {
         // 이력서 조회하기
-        Resume resumePS1 = resumeRepository.findByResumeId(resumeId)
+        Resume resumePS = resumeRepository.findByResumeId(resumeId)
                 .orElseThrow(() -> new ExceptionApi400("해당 이력서는 존재하지 않습니다"));
 
         // 권한 체크
-        if (!resumePS1.getUser().getId().equals(sessionUserId)) {
+        if (!resumePS.getUser().getId().equals(sessionUserId)) {
             throw new ExceptionApi403("권한이 없습니다");
         }
 
@@ -67,35 +65,25 @@ public class ResumeService {
 
         // resumeTechStack 등록
         reqDTO.getTechStackIds().forEach(techStackId -> {
-            resumeTechStackRepository.save(new ResumeTechStackRequest.UpdateDTO(techStackId).toEntity(resumePS1));
+            resumeTechStackRepository.save(new ResumeTechStackRequest.UpdateDTO(techStackId).toEntity(resumePS));
         });
 
         // 이력서 등록 전 삭제
         // 자격증 삭제 후 등록
         certificationRepository.deleteByResumeId(resumeId);
 
-        List<Certification> certificationsPS = new ArrayList<>();
-
-        reqDTO.getCertifications().forEach(certification -> {
-            Certification certificationPS = certificationRepository.save(certification.toEntity(resumePS1));
-            certificationsPS.add(certificationPS);
-        });
+        List<Certification> certificationsPS = reqDTO.getCertifications().stream()
+                .map(certification -> certificationRepository.save(certification.toEntity(resumePS)))
+                .toList();
 
         // 경력 삭제 후 등록
         careerRepository.deleteByResumeId(resumeId);
 
-        List<Career> careersPS = new ArrayList<>();
+        List<Career> careersPS = reqDTO.getCareers().stream()
+                .map(career -> careerRepository.save(career.toEntity(resumePS)))
+                .toList();
 
-        reqDTO.getCareers().forEach(career -> {
-            Career careerPS = careerRepository.save(career.toEntity(resumePS1));
-            careersPS.add(careerPS);
-        });
-
-        // 다시 이력서 조회, 경력과 자격증 조회한 이력서를 DTO에 넣는다
-        Resume resumePS2 = resumeRepository.findByResumeIdJoinFetchAll(resumeId)
-                .orElseThrow(() -> new ExceptionApi400("해당 이력서는 존재하지 않습니다"));
-
-        return new ResumeResponse.UpdateDTO(resumePS2, certificationsPS, careersPS);
+        return new ResumeResponse.UpdateDTO(reqDTO, certificationsPS, careersPS, resumeId, sessionUserId);
     }
 
     public ResumeResponse.ListDTO 이력서목록보기(Integer sessionUserId, boolean isDefault) {
@@ -145,8 +133,6 @@ public class ResumeService {
 
         // 이력서 등록
         Resume resumePS = resumeRepository.save(resume);
-        Resume resumePS2 = resumeRepository.findByResumeIdJoinFetchAll(resumePS.getId())
-                .orElseThrow(() -> new ExceptionApi404("존재하지 않는 이력서입니다"));
 
         List<Certification> certificationsPS = reqDTO.getCertifications().stream()
                 .map(certification -> certificationRepository.save(certification.toEntity(resumePS)))
@@ -156,7 +142,7 @@ public class ResumeService {
                 .map(career -> careerRepository.save(career.toEntity(resumePS)))
                 .toList();
 
-        return new ResumeResponse.SaveDTO(resumePS2, certificationsPS, careersPS);
+        return new ResumeResponse.SaveDTO(resumePS, certificationsPS, careersPS);
     }
 }
 

@@ -6,14 +6,14 @@ public class ApplicationResponse {
 
     @Data
     public static class SaveDTO {
-        private Integer applicationId;
+        private Integer id;
         private String status;
         private String createdAt;
         private Integer jobId;
         private Integer resumeId;
 
         public SaveDTO(Application application) {
-            this.applicationId = application.getId();
+            this.id = application.getId();
             this.status = application.getStatus();
             this.createdAt = application.getCreatedAt().toString().substring(0, 10);
             this.jobId = application.getJob().getId();
@@ -23,11 +23,11 @@ public class ApplicationResponse {
 
     @Data
     public static class UpdateDTO {
-        private Integer applicationId;
+        private Integer id;
         private String status;
 
         public UpdateDTO(Application application) {
-            this.applicationId = application.getId();
+            this.id = application.getId();
             this.status = application.getStatus();
         }
     }

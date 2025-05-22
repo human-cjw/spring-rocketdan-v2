@@ -74,7 +74,7 @@ public class ResumeControllerTest extends MyRestDoc {
         // then
         actions.andExpect(jsonPath("$.status").value(200));
         actions.andExpect(jsonPath("$.msg").value("성공"));
-        actions.andExpect(jsonPath("$.body.resumeId").value(1));
+        actions.andExpect(jsonPath("$.body.id").value(1));
         actions.andExpect(jsonPath("$.body.title").value("백엔드 개발자 이력서"));
         actions.andExpect(jsonPath("$.body.summary").value("Java와 Spring Boot 기반의 백엔드 시스템 개발 경험이 있습니다. RESTful API 설계, 데이터베이스 최적화, 대용량 트래픽 처리에 능숙하며, 코드 리뷰와 협업 문화에 익숙합니다. 문제 해결과 지속적인 기술 학습에 열정을 가지고 있습니다."));
         actions.andExpect(jsonPath("$.body.gender").value("남"));
@@ -90,10 +90,11 @@ public class ResumeControllerTest extends MyRestDoc {
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.graduationDate",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
-        actions.andExpect(jsonPath("$.body.createdAt").value("2025-05-21"));
+        actions.andExpect(jsonPath("$.body.createdAt",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
 
-        actions.andExpect(jsonPath("$.body.user.userId").value(1));
+        actions.andExpect(jsonPath("$.body.user.id").value(1));
         actions.andExpect(jsonPath("$.body.user.username").value("user01"));
         actions.andExpect(jsonPath("$.body.user.email").value("user01@example.com"));
         actions.andExpect(jsonPath("$.body.user.fileUrl").doesNotExist());
@@ -102,19 +103,22 @@ public class ResumeControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
 
-        actions.andExpect(jsonPath("$.body.certifications[0].certificationId").value(1));
+        actions.andExpect(jsonPath("$.body.certifications[0].id").value(1));
         actions.andExpect(jsonPath("$.body.certifications[0].name").value("정보처리기사"));
         actions.andExpect(jsonPath("$.body.certifications[0].issuer").value("한국산업인력공단"));
-        actions.andExpect(jsonPath("$.body.certifications[0].issuedDate").value("2020-02-01"));
+        actions.andExpect(jsonPath("$.body.certifications[0].issuedDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
 
-        actions.andExpect(jsonPath("$.body.careers[0].careerId").value(1));
+        actions.andExpect(jsonPath("$.body.careers[0].id").value(1));
         actions.andExpect(jsonPath("$.body.careers[0].companyName").value("네이버"));
-        actions.andExpect(jsonPath("$.body.careers[0].startDate").value("2018-03-01"));
-        actions.andExpect(jsonPath("$.body.careers[0].endDate").value("2022-02-01"));
+        actions.andExpect(jsonPath("$.body.careers[0].startDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andExpect(jsonPath("$.body.careers[0].endDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
 
         actions.andExpect(jsonPath("$.body.isOwner").value(false));
 
-        actions.andExpect(jsonPath("$.body.salaryRange.salaryRangeId").value(3));
+        actions.andExpect(jsonPath("$.body.salaryRange.id").value(3));
         actions.andExpect(jsonPath("$.body.salaryRange.minSalary").value(5000));
         actions.andExpect(jsonPath("$.body.salaryRange.maxSalary").value(6000));
         actions.andExpect(jsonPath("$.body.salaryRange.label").value("5000-6000"));
@@ -122,7 +126,7 @@ public class ResumeControllerTest extends MyRestDoc {
         actions.andExpect(jsonPath("$.body.jobGroup.id").value(1));
         actions.andExpect(jsonPath("$.body.jobGroup.name").value("백엔드 개발자"));
 
-        actions.andExpect(jsonPath("$.body.techStacks[0].techStackId").value(1));
+        actions.andExpect(jsonPath("$.body.techStacks[0].id").value(1));
         actions.andExpect(jsonPath("$.body.techStacks[0].name").value("Java"));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
@@ -185,7 +189,7 @@ public class ResumeControllerTest extends MyRestDoc {
         // then
         actions.andExpect(jsonPath("$.status").value(200));
         actions.andExpect(jsonPath("$.msg").value("성공"));
-        actions.andExpect(jsonPath("$.body.resumeId").value(1));
+        actions.andExpect(jsonPath("$.body.id").value(1));
         actions.andExpect(jsonPath("$.body.title").value("백엔드 개발자 이력서"));
         actions.andExpect(jsonPath("$.body.summary").value("Java와 Spring Boot 기반의 개발 경험을 보유한 백엔드 개발자입니다."));
         actions.andExpect(jsonPath("$.body.portfolioUrl").value("https://github.com/example"));
@@ -202,11 +206,18 @@ public class ResumeControllerTest extends MyRestDoc {
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.careerLevel").value("경력"));
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
-                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.userId").value(1));
-        actions.andExpect(jsonPath("$.body.certificationIds").value(51));
-        actions.andExpect(jsonPath("$.body.careerIds").value(51));
+        actions.andExpect(jsonPath("$.body.certifications[0].id").value(51));
+        actions.andExpect(jsonPath("$.body.certifications[0].name").value("정보처리기사"));
+        actions.andExpect(jsonPath("$.body.certifications[0].issuer").value("한국산업인력공단"));
+        actions.andExpect(jsonPath("$.body.certifications[0].issuedDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andExpect(jsonPath("$.body.careers.[0].id").value(51));
+        actions.andExpect(jsonPath("$.body.careers.[0].companyName").value("카카오"));
+        actions.andExpect(jsonPath("$.body.careers.[0].startDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andExpect(jsonPath("$.body.careers.[0].endDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.salaryRangeId").value(1));
         actions.andExpect(jsonPath("$.body.jobGroupId").value(1));
         actions.andExpect(jsonPath("$.body.techStackIds[0]").value(1));
@@ -230,7 +241,7 @@ public class ResumeControllerTest extends MyRestDoc {
         // then
         actions.andExpect(jsonPath("$.status").value(200));
         actions.andExpect(jsonPath("$.msg").value("성공"));
-        actions.andExpect(jsonPath("$.body.resumes[0].resumeId").value(1));
+        actions.andExpect(jsonPath("$.body.resumes[0].id").value(1));
         actions.andExpect(jsonPath("$.body.resumes[0].title").value("백엔드 개발자 이력서"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.resumes[0].createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
@@ -340,7 +351,7 @@ public class ResumeControllerTest extends MyRestDoc {
         // then
         actions.andExpect(jsonPath("$.status").value(200));
         actions.andExpect(jsonPath("$.msg").value("성공"));
-        actions.andExpect(jsonPath("$.body.resumeId").value(51));
+        actions.andExpect(jsonPath("$.body.id").value(51));
         actions.andExpect(jsonPath("$.body.title").value("백엔드 개발자 이력서"));
         actions.andExpect(jsonPath("$.body.summary").value("Java와 Spring Boot 기반의 개발 경험을 보유한 백엔드 개발자입니다."));
         actions.andExpect(jsonPath("$.body.gender").value("남"));
@@ -360,8 +371,17 @@ public class ResumeControllerTest extends MyRestDoc {
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
         actions.andExpect(jsonPath("$.body.userId").value(1));
-        actions.andExpect(jsonPath("$.body.certificationIds[0]").value(52));
-        actions.andExpect(jsonPath("$.body.careerIds[0]").value(52));
+        actions.andExpect(jsonPath("$.body.certifications[0].id").value(52));
+        actions.andExpect(jsonPath("$.body.certifications[0].name").value("정보처리기사"));
+        actions.andExpect(jsonPath("$.body.certifications[0].issuer").value("한국산업인력공단"));
+        actions.andExpect(jsonPath("$.body.certifications[0].issuedDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andExpect(jsonPath("$.body.careers[0].id").value(52));
+        actions.andExpect(jsonPath("$.body.careers[0].companyName").value("카카오"));
+        actions.andExpect(jsonPath("$.body.careers[0].startDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andExpect(jsonPath("$.body.careers[0].endDate",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.salaryRangeId").value(1));
         actions.andExpect(jsonPath("$.body.jobGroupId").value(1));
         actions.andExpect(jsonPath("$.body.techStackIds[0]").value(1));

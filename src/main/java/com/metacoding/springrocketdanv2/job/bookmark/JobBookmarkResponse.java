@@ -10,19 +10,19 @@ public class JobBookmarkResponse {
 
     @Data
     public static class ListDTO {
-        private List<ItemDTO> jobs;
+        private List<ItemDTO> jobBookmarks;
         private Integer jobBookmarkCount;
 
         public ListDTO(List<JobBookmark> jobBookmarks) {
-            this.jobs = jobBookmarks.stream()
-                    .map(jobBookmark -> new ItemDTO(jobBookmark.getId(), jobBookmark.getJob()))
+            this.jobBookmarks = jobBookmarks.stream()
+                    .map(jobBookmark -> new ItemDTO(jobBookmark, jobBookmark.getJob()))
                     .toList();
             this.jobBookmarkCount = jobBookmarks.size();
         }
 
         @Data
         class ItemDTO {
-            private Integer jobBookmarkId;
+            private Integer id;
             private String jobTitle;
             private String jobCareerLevel;
             private String jobEmploymentType;
@@ -31,8 +31,8 @@ public class JobBookmarkResponse {
             private String companyName;
             private String companyLogoImageUrl;
 
-            public ItemDTO(Integer jobBookmarkId, Job job) {
-                this.jobBookmarkId = jobBookmarkId;
+            public ItemDTO(JobBookmark jobBookmark, Job job) {
+                this.id = jobBookmark.getId();
                 this.jobTitle = job.getTitle();
                 this.jobCareerLevel = job.getCareerLevel();
                 this.jobEmploymentType = job.getEmploymentType();
@@ -48,11 +48,11 @@ public class JobBookmarkResponse {
 
     @Data
     public static class SaveDTO {
-        private Integer jobBookmarkId;
+        private Integer id;
         private Integer jobBookmarkCount;
 
-        public SaveDTO(Integer jobBookmarkId, Integer jobBookmarkCount) {
-            this.jobBookmarkId = jobBookmarkId;
+        public SaveDTO(JobBookmark jobBookmark, Integer jobBookmarkCount) {
+            this.id = jobBookmark.getId();
             this.jobBookmarkCount = jobBookmarkCount;
         }
     }

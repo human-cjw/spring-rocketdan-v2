@@ -1,6 +1,7 @@
 package com.metacoding.springrocketdanv2.job;
 
 import com.metacoding.springrocketdanv2.company.Company;
+import com.metacoding.springrocketdanv2.job.techstack.JobStatusEnum;
 import com.metacoding.springrocketdanv2.job.techstack.JobTechStack;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
@@ -53,13 +54,6 @@ public class JobRequest {
         )
         private String deadline;
 
-        @NotBlank(message = "공고 상태는 필수입니다.")
-        @Pattern(
-                regexp = "^(OPEN|CLOSED)$",
-                message = "공고 상태는 OPEN 또는 CLOSED로 입력해 주세요."
-        )
-        private String status;
-
         @NotNull(message = "직무 그룹 선택은 필수입니다.")
         private Integer jobGroupId;
 
@@ -86,7 +80,7 @@ public class JobRequest {
                     .location(location)
                     .employmentType(employmentType)
                     .deadline(deadline)
-                    .status(status)
+                    .status(JobStatusEnum.OPEN.value)
                     .careerLevel(careerLevel)
                     .jobGroup(JobGroup.builder()
                             .id(jobGroupId)
