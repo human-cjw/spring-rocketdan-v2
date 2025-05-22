@@ -94,7 +94,7 @@ public class BoardControllerTest extends MyRestDoc {
         reqDTO.setPassword("1234");
 
         String requestBody = om.writeValueAsString(reqDTO);
-//        System.out.println(requestBody);
+        System.out.println(requestBody);
 
         // when
         ResultActions actions = mvc.perform(
