@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SalaryRangeController {
     private final SalaryRangeService salaryRangeService;
 
-    @GetMapping("/salaryRange")
+    @GetMapping("/salaryrange")
     public ResponseEntity<?> salaryRangeList() {
         SalaryRangeResponse.ListDTO respDTO = salaryRangeService.목록보기();
 

@@ -46,7 +46,7 @@ public class WorkFieldControllerTest extends MyRestDoc {
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
-                        .get("/api/workField")
+                        .get("/api/workfield")
         );
 
         // eye
