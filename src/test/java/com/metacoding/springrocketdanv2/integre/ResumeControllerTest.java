@@ -7,6 +7,7 @@ import com.metacoding.springrocketdanv2.career.CareerRequest;
 import com.metacoding.springrocketdanv2.certification.CertificationRequest;
 import com.metacoding.springrocketdanv2.resume.ResumeRequest;
 import com.metacoding.springrocketdanv2.user.User;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,8 @@ public class ResumeControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;
+    @Autowired
+    private EntityManager em;
 
     private String accessToken;
 
