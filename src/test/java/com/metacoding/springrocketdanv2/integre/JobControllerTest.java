@@ -5,7 +5,6 @@ import com.metacoding.springrocketdanv2.MyRestDoc;
 import com.metacoding.springrocketdanv2._core.util.JwtUtil;
 import com.metacoding.springrocketdanv2.job.JobRequest;
 import com.metacoding.springrocketdanv2.user.User;
-import jakarta.persistence.EntityManager;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,9 +29,6 @@ public class JobControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;
-
-    @Autowired
-    private EntityManager em;
 
     private String accessToken;
 
@@ -252,11 +248,6 @@ public class JobControllerTest extends MyRestDoc {
     public void delete_test() throws Exception {
         // given
         Integer jobId = 1;
-
-        // 삭제 전 북마크 삭제
-        em.createQuery("DELETE FROM JobBookmark jb WHERE jb.job.id = :jobId")
-                .setParameter("jobId", jobId)
-                .executeUpdate();
 
         // when
         ResultActions actions = mvc.perform(

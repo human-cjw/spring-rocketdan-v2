@@ -7,7 +7,6 @@ import com.metacoding.springrocketdanv2.career.CareerRequest;
 import com.metacoding.springrocketdanv2.certification.CertificationRequest;
 import com.metacoding.springrocketdanv2.resume.ResumeRequest;
 import com.metacoding.springrocketdanv2.user.User;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,9 +31,6 @@ public class ResumeControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;
-
-    @Autowired
-    private EntityManager em;
 
     private String accessToken;
 
@@ -254,27 +250,6 @@ public class ResumeControllerTest extends MyRestDoc {
         // given
         Integer resumeId = 1;
 
-        // 연관 테이블 삭제
-        em.createQuery("DELETE FROM ResumeBookmark rb WHERE rb.resume.id = :resumeId")
-                .setParameter("resumeId", resumeId)
-                .executeUpdate();
-
-        em.createQuery("DELETE FROM Certification c WHERE c.resume.id = :resumeId")
-                .setParameter("resumeId", resumeId)
-                .executeUpdate();
-
-        em.createQuery("DELETE FROM Career c WHERE c.resume.id = :resumeId")
-                .setParameter("resumeId", resumeId)
-                .executeUpdate();
-
-        em.createQuery("DELETE FROM Application a WHERE a.resume.id = :resumeId")
-                .setParameter("resumeId", resumeId)
-                .executeUpdate();
-
-        em.createQuery("DELETE FROM ResumeTechStack rts WHERE rts.resume.id = :resumeId")
-                .setParameter("resumeId", resumeId)
-                .executeUpdate();
-
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
@@ -338,7 +313,7 @@ public class ResumeControllerTest extends MyRestDoc {
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
-                        .post("/s/api/resume/")
+                        .post("/s/api/resume")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + accessToken)

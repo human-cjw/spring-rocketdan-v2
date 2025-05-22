@@ -56,4 +56,10 @@ public class JobBookmarkRepository {
                 .setParameter("userId", userId)
                 .getResultList();
     }
+
+    public void deleteByJobId(Integer jobId) {
+        em.createQuery("DELETE FROM JobBookmark j WHERE j.job.id = :jobId")
+                .setParameter("jobId", jobId)
+                .executeUpdate();
+    }
 }

@@ -60,7 +60,7 @@ public class ResumeController {
         return Resp.ok(null);
     }
 
-    @PostMapping("/s/api/resume/")
+    @PostMapping("/s/api/resume")
     public ResponseEntity<?> save(@Valid @RequestBody ResumeRequest.SaveDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
