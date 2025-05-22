@@ -1,7 +1,9 @@
 package com.metacoding.springrocketdanv2.board;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
+import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi404;
 import lombok.RequiredArgsConstructor;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +16,11 @@ public class BoardService {
 
     public BoardResponse.VerifyDTO verifyPassword(Integer boardId, String password) {
         Board boardPS = boardRepository.findByBoardId(boardId)
-                .orElseThrow(() -> new ExceptionApi400("존재하지 않는 글입니다"));
+                .orElseThrow(() -> new ExceptionApi404("존재하지 않는 글입니다"));
 
-        if (boardPS.getPassword().equals(password)) {
+        Boolean isMatched = BCrypt.checkpw(password, boardPS.getPassword());
+
+        if (isMatched) {
             return new BoardResponse.VerifyDTO(true, "비밀번호가 맞습니다.");
         } else {
             return new BoardResponse.VerifyDTO(false, "비밀번호가 틀렸습니다.");
@@ -31,6 +35,9 @@ public class BoardService {
 
     @Transactional
     public BoardResponse.DTO 글쓰기(BoardRequest.SaveDTO reqDTO) {
+        String encPassword = BCrypt.hashpw(reqDTO.getPassword(), BCrypt.gensalt());
+        reqDTO.setPassword(encPassword);
+
         // BoardRequest.saveDTO 객체를 Board 엔티티 객체로 변환
         Board board = reqDTO.toEntity();
 
@@ -51,7 +58,7 @@ public class BoardService {
     @Transactional
     public void 글삭제하기(Integer boardId) {
         boardRepository.findByBoardId(boardId)
-                .orElseThrow(() -> new ExceptionApi400("존재하지 않는 글입니다"));
+                .orElseThrow(() -> new ExceptionApi404("존재하지 않는 글입니다"));
 
         boardRepository.deleteByBoardId(boardId);
     }

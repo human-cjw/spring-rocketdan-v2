@@ -34,7 +34,7 @@ public class Application {
 
     // 이력서 FK
     @ManyToOne(fetch = FetchType.LAZY, optional = true) // optional = true -> jpa 에서 null 가능
-    private Resume resume;
+    private Resume resume; // resume -> id , resume -> title , description resume.getTitle()
 
     // 공고 FK
     @ManyToOne(fetch = FetchType.LAZY)

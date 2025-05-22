@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class BoardController extends MyRestDoc {
+public class BoardControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;

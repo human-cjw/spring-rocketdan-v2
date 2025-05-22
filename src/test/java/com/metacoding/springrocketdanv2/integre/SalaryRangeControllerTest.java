@@ -9,16 +9,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class JobGroupController extends MyRestDoc {
+public class SalaryRangeControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;
@@ -44,23 +44,27 @@ public class JobGroupController extends MyRestDoc {
 
     @Test
     public void List_test() throws Exception {
+        // given
+
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
-                        .get("/jobGroup")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .get("/salaryRange")
+                        .header("Authorization", "Bearer " + accessToken)
         );
 
         // eye
         String responseBody = actions.andReturn().getResponse().getContentAsString();
-        System.out.println("responseBody = " + responseBody);
+        System.out.println(responseBody);
 
         // then
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroups[0].id").value(1));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroups[0].name").value("백엔드 개발자"));
+        actions.andExpect(jsonPath("$.status").value(200));
+        actions.andExpect(jsonPath("$.msg").value("성공"));
+        actions.andExpect(jsonPath("$.body.salaryRanges[0].salaryRangeId").value(1));
+        actions.andExpect(jsonPath("$.body.salaryRanges[0].minSalary").value(3000));
+        actions.andExpect(jsonPath("$.body.salaryRanges[0].maxSalary").value(4000));
+        actions.andExpect(jsonPath("$.body.salaryRanges[0].label").value("3000-4000"));
+        actions.andDo(MockMvcResultHandlers.print());
 
-        actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }
