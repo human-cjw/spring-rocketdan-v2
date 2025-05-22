@@ -7,6 +7,7 @@ import com.metacoding.springrocketdanv2.career.CareerRequest;
 import com.metacoding.springrocketdanv2.certification.CertificationRequest;
 import com.metacoding.springrocketdanv2.resume.ResumeRequest;
 import com.metacoding.springrocketdanv2.user.User;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,8 +32,17 @@ public class ResumeControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;
+    @Autowired
+    private EntityManager em;
 
     private String accessToken;
+
+    @BeforeEach
+    void resetAutoIncrement() {
+        // 더미는 이미 들어가 있는 상태이므로, 테이블 데이터는 지우지 않고 시퀀스만 리셋
+        em.createNativeQuery("ALTER TABLE certification_tb ALTER COLUMN id RESTART WITH 51").executeUpdate();
+        em.createNativeQuery("ALTER TABLE career_tb ALTER COLUMN id RESTART WITH 51").executeUpdate();
+    }
 
     @BeforeEach
     public void setUp() {
@@ -346,12 +356,12 @@ public class ResumeControllerTest extends MyRestDoc {
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(jsonPath("$.body.isDefault").value(true));
         actions.andExpect(jsonPath("$.body.userId").value(1));
-        actions.andExpect(jsonPath("$.body.certifications[0].id").value(52));
+        actions.andExpect(jsonPath("$.body.certifications[0].id").value(51));
         actions.andExpect(jsonPath("$.body.certifications[0].name").value("정보처리기사"));
         actions.andExpect(jsonPath("$.body.certifications[0].issuer").value("한국산업인력공단"));
         actions.andExpect(jsonPath("$.body.certifications[0].issuedDate",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
-        actions.andExpect(jsonPath("$.body.careers[0].id").value(52));
+        actions.andExpect(jsonPath("$.body.careers[0].id").value(51));
         actions.andExpect(jsonPath("$.body.careers[0].companyName").value("카카오"));
         actions.andExpect(jsonPath("$.body.careers[0].startDate",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
