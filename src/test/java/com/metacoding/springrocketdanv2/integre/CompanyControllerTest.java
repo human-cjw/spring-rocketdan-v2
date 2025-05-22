@@ -99,7 +99,7 @@ public class CompanyControllerTest extends MyRestDoc {
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.workField.id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.workField.name").value("IT/소프트웨어"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStacks[0].techStackId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStacks[0].id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStacks[0].name").value("Java"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.owner").value(false));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
@@ -166,7 +166,8 @@ public class CompanyControllerTest extends MyRestDoc {
         // then
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.companyId").value(51));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(51));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.userId").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.nameKr").value("테스트기업"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.nameEn").value("testCompany"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.ceo").value("테스터"));
@@ -233,7 +234,7 @@ public class CompanyControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
 
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.companyId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.nameKr").value("테스트기업"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.nameEn").value("testCompany"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.ceo").value("테스터"));
@@ -248,8 +249,6 @@ public class CompanyControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.infoImageUrl").value(nullValue()));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.contactManager").value("테스트매니저"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.startDate",
-                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.workFieldId").value(1));
 
@@ -278,7 +277,7 @@ public class CompanyControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
 
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[0].jobId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[0].id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[0].title").value("AI 백엔드 개발자 모집"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[0].careerLevel").value("경력"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[0].createdAt",
@@ -314,7 +313,7 @@ public class CompanyControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobTitle").value("AI 백엔드 개발자 모집"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.status").value("접수"));
 
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].applicationId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].username").value("user01"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].title").value("백엔드 개발자 이력서"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].careerLevel").value("경력"));
@@ -344,8 +343,9 @@ public class CompanyControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
 
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applicationId").value(1));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt").value("2025-05-21"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.resumeId").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.title").value("백엔드 개발자 이력서"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.summary").value("Java와 Spring Boot 기반의 백엔드 시스템 개발 경험이 있습니다. RESTful API 설계, 데이터베이스 최적화, 대용량 트래픽 처리에 능숙하며, 코드 리뷰와 협업 문화에 익숙합니다. 문제 해결과 지속적인 기술 학습에 열정을 가지고 있습니다."));
@@ -364,7 +364,7 @@ public class CompanyControllerTest extends MyRestDoc {
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.username").value("user01"));
 
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRange.salaryRangeId").value(3));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRange.id").value(3));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRange.minSalary").value(5000));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRange.maxSalary").value(6000));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRange.label").value("5000-6000"));
@@ -372,7 +372,7 @@ public class CompanyControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroup.id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroup.name").value("백엔드 개발자"));
 
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStacks[0].techStackId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStacks[0].id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStacks[0].name").value("Java"));
 
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);

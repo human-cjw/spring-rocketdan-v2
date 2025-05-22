@@ -35,7 +35,7 @@ public class JobRepositoryTest {
 
         // eye
         for (JobResponse.DTO dto : dtos) {
-            System.out.println("ID: " + dto.getJobId());
+            System.out.println("ID: " + dto.getId());
             System.out.println("제목: " + dto.getTitle());
             System.out.println("설명: " + dto.getDescription());
             System.out.println("위치: " + dto.getLocation());

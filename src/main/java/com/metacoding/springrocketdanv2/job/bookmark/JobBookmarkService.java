@@ -18,7 +18,7 @@ public class JobBookmarkService {
         JobBookmark jobBookmarkPS = jobBookmarkRepository.save(reqDTO.toEntity(sessionUserId));
         Long jobBookmarkCount = jobBookmarkRepository.countByUserId(sessionUserId);
 
-        return new JobBookmarkResponse.SaveDTO(jobBookmarkPS.getId(), jobBookmarkCount.intValue());
+        return new JobBookmarkResponse.SaveDTO(jobBookmarkPS, jobBookmarkCount.intValue());
     }
 
     public JobBookmarkResponse.ListDTO 북마크목록보기(Integer sessionUserId) {

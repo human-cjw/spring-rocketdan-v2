@@ -2,7 +2,6 @@ package com.metacoding.springrocketdanv2.job;
 
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi400;
 import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi403;
-import com.metacoding.springrocketdanv2._core.error.ex.ExceptionApi404;
 import com.metacoding.springrocketdanv2.application.ApplicationRepository;
 import com.metacoding.springrocketdanv2.job.bookmark.JobBookmark;
 import com.metacoding.springrocketdanv2.job.bookmark.JobBookmarkRepository;
@@ -63,10 +62,8 @@ public class JobService {
         Job job = reqDTO.toEntity(sessionUserCompanyId);
 
         Job jobPS = jobRepository.save(job);
-        Job jobPS2 = jobRepository.findByJobIdJoinFetchAll(jobPS.getId())
-                .orElseThrow(() -> new ExceptionApi404("존재하지 않는 공고입니다"));
 
-        return new JobResponse.SaveDTO(jobPS2);
+        return new JobResponse.SaveDTO(jobPS);
     }
 
     @Transactional
@@ -86,10 +83,7 @@ public class JobService {
             jobTechStackRepository.save(new JobTechStackRequest.UpdateDTO(techStackId).toEntity(jobPS1));
         });
 
-        Job jobPS2 = jobRepository.findByJobIdJoinFetchAll(jobId)
-                .orElseThrow(() -> new ExceptionApi400("터지면 안된다"));
-
-        return new JobResponse.UpdateDTO(jobPS2);
+        return new JobResponse.UpdateDTO(reqDTO, jobId);
     }
 
     @Transactional

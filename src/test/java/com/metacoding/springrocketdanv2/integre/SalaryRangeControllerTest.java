@@ -60,7 +60,7 @@ public class SalaryRangeControllerTest extends MyRestDoc {
         // then
         actions.andExpect(jsonPath("$.status").value(200));
         actions.andExpect(jsonPath("$.msg").value("성공"));
-        actions.andExpect(jsonPath("$.body.salaryRanges[0].salaryRangeId").value(1));
+        actions.andExpect(jsonPath("$.body.salaryRanges[0].id").value(1));
         actions.andExpect(jsonPath("$.body.salaryRanges[0].minSalary").value(3000));
         actions.andExpect(jsonPath("$.body.salaryRanges[0].maxSalary").value(4000));
         actions.andExpect(jsonPath("$.body.salaryRanges[0].label").value("3000-4000"));

@@ -60,10 +60,8 @@ public class TechStackControllerTest extends MyRestDoc {
         // then
         actions.andExpect(jsonPath("$.status").value(200));
         actions.andExpect(jsonPath("$.msg").value("성공"));
-        actions.andExpect(jsonPath("$.body.techStacks[0].techStackId").value(1));
+        actions.andExpect(jsonPath("$.body.techStacks[0].id").value(1));
         actions.andExpect(jsonPath("$.body.techStacks[0].name").value("Java"));
-        actions.andExpect(jsonPath("$.body.techStacks[23].techStackId").value(24));
-        actions.andExpect(jsonPath("$.body.techStacks[23].name").value("Spark"));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 }

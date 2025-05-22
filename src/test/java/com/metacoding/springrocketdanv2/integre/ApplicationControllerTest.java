@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.hamcrest.Matchers.matchesPattern;
+
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class ApplicationControllerTest extends MyRestDoc {
@@ -85,9 +87,10 @@ public class ApplicationControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.status().isOk());
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applicationId").value(101));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(101));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.status").value("접수"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt").value("2025-05-21"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobId").value(3));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.resumeId").value(1));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
@@ -119,7 +122,7 @@ public class ApplicationControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.status().isOk());
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applicationId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.status").value("검토"));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }

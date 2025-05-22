@@ -48,8 +48,6 @@ public class CompanyService {
         Company company = reqDTO.toEntity(sessionUserId);
 
         Company companyPS = companyRepository.save(company);
-        Company companyPS2 = companyRepository.findByCompanyIdJoinFetchAll(companyPS.getId())
-                .orElseThrow(() -> new ExceptionApi404("존재하지 않는 기업입니다"));
 
         User userPS = userRepository.findByUserId(sessionUserId)
                 .orElseThrow(() -> new ExceptionApi404("존재하지 않는 유저 입니다"));
@@ -64,7 +62,7 @@ public class CompanyService {
                 .refreshToken(refreshToken)
                 .build();
 
-        return new CompanyResponse.SaveDTO(companyPS2, tokenDTO);
+        return new CompanyResponse.SaveDTO(companyPS, tokenDTO);
     }
 
     // 기업 수정
@@ -90,10 +88,7 @@ public class CompanyService {
             companyTechStackRepository.save(new CompanyTechStackRequest.UpdateDTO(techStackId).toEntity(companyPS1));
         });
 
-        Company companyPS2 = companyRepository.findByCompanyIdJoinFetchAll(companyId)
-                .orElseThrow(() -> new ExceptionApi400("터지면 안된다"));
-
-        return new CompanyResponse.UpdateDTO(companyPS2);
+        return new CompanyResponse.UpdateDTO(reqDTO, companyId);
     }
 
     // 기업 공고관리

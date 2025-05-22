@@ -68,7 +68,7 @@ public class UserControllerTest extends MyRestDoc {
         // then
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.userId").value(101));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(101));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.username").value("newuser"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.email").value("newuser@example.com"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.fileUrl").doesNotExist()); // 또는 nullValue()도 가능
@@ -132,7 +132,7 @@ public class UserControllerTest extends MyRestDoc {
         // then
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].applicationId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].status").value("접수"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applications[0].createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
@@ -163,7 +163,7 @@ public class UserControllerTest extends MyRestDoc {
         // then
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.applicationId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.status").value("접수"));

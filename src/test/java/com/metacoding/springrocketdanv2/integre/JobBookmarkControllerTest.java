@@ -66,7 +66,7 @@ public class JobBookmarkControllerTest extends MyRestDoc {
         // then
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobBookmarkId").value(25));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(25));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobBookmarkCount").value(1));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }

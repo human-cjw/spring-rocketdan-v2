@@ -16,7 +16,7 @@ public class ResumeResponse {
 
     @Data
     public static class UpdateDTO {
-        private Integer resumeId;
+        private Integer id;
         private String title;
         private String summary;
         private String portfolioUrl;
@@ -30,48 +30,44 @@ public class ResumeResponse {
         private String graduationDate;
         private String careerLevel;
         private Boolean isDefault;
-        private String createdAt;
         private Integer userId;
-        private List<Integer> certificationIds;
-        private List<Integer> careerIds;
+        private List<CertificationResponse.DTO> certifications;
+        private List<CareerResponse.DTO> careers;
         private Integer salaryRangeId;
         private Integer jobGroupId;
         private List<Integer> techStackIds;
 
-        public UpdateDTO(Resume resume, List<Certification> certifications, List<Career> careers) {
-            this.resumeId = resume.getId();
-            this.title = resume.getTitle();
-            this.summary = resume.getSummary();
-            this.portfolioUrl = resume.getPortfolioUrl();
-            this.gender = resume.getGender();
-            this.education = resume.getEducation();
-            this.birthdate = resume.getBirthdate();
-            this.major = resume.getMajor();
-            this.graduationType = resume.getGraduationType();
-            this.phone = resume.getPhone();
-            this.enrollmentDate = resume.getEnrollmentDate();
-            this.graduationDate = resume.getGraduationDate();
-            this.careerLevel = resume.getCareerLevel();
-            this.isDefault = resume.getIsDefault();
-            this.createdAt = resume.getCreatedAt().toString().substring(0, 10);
-            this.userId = resume.getUser().getId();
-            this.certificationIds = certifications.stream()
-                    .map(certification -> certification.getId())
+        public UpdateDTO(ResumeRequest.UpdateDTO reqDTO, List<Certification> certifications, List<Career> careers, Integer resumeId, Integer sessionUserId) {
+            this.id = resumeId;
+            this.title = reqDTO.getTitle();
+            this.summary = reqDTO.getSummary();
+            this.portfolioUrl = reqDTO.getPortfolioUrl();
+            this.gender = reqDTO.getGender();
+            this.education = reqDTO.getEducation();
+            this.birthdate = reqDTO.getBirthdate();
+            this.major = reqDTO.getMajor();
+            this.graduationType = reqDTO.getGraduationType();
+            this.phone = reqDTO.getPhone();
+            this.enrollmentDate = reqDTO.getEnrollmentDate();
+            this.graduationDate = reqDTO.getGraduationDate();
+            this.careerLevel = reqDTO.getCareerLevel();
+            this.isDefault = reqDTO.getIsDefault();
+            this.userId = sessionUserId;
+            this.certifications = certifications.stream()
+                    .map(certification -> new CertificationResponse.DTO(certification))
                     .toList();
-            this.careerIds = careers.stream()
-                    .map(career -> career.getId())
+            this.careers = careers.stream()
+                    .map(career -> new CareerResponse.DTO(career))
                     .toList();
-            this.salaryRangeId = resume.getSalaryRange().getId();
-            this.jobGroupId = resume.getJobGroup().getId();
-            this.techStackIds = resume.getResumeTechStacks().stream()
-                    .map(resumeTechStack -> resumeTechStack.getTechStack().getId())
-                    .toList();
+            this.salaryRangeId = reqDTO.getSalaryRangeId();
+            this.jobGroupId = reqDTO.getJobGroupId();
+            this.techStackIds = reqDTO.getTechStackIds();
         }
     }
 
     @Data
     public static class DetailDTO {
-        private Integer resumeId;
+        private Integer id;
         private String title;
         private String summary;
         private String gender;
@@ -95,7 +91,7 @@ public class ResumeResponse {
         private List<TechStackResponse.DTO> techStacks;
 
         public DetailDTO(Resume resume, List<Certification> certifications, List<Career> careers, Integer sessionUserId) {
-            this.resumeId = resume.getId();
+            this.id = resume.getId();
             this.title = resume.getTitle();
             this.summary = resume.getSummary();
             this.gender = resume.getGender();
@@ -138,13 +134,13 @@ public class ResumeResponse {
 
         @Data
         class ItemDTO {
-            private Integer resumeId;
+            private Integer id;
             private String title;
             private String createdAt;
             private Boolean isDefault;
 
             public ItemDTO(Resume resume) {
-                this.resumeId = resume.getId();
+                this.id = resume.getId();
                 this.title = resume.getTitle();
                 this.createdAt = resume.getCreatedAt().toString().substring(0, 10);
                 this.isDefault = resume.getIsDefault();
@@ -155,7 +151,7 @@ public class ResumeResponse {
 
     @Data
     public static class SaveDTO {
-        private Integer resumeId;
+        private Integer id;
         private String title;
         private String summary;
         private String gender;
@@ -171,14 +167,14 @@ public class ResumeResponse {
         private String createdAt;
         private Boolean isDefault;
         private Integer userId;
-        private List<Integer> certificationIds;
-        private List<Integer> careerIds;
+        private List<CertificationResponse.DTO> certifications;
+        private List<CareerResponse.DTO> careers;
         private Integer salaryRangeId;
         private Integer jobGroupId;
         private List<Integer> techStackIds;
 
         public SaveDTO(Resume resume, List<Certification> certifications, List<Career> careers) {
-            this.resumeId = resume.getId();
+            this.id = resume.getId();
             this.title = resume.getTitle();
             this.summary = resume.getSummary();
             this.gender = resume.getGender();
@@ -194,11 +190,11 @@ public class ResumeResponse {
             this.createdAt = resume.getCreatedAt().toString().substring(0, 10);
             this.isDefault = resume.getIsDefault();
             this.userId = resume.getUser().getId();
-            this.certificationIds = certifications.stream()
-                    .map(certification -> certification.getId())
+            this.certifications = certifications.stream()
+                    .map(certification -> new CertificationResponse.DTO(certification))
                     .toList();
-            this.careerIds = careers.stream()
-                    .map(career -> career.getId())
+            this.careers = careers.stream()
+                    .map(career -> new CareerResponse.DTO(career))
                     .toList();
             this.salaryRangeId = resume.getSalaryRange().getId();
             this.jobGroupId = resume.getJobGroup().getId();

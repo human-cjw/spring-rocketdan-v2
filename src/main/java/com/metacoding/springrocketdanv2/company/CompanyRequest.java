@@ -48,7 +48,6 @@ public class CompanyRequest {
         @Email(message = "이메일 형식이 올바르지 않습니다.")
         private String email;
 
-        @NotBlank(message = "홈페이지 URL은 필수입니다.")
         @Pattern(
                 regexp = "^(https?://)?([\\w.-]+)+(:\\d+)?(/\\S*)?$",
                 message = "올바른 URL 형식이 아닙니다."
@@ -71,6 +70,18 @@ public class CompanyRequest {
         @Size(max = 100, message = "주소는 100자 이내여야 합니다.")
         private String address;
 
+        @Pattern(
+                regexp = "^(https?://)?([\\w.-]+)+(:\\d+)?(/\\S*)?$",
+                message = "올바른 URL 형식이 아닙니다."
+        )
+        private String logoImageUrl;
+
+        @Pattern(
+                regexp = "^(https?://)?([\\w.-]+)+(:\\d+)?(/\\S*)?$",
+                message = "올바른 URL 형식이 아닙니다."
+        )
+        private String infoImageUrl;
+
         @NotNull(message = "업무 분야는 필수입니다.")
         private Integer workFieldId;
 
@@ -90,6 +101,8 @@ public class CompanyRequest {
                     .phone(phone)
                     .ceo(ceo)
                     .homepageUrl(homepageUrl)
+                    .logoImageUrl(logoImageUrl)
+                    .infoImageUrl(infoImageUrl)
                     .build();
 
             for (Integer techStackId : techStackIds) {
@@ -134,7 +147,6 @@ public class CompanyRequest {
         @Email(message = "올바른 이메일 형식이 아닙니다.")
         private String email;
 
-        @NotBlank(message = "홈페이지 URL은 필수입니다.")
         @Pattern(
                 regexp = "^(https?://)?([\\w.-]+)+(:\\d+)?(/\\S*)?$",
                 message = "올바른 URL 형식이 아닙니다."
@@ -159,6 +171,18 @@ public class CompanyRequest {
 
         @NotNull(message = "업무 분야 선택은 필수입니다.")
         private Integer workFieldId;
+
+        @Pattern(
+                regexp = "^(https?://)?([\\w.-]+)+(:\\d+)?(/\\S*)?$",
+                message = "올바른 URL 형식이 아닙니다."
+        )
+        private String logoImageUrl;
+
+        @Pattern(
+                regexp = "^(https?://)?([\\w.-]+)+(:\\d+)?(/\\S*)?$",
+                message = "올바른 URL 형식이 아닙니다."
+        )
+        private String infoImageUrl;
 
         @NotEmpty(message = "기술 스택은 하나 이상 입력되어야 합니다.")
         private List<@NotNull(message = "기술 스택 항목은 비어 있을 수 없습니다.") Integer> techStackIds;

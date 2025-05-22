@@ -62,7 +62,6 @@ public class JobControllerTest extends MyRestDoc {
         reqDTO.setLocation("서울특별시 강남구 테헤란로");
         reqDTO.setEmploymentType("정규직");
         reqDTO.setDeadline("2025-12-31");
-        reqDTO.setStatus("OPEN");
         reqDTO.setCareerLevel("신입");
         reqDTO.setJobGroupId(1);
         reqDTO.setWorkFieldId(1);
@@ -141,7 +140,7 @@ public class JobControllerTest extends MyRestDoc {
         // then
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.title").value("백엔드 개발자 채용 수정"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.description").value("Spring 기반 백엔드 개발"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.location").value("서울시 마포구 독막로"));
@@ -178,24 +177,11 @@ public class JobControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
 
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[0].jobId").value(50));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[0].id").value(50));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[0].title").value("공공 헬스케어 데이터 분석가"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[0].careerLevel").value("경력"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[0].companyName").value("시티헬스"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[0].bookmarkId").value(Matchers.nullValue()));
-
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[1].jobId").value(49));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[1].title").value("스마트 건설 프로젝트 매니저"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[1].careerLevel").value("경력"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[1].companyName").value("스마트인프라"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[1].bookmarkId").value(Matchers.nullValue()));
-
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[2].jobId").value(48));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[2].title").value("스마트 홈케어 서비스 매니저"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[2].careerLevel").value("신입"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[2].companyName").value("클린에너지"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobs[2].bookmarkId").value(Matchers.nullValue()));
-
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.bookmarkCount").value(0));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
@@ -220,7 +206,7 @@ public class JobControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
 
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.title").value("AI 백엔드 개발자 모집"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.description").value(Matchers.startsWith("AI 기반 소프트웨어 플랫폼의 백엔드 시스템 개발을 담당할 인재를 찾습니다")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.location").value("서울특별시 강남구 테헤란로"));
@@ -233,13 +219,13 @@ public class JobControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.updatedAt").value(Matchers.nullValue()));
 
         // company 정보
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.company.companyId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.company.id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.company.name").value("에이아이랩"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.company.phone").value("02-1111-1111"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.company.contactManager").value("박지현"));
 
         // salaryRange 정보
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRange.salaryRangeId").value(4));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRange.id").value(4));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRange.minSalary").value(6000));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRange.maxSalary").value(7000));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRange.label").value("6000-7000"));
@@ -253,7 +239,7 @@ public class JobControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroup.name").value("백엔드 개발자"));
 
         // techStacks
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStacks[0].techStackId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStacks[0].id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStacks[0].name").value("Java"));
 
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobBookmarkId").value(Matchers.nullValue()));

@@ -25,14 +25,14 @@ public class CompanyResponse {
 
         @Data
         class ItemDTO {
-            private Integer jobId;
+            private Integer id;
             private String title;
             private String careerLevel;
             private String createdAt;
             private JobGroupResponse.DTO jobGroup;
 
             public ItemDTO(Job job) {
-                this.jobId = job.getId();
+                this.id = job.getId();
                 this.title = job.getTitle();
                 this.careerLevel = job.getCareerLevel();
                 this.createdAt = job.getCreatedAt().toString().substring(0, 10);
@@ -43,7 +43,7 @@ public class CompanyResponse {
 
     @Data
     public static class UpdateDTO {
-        private Integer companyId;
+        private Integer id;
         private String nameKr;
         private String nameEn;
         private String ceo;
@@ -62,33 +62,31 @@ public class CompanyResponse {
         private Integer workFieldId;
         private List<Integer> techStackIds;
 
-        public UpdateDTO(Company company) {
-            this.companyId = company.getId();
-            this.nameKr = company.getNameKr();
-            this.nameEn = company.getNameEn();
-            this.ceo = company.getCeo();
-            this.businessNumber = company.getBusinessNumber();
-            this.email = company.getEmail();
-            this.phone = company.getPhone();
-            this.address = company.getAddress();
-            this.introduction = company.getIntroduction();
-            this.oneLineIntro = company.getOneLineIntro();
-            this.homepageUrl = company.getHomepageUrl();
-            this.logoImageUrl = company.getLogoImageUrl();
-            this.infoImageUrl = company.getInfoImageUrl();
-            this.contactManager = company.getContactManager();
-            this.startDate = company.getStartDate();
-            this.createdAt = company.getCreatedAt().toString().substring(0, 10);
-            this.workFieldId = company.getWorkField().getId();
-            this.techStackIds = company.getCompanyTechStacks().stream()
-                    .map(companyTechStack -> companyTechStack.getTechStack().getId())
-                    .toList();
+        public UpdateDTO(CompanyRequest.UpdateDTO reqDTO, Integer companyId) {
+            this.id = companyId;
+            this.nameKr = reqDTO.getNameKr();
+            this.nameEn = reqDTO.getNameEn();
+            this.ceo = reqDTO.getCeo();
+            this.businessNumber = reqDTO.getBusinessNumber();
+            this.email = reqDTO.getEmail();
+            this.phone = reqDTO.getPhone();
+            this.address = reqDTO.getAddress();
+            this.introduction = reqDTO.getIntroduction();
+            this.oneLineIntro = reqDTO.getOneLineIntro();
+            this.homepageUrl = reqDTO.getHomepageUrl();
+            this.logoImageUrl = reqDTO.getLogoImageUrl();
+            this.infoImageUrl = reqDTO.getInfoImageUrl();
+            this.contactManager = reqDTO.getContactManager();
+            this.startDate = reqDTO.getStartDate();
+            this.workFieldId = reqDTO.getWorkFieldId();
+            this.techStackIds = reqDTO.getTechStackIds();
         }
     }
 
     @Data
     public static class SaveDTO {
-        private Integer companyId;
+        private Integer id;
+        private Integer userId;
         private String nameKr;
         private String nameEn;
         private String ceo;
@@ -109,7 +107,8 @@ public class CompanyResponse {
         private UserResponse.TokenDTO token;
 
         public SaveDTO(Company company, UserResponse.TokenDTO token) {
-            this.companyId = company.getId();
+            this.id = company.getId();
+            this.userId = company.getUser().getId();
             this.nameKr = company.getNameKr();
             this.nameEn = company.getNameEn();
             this.ceo = company.getCeo();
@@ -222,14 +221,14 @@ public class CompanyResponse {
 
         @Data
         class ItemDTO {
-            private Integer applicationId;
+            private Integer id;
             private String username;
             private String title;
             private String careerLevel;
             private String ApplyCreatedAt;
 
             public ItemDTO(Application application) {
-                this.applicationId = application.getId();
+                this.id = application.getId();
                 this.username = application.getUser().getUsername();
                 this.title = application.getResume().getTitle();
                 this.careerLevel = application.getResume().getCareerLevel();
@@ -240,7 +239,7 @@ public class CompanyResponse {
 
     @Data
     public static class ApplicationDetailDTO {
-        private Integer applicationId;
+        private Integer id;
         private String createdAt;
         private Integer resumeId;
         private String title;
@@ -261,7 +260,7 @@ public class CompanyResponse {
         private List<TechStackResponse.DTO> techStacks;
 
         public ApplicationDetailDTO(Application application) {
-            this.applicationId = application.getId();
+            this.id = application.getId();
             this.createdAt = application.getCreatedAt().toString().substring(0, 10);
             this.resumeId = application.getResume().getId();
             this.title = application.getResume().getTitle();
