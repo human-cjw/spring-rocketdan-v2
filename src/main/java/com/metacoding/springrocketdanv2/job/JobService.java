@@ -103,6 +103,7 @@ public class JobService {
         jobTechStackRepository.deleteByJobId(jobId);
 
         // jobBookmark 삭제 추가
+        jobBookmarkRepository.deleteByJobId(jobId);
 
         // 3. 공고 삭제
         jobRepository.deleteByJobId(jobId);
