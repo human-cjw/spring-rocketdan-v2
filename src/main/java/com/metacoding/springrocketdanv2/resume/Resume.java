@@ -1,8 +1,11 @@
 package com.metacoding.springrocketdanv2.resume;
 
+import com.metacoding.springrocketdanv2.career.Career;
+import com.metacoding.springrocketdanv2.certification.Certification;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStack;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.user.User;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -60,6 +63,12 @@ public class Resume {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ResumeTechStack> resumeTechStacks = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Career> careers = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Certification> certifications = new ArrayList<>();
+
     @Builder
     public Resume(Integer id, String title, String summary, String gender, String careerLevel, String education, String birthdate, String major, String graduationType, String phone, String portfolioUrl, String enrollmentDate, String graduationDate, Boolean isDefault, Timestamp createdAt, User user, SalaryRange salaryRange, JobGroup jobGroup) {
         this.id = id;
@@ -84,5 +93,49 @@ public class Resume {
 
     public void setIsDefault(boolean isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public void update(ResumeRequest.UpdateDTO reqDTO, SalaryRange salaryRange, JobGroup jobGroup, List<TechStack> techStacks) {
+        this.title = reqDTO.getTitle();
+        this.summary = reqDTO.getSummary();
+        this.gender = reqDTO.getGender();
+        this.careerLevel = reqDTO.getCareerLevel();
+        this.education = reqDTO.getEducation();
+        this.birthdate = reqDTO.getBirthdate();
+        this.major = reqDTO.getMajor();
+        this.graduationType = reqDTO.getGraduationType();
+        this.phone = reqDTO.getPhone();
+        this.portfolioUrl = reqDTO.getPortfolioUrl();
+        this.enrollmentDate = reqDTO.getEnrollmentDate();
+        this.graduationDate = reqDTO.getGraduationDate();
+        this.isDefault = reqDTO.getIsDefault();
+        this.salaryRange = salaryRange;
+        this.jobGroup = jobGroup;
+
+        this.resumeTechStacks.clear();
+        techStacks.forEach(techStack -> this.resumeTechStacks.add(
+                ResumeTechStack.builder()
+                        .resume(this)
+                        .techStack(techStack)
+                        .build()));
+
+        this.careers.clear();
+        reqDTO.getCareers().forEach(career -> this.careers.add(
+                Career.builder()
+                        .resume(this)
+                        .companyName(career.getCompanyName())
+                        .startDate(career.getStartDate())
+                        .endDate(career.getEndDate())
+                        .build()));
+
+        this.certifications.clear();
+        reqDTO.getCertifications().forEach(certification -> this.certifications.add(
+                Certification.builder()
+                        .resume(this)
+                        .name(certification.getName())
+                        .issuer(certification.getIssuer())
+                        .issuedDate(certification.getIssuedDate())
+                        .build()
+        ));
     }
 }

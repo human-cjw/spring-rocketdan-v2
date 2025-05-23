@@ -4,6 +4,7 @@ import com.metacoding.springrocketdanv2.company.Company;
 import com.metacoding.springrocketdanv2.job.techstack.JobTechStack;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRange;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.workfield.WorkField;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -78,5 +79,25 @@ public class Job {
         this.salaryRange = salaryRange;
         this.workField = workField;
         this.jobGroup = jobGroup;
+    }
+
+    public void update(JobRequest.UpdateDTO reqDTO, SalaryRange salaryRangePS, WorkField workFieldPS, JobGroup jobGroupPS, List<TechStack> techStacksPS) {
+        this.title = reqDTO.getTitle();
+        this.description = reqDTO.getDescription();
+        this.location = reqDTO.getLocation();
+        this.employmentType = reqDTO.getEmploymentType();
+        this.deadline = reqDTO.getDeadline();
+        this.status = reqDTO.getStatus();
+        this.careerLevel = reqDTO.getCareerLevel();
+        this.salaryRange = salaryRangePS;
+        this.workField = workFieldPS;
+        this.jobGroup = jobGroupPS;
+
+        this.jobTechStacks.clear();
+        techStacksPS.forEach(techStack -> this.jobTechStacks.add(JobTechStack.builder()
+                .job(this)
+                .techStack(techStack)
+                .build()));
+
     }
 }

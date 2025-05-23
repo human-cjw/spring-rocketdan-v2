@@ -49,7 +49,7 @@ public class CompanyController {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
 
-        CompanyResponse.SaveDTO respDTO = companyService.기업등록(reqDTO, sessionUser.getId());
+        CompanyResponse.SaveDTO respDTO = companyService.기업등록(reqDTO, sessionUser);
 
         log.debug("기업등록" + respDTO);
 

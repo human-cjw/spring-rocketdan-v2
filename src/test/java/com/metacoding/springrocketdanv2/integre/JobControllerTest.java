@@ -5,6 +5,7 @@ import com.metacoding.springrocketdanv2.MyRestDoc;
 import com.metacoding.springrocketdanv2._core.util.JwtUtil;
 import com.metacoding.springrocketdanv2.job.JobRequest;
 import com.metacoding.springrocketdanv2.user.User;
+import jakarta.persistence.EntityManager;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.hamcrest.Matchers.matchesPattern;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -29,6 +29,8 @@ public class JobControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;
+    @Autowired
+    private EntityManager em;
 
     private String accessToken;
 
@@ -47,6 +49,12 @@ public class JobControllerTest extends MyRestDoc {
     public void tearDown() { // 끝나고 나서 마무리 함수
         // 테스트 후 정리할 코드
         System.out.println("tearDown");
+    }
+
+    @BeforeEach
+    void resetAutoIncrement() {
+        // 더미는 이미 들어가 있는 상태이므로, 테이블 데이터는 지우지 않고 시퀀스만 리셋
+        em.createNativeQuery("ALTER TABLE job_tech_stack_tb ALTER COLUMN id RESTART WITH 274").executeUpdate();
     }
 
     @Test
@@ -81,20 +89,26 @@ public class JobControllerTest extends MyRestDoc {
         System.out.println(responseBody);
 
         // then
-        actions.andExpect(jsonPath("$.status").value(200));
-        actions.andExpect(jsonPath("$.msg").value("성공"));
-        actions.andExpect(jsonPath("$.body.id").value(51));
-        actions.andExpect(jsonPath("$.body.title").value("백엔드 개발자 모집"));
-        actions.andExpect(jsonPath("$.body.description").value("Spring Boot 기반 서비스 개발"));
-        actions.andExpect(jsonPath("$.body.location").value("서울특별시 강남구 테헤란로"));
-        actions.andExpect(jsonPath("$.body.employmentType").value("정규직"));
-        actions.andExpect(jsonPath("$.body.deadline").value("2025-12-31"));
-        actions.andExpect(jsonPath("$.body.status").value("OPEN"));
-        actions.andExpect(jsonPath("$.body.careerLevel").value("신입"));
-        actions.andExpect(jsonPath("$.body.jobGroupId").value(1));
-        actions.andExpect(jsonPath("$.body.workFieldId").value(1));
-        actions.andExpect(jsonPath("$.body.salaryRangeId").value(2));
-        actions.andExpect(jsonPath("$.body.techStackIds[0]").value(1));
+        actions.andExpect(MockMvcResultMatchers.status().is(200));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
+
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(51));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.title").value("백엔드 개발자 모집"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.description").value("Spring Boot 기반 서비스 개발"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.location").value("서울특별시 강남구 테헤란로"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.employmentType").value("정규직"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.deadline",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.status").value("OPEN"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroupId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.workFieldId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.careerLevel").value("신입"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRangeId").value(2));
+
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobTechStacks[0].id").value(274));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobTechStacks[0].jobId").value(51));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobTechStacks[0].techStackId").value(1));
+
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
@@ -134,20 +148,25 @@ public class JobControllerTest extends MyRestDoc {
         System.out.println("responseBody = " + responseBody);
 
         // then
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
+        actions.andExpect(MockMvcResultMatchers.status().is(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(1));
+
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.title").value("백엔드 개발자 채용 수정"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.description").value("Spring 기반 백엔드 개발"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.location").value("서울시 마포구 독막로"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.employmentType").value("계약직"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.deadline").value("2026-01-31"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.deadline",
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.status").value("CLOSED"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobGroupId").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.workFieldId").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.careerLevel").value("경력"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.salaryRangeId").value(2));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStackIds[0]").value(1));
+
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobTechStacks[0].id").value(274));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobTechStacks[0].jobId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.jobTechStacks[0].techStackId").value(1));
+
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 

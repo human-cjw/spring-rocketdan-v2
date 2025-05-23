@@ -2,6 +2,7 @@ package com.metacoding.springrocketdanv2.job;
 
 import com.metacoding.springrocketdanv2.company.Company;
 import com.metacoding.springrocketdanv2.job.bookmark.JobBookmark;
+import com.metacoding.springrocketdanv2.job.techstack.JobTechStackResponse;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
 import com.metacoding.springrocketdanv2.techstack.TechStackResponse;
@@ -130,7 +131,7 @@ public class JobResponse {
         private Integer workFieldId;
         private String careerLevel;
         private Integer salaryRangeId;
-        private List<Integer> techStackIds;
+        private List<JobTechStackResponse.DTO> jobTechStacks;
 
         public SaveDTO(Job job) {
             this.id = job.getId();
@@ -144,15 +145,14 @@ public class JobResponse {
             this.workFieldId = job.getWorkField().getId();
             this.careerLevel = job.getCareerLevel();
             this.salaryRangeId = job.getSalaryRange().getId();
-            this.techStackIds = job.getJobTechStacks().stream()
-                    .map(jobTechStack -> jobTechStack.getTechStack().getId())
+            this.jobTechStacks = job.getJobTechStacks().stream()
+                    .map(jobTechStack -> new JobTechStackResponse.DTO(jobTechStack))
                     .toList();
         }
     }
 
     @Data
     public static class UpdateDTO {
-        private Integer id;
         private String title;
         private String description;
         private String location;
@@ -163,21 +163,22 @@ public class JobResponse {
         private Integer workFieldId;
         private String careerLevel;
         private Integer salaryRangeId;
-        private List<Integer> techStackIds;
+        private List<JobTechStackResponse.DTO> jobTechStacks;
 
-        public UpdateDTO(JobRequest.UpdateDTO reqDTO, Integer jobId) {
-            this.id = jobId;
-            this.title = reqDTO.getTitle();
-            this.description = reqDTO.getDescription();
-            this.location = reqDTO.getLocation();
-            this.employmentType = reqDTO.getEmploymentType();
-            this.deadline = reqDTO.getDeadline();
-            this.status = reqDTO.getStatus();
-            this.jobGroupId = reqDTO.getJobGroupId();
-            this.workFieldId = reqDTO.getWorkFieldId();
-            this.careerLevel = reqDTO.getCareerLevel();
-            this.salaryRangeId = reqDTO.getSalaryRangeId();
-            this.techStackIds = reqDTO.getTechStackIds();
+        public UpdateDTO(Job job) {
+            this.title = job.getTitle();
+            this.description = job.getDescription();
+            this.location = job.getLocation();
+            this.employmentType = job.getEmploymentType();
+            this.deadline = job.getDeadline();
+            this.status = job.getStatus();
+            this.jobGroupId = job.getJobGroup().getId();
+            this.workFieldId = job.getWorkField().getId();
+            this.careerLevel = job.getCareerLevel();
+            this.salaryRangeId = job.getSalaryRange().getId();
+            this.jobTechStacks = job.getJobTechStacks().stream()
+                    .map(jobTechStack -> new JobTechStackResponse.DTO(jobTechStack))
+                    .toList();
         }
     }
 

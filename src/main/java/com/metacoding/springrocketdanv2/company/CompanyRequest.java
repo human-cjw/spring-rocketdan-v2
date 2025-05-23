@@ -85,7 +85,7 @@ public class CompanyRequest {
         @NotNull(message = "업무 분야는 필수입니다.")
         private Integer workFieldId;
 
-        public Company toEntity(Integer userId) {
+        public Company toEntity(User user, WorkField workField, List<TechStack> techStacks) {
             Company company = Company.builder()
                     .nameKr(nameKr)
                     .nameEn(nameEn)
@@ -96,8 +96,8 @@ public class CompanyRequest {
                     .email(email)
                     .contactManager(contactManager)
                     .address(address)
-                    .user(User.builder().id(userId).build())
-                    .workField(WorkField.builder().id(workFieldId).build())
+                    .user(user)
+                    .workField(workField)
                     .phone(phone)
                     .ceo(ceo)
                     .homepageUrl(homepageUrl)
@@ -105,14 +105,12 @@ public class CompanyRequest {
                     .infoImageUrl(infoImageUrl)
                     .build();
 
-            for (Integer techStackId : techStackIds) {
-                company.getCompanyTechStacks().add(
-                        CompanyTechStack.builder()
-                                .company(company)
-                                .techStack(TechStack.builder().id(techStackId).build())
-                                .build()
-                );
-            }
+            techStacks.forEach(techStack -> company.getCompanyTechStacks()
+                    .add(CompanyTechStack.builder()
+                            .company(company)
+                            .techStack(techStack)
+                            .build()));
+
             return company;
         }
     }

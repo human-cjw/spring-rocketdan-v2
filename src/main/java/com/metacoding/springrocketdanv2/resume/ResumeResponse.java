@@ -5,6 +5,7 @@ import com.metacoding.springrocketdanv2.career.CareerResponse;
 import com.metacoding.springrocketdanv2.certification.Certification;
 import com.metacoding.springrocketdanv2.certification.CertificationResponse;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
+import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStackResponse;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
 import com.metacoding.springrocketdanv2.techstack.TechStackResponse;
 import com.metacoding.springrocketdanv2.user.UserResponse;
@@ -16,7 +17,6 @@ public class ResumeResponse {
 
     @Data
     public static class UpdateDTO {
-        private Integer id;
         private String title;
         private String summary;
         private String portfolioUrl;
@@ -30,38 +30,37 @@ public class ResumeResponse {
         private String graduationDate;
         private String careerLevel;
         private Boolean isDefault;
-        private Integer userId;
-        private List<CertificationResponse.DTO> certifications;
-        private List<CareerResponse.DTO> careers;
         private Integer salaryRangeId;
         private Integer jobGroupId;
-        private List<Integer> techStackIds;
+        private List<CertificationResponse.DTO> certifications;
+        private List<CareerResponse.DTO> careers;
+        private List<ResumeTechStackResponse.DTO> resumeTechStacks;
 
-        public UpdateDTO(ResumeRequest.UpdateDTO reqDTO, List<Certification> certifications, List<Career> careers, Integer resumeId, Integer sessionUserId) {
-            this.id = resumeId;
-            this.title = reqDTO.getTitle();
-            this.summary = reqDTO.getSummary();
-            this.portfolioUrl = reqDTO.getPortfolioUrl();
-            this.gender = reqDTO.getGender();
-            this.education = reqDTO.getEducation();
-            this.birthdate = reqDTO.getBirthdate();
-            this.major = reqDTO.getMajor();
-            this.graduationType = reqDTO.getGraduationType();
-            this.phone = reqDTO.getPhone();
-            this.enrollmentDate = reqDTO.getEnrollmentDate();
-            this.graduationDate = reqDTO.getGraduationDate();
-            this.careerLevel = reqDTO.getCareerLevel();
-            this.isDefault = reqDTO.getIsDefault();
-            this.userId = sessionUserId;
-            this.certifications = certifications.stream()
+        public UpdateDTO(Resume resume) {
+            this.title = resume.getTitle();
+            this.summary = resume.getSummary();
+            this.portfolioUrl = resume.getPortfolioUrl();
+            this.gender = resume.getGender();
+            this.education = resume.getEducation();
+            this.birthdate = resume.getBirthdate();
+            this.major = resume.getMajor();
+            this.graduationType = resume.getGraduationType();
+            this.phone = resume.getPhone();
+            this.enrollmentDate = resume.getEnrollmentDate();
+            this.graduationDate = resume.getGraduationDate();
+            this.careerLevel = resume.getCareerLevel();
+            this.isDefault = resume.getIsDefault();
+            this.salaryRangeId = resume.getSalaryRange().getId();
+            this.jobGroupId = resume.getJobGroup().getId();
+            this.certifications = resume.getCertifications().stream()
                     .map(certification -> new CertificationResponse.DTO(certification))
                     .toList();
-            this.careers = careers.stream()
+            this.careers = resume.getCareers().stream()
                     .map(career -> new CareerResponse.DTO(career))
                     .toList();
-            this.salaryRangeId = reqDTO.getSalaryRangeId();
-            this.jobGroupId = reqDTO.getJobGroupId();
-            this.techStackIds = reqDTO.getTechStackIds();
+            this.resumeTechStacks = resume.getResumeTechStacks().stream()
+                    .map(resumeTechStack -> new ResumeTechStackResponse.DTO(resumeTechStack))
+                    .toList();
         }
     }
 
@@ -171,9 +170,9 @@ public class ResumeResponse {
         private List<CareerResponse.DTO> careers;
         private Integer salaryRangeId;
         private Integer jobGroupId;
-        private List<Integer> techStackIds;
+        private List<ResumeTechStackResponse.DTO> resumeTechStacks;
 
-        public SaveDTO(Resume resume, List<Certification> certifications, List<Career> careers) {
+        public SaveDTO(Resume resume) {
             this.id = resume.getId();
             this.title = resume.getTitle();
             this.summary = resume.getSummary();
@@ -190,16 +189,16 @@ public class ResumeResponse {
             this.createdAt = resume.getCreatedAt().toString().substring(0, 10);
             this.isDefault = resume.getIsDefault();
             this.userId = resume.getUser().getId();
-            this.certifications = certifications.stream()
-                    .map(certification -> new CertificationResponse.DTO(certification))
-                    .toList();
-            this.careers = careers.stream()
-                    .map(career -> new CareerResponse.DTO(career))
-                    .toList();
             this.salaryRangeId = resume.getSalaryRange().getId();
             this.jobGroupId = resume.getJobGroup().getId();
-            this.techStackIds = resume.getResumeTechStacks().stream()
-                    .map(resumeTechStack -> resumeTechStack.getTechStack().getId())
+            this.certifications = resume.getCertifications().stream()
+                    .map(certification -> new CertificationResponse.DTO(certification))
+                    .toList();
+            this.careers = resume.getCareers().stream()
+                    .map(career -> new CareerResponse.DTO(career))
+                    .toList();
+            this.resumeTechStacks = resume.getResumeTechStacks().stream()
+                    .map(resumeTechStack -> new ResumeTechStackResponse.DTO(resumeTechStack))
                     .toList();
         }
     }

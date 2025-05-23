@@ -1,6 +1,7 @@
 package com.metacoding.springrocketdanv2.company;
 
 import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStack;
+import com.metacoding.springrocketdanv2.techstack.TechStack;
 import com.metacoding.springrocketdanv2.user.User;
 import com.metacoding.springrocketdanv2.workfield.WorkField;
 import jakarta.persistence.*;
@@ -10,7 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,18 +81,28 @@ public class Company {
         this.workField = workField;
     }
 
-    public void typeUpdate(Object user) {
-        try {
-            Field userTypeField = user.getClass().getDeclaredField("userType");
-            userTypeField.setAccessible(true);
-            userTypeField.set(user, "company");
-
-            Field companyIdField = user.getClass().getDeclaredField("companyId");
-            companyIdField.setAccessible(true);
-            companyIdField.set(user, this.id);
-
-        } catch (Exception e) {
-            throw new RuntimeException("User 상태 변경 실패", e);
-        }
+    public void update(CompanyRequest.UpdateDTO reqDTO, WorkField workField, List<TechStack> techStacks) {
+        this.nameKr = reqDTO.getNameKr();
+        this.nameEn = reqDTO.getNameEn();
+        this.ceo = reqDTO.getCeo();
+        this.businessNumber = reqDTO.getBusinessNumber();
+        this.email = reqDTO.getEmail();
+        this.phone = reqDTO.getPhone();
+        this.address = reqDTO.getAddress();
+        this.introduction = reqDTO.getIntroduction();
+        this.oneLineIntro = reqDTO.getOneLineIntro();
+        this.homepageUrl = reqDTO.getHomepageUrl();
+        this.logoImageUrl = reqDTO.getLogoImageUrl();
+        this.infoImageUrl = reqDTO.getInfoImageUrl();
+        this.contactManager = reqDTO.getContactManager();
+        this.startDate = reqDTO.getStartDate();
+        this.workField = workField;
+        
+        this.companyTechStacks.clear();
+        techStacks.forEach(techStack -> this.companyTechStacks
+                .add(CompanyTechStack.builder()
+                        .company(this)
+                        .techStack(techStack)
+                        .build()));
     }
 }

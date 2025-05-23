@@ -73,7 +73,7 @@ public class JobRequest {
         @NotEmpty(message = "기술 스택 ID는 하나 이상 선택해야 합니다.")
         private List<@NotNull(message = "기술 스택 ID는 null일 수 없습니다.") Integer> techStackIds;
 
-        public Job toEntity(Integer companyId) {
+        public Job toEntity(Company company, JobGroup jobGroup, WorkField workField, SalaryRange salaryRange, List<TechStack> techStacks) {
             Job job = Job.builder()
                     .title(title)
                     .description(description)
@@ -82,30 +82,17 @@ public class JobRequest {
                     .deadline(deadline)
                     .status(JobStatusEnum.OPEN.value)
                     .careerLevel(careerLevel)
-                    .jobGroup(JobGroup.builder()
-                            .id(jobGroupId)
-                            .build())
-                    .company(Company.builder()
-                            .id(companyId)
-                            .build())
-                    .workField(WorkField.builder()
-                            .id(workFieldId)
-                            .build())
-                    .salaryRange(SalaryRange.builder()
-                            .id(salaryRangeId)
-                            .build())
+                    .jobGroup(jobGroup)
+                    .company(company)
+                    .workField(workField)
+                    .salaryRange(salaryRange)
                     .build();
 
-            for (Integer techStackId : techStackIds) {
-                job.getJobTechStacks().add(
-                        JobTechStack.builder()
-                                .job(job)
-                                .techStack(TechStack.builder()
-                                        .id(techStackId)
-                                        .build()
-                                ).build()
-                );
-            }
+            techStacks.forEach(techStack -> job.getJobTechStacks()
+                    .add(JobTechStack.builder()
+                            .job(job)
+                            .techStack(techStack)
+                            .build()));
 
             return job;
         }

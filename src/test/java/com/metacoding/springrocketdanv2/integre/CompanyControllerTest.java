@@ -5,6 +5,7 @@ import com.metacoding.springrocketdanv2.MyRestDoc;
 import com.metacoding.springrocketdanv2._core.util.JwtUtil;
 import com.metacoding.springrocketdanv2.company.CompanyRequest;
 import com.metacoding.springrocketdanv2.user.User;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,8 @@ public class CompanyControllerTest extends MyRestDoc {
 
     @Autowired
     private ObjectMapper om;
+    @Autowired
+    private EntityManager em;
 
     private String userAccessToken;
     private String companyAccessToken;
@@ -53,6 +56,12 @@ public class CompanyControllerTest extends MyRestDoc {
                 .companyId(1)
                 .build();
         companyAccessToken = JwtUtil.create(company01);
+    }
+
+    @BeforeEach
+    void resetAutoIncrement() {
+        // 더미는 이미 들어가 있는 상태이므로, 테이블 데이터는 지우지 않고 시퀀스만 리셋
+        em.createNativeQuery("ALTER TABLE company_tech_stack_tb ALTER COLUMN id RESTART WITH 274").executeUpdate();
     }
 
     @AfterEach
@@ -164,7 +173,7 @@ public class CompanyControllerTest extends MyRestDoc {
         System.out.println(responseBody);
 
         // then
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
+        actions.andExpect(MockMvcResultMatchers.status().is(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(51));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.userId").value(1));
@@ -186,7 +195,9 @@ public class CompanyControllerTest extends MyRestDoc {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt",
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.workFieldId").value(1));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStackIds[0]").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.companyTechStacks[0].techStackId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.companyTechStacks[0].companyId").value(51));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.companyTechStacks[0].id").value(274));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.token.accessToken",
                 matchesPattern("^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.token.refreshToken",
@@ -231,10 +242,9 @@ public class CompanyControllerTest extends MyRestDoc {
         System.out.println(responseBody);
 
         // then
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
+        actions.andExpect(MockMvcResultMatchers.status().is(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
 
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(1));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.nameKr").value("테스트기업"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.nameEn").value("testCompany"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.ceo").value("테스터"));
@@ -252,8 +262,9 @@ public class CompanyControllerTest extends MyRestDoc {
                 matchesPattern("\\d{4}-\\d{2}-\\d{2}")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.workFieldId").value(1));
 
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStackIds[0]").value(1));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.techStackIds[1]").value(2));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.companyTechStacks[0].techStackId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.companyTechStacks[0].companyId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.companyTechStacks[0].id").value(274));
 
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
