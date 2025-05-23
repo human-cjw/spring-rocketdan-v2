@@ -17,7 +17,7 @@ public class WorkFieldRepository {
         return em.createQuery(q, WorkField.class).getResultList();
     }
 
-    public Optional<WorkField> findById(Integer id) {
+    public Optional<WorkField> findByWorkFieldId(Integer id) {
         return Optional.ofNullable(em.find(WorkField.class, id));
     }
 }

@@ -1,6 +1,7 @@
 package com.metacoding.springrocketdanv2.company;
 
 import com.metacoding.springrocketdanv2.application.Application;
+import com.metacoding.springrocketdanv2.company.techstack.CompanyTechStackResponse;
 import com.metacoding.springrocketdanv2.job.Job;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroupResponse;
 import com.metacoding.springrocketdanv2.salaryrange.SalaryRangeResponse;
@@ -43,7 +44,6 @@ public class CompanyResponse {
 
     @Data
     public static class UpdateDTO {
-        private Integer id;
         private String nameKr;
         private String nameEn;
         private String ceo;
@@ -58,28 +58,28 @@ public class CompanyResponse {
         private String infoImageUrl;
         private String contactManager;
         private String startDate;
-        private String createdAt;
         private Integer workFieldId;
-        private List<Integer> techStackIds;
+        private List<CompanyTechStackResponse.DTO> companyTechStacks;
 
-        public UpdateDTO(CompanyRequest.UpdateDTO reqDTO, Integer companyId) {
-            this.id = companyId;
-            this.nameKr = reqDTO.getNameKr();
-            this.nameEn = reqDTO.getNameEn();
-            this.ceo = reqDTO.getCeo();
-            this.businessNumber = reqDTO.getBusinessNumber();
-            this.email = reqDTO.getEmail();
-            this.phone = reqDTO.getPhone();
-            this.address = reqDTO.getAddress();
-            this.introduction = reqDTO.getIntroduction();
-            this.oneLineIntro = reqDTO.getOneLineIntro();
-            this.homepageUrl = reqDTO.getHomepageUrl();
-            this.logoImageUrl = reqDTO.getLogoImageUrl();
-            this.infoImageUrl = reqDTO.getInfoImageUrl();
-            this.contactManager = reqDTO.getContactManager();
-            this.startDate = reqDTO.getStartDate();
-            this.workFieldId = reqDTO.getWorkFieldId();
-            this.techStackIds = reqDTO.getTechStackIds();
+        public UpdateDTO(Company company) {
+            this.nameKr = company.getNameKr();
+            this.nameEn = company.getNameEn();
+            this.ceo = company.getCeo();
+            this.businessNumber = company.getBusinessNumber();
+            this.email = company.getEmail();
+            this.phone = company.getPhone();
+            this.address = company.getAddress();
+            this.introduction = company.getIntroduction();
+            this.oneLineIntro = company.getOneLineIntro();
+            this.homepageUrl = company.getHomepageUrl();
+            this.logoImageUrl = company.getLogoImageUrl();
+            this.infoImageUrl = company.getInfoImageUrl();
+            this.contactManager = company.getContactManager();
+            this.startDate = company.getStartDate();
+            this.workFieldId = company.getWorkField().getId();
+            this.companyTechStacks = company.getCompanyTechStacks().stream()
+                    .map(companyTechStack -> new CompanyTechStackResponse.DTO(companyTechStack))
+                    .toList();
         }
     }
 
@@ -103,7 +103,7 @@ public class CompanyResponse {
         private String startDate;
         private String createdAt;
         private Integer workFieldId;
-        private List<Integer> techStackIds;
+        private List<CompanyTechStackResponse.DTO> companyTechStacks;
         private UserResponse.TokenDTO token;
 
         public SaveDTO(Company company, UserResponse.TokenDTO token) {
@@ -125,8 +125,8 @@ public class CompanyResponse {
             this.startDate = company.getStartDate();
             this.createdAt = company.getCreatedAt().toString().substring(0, 10);
             this.workFieldId = company.getWorkField().getId();
-            this.techStackIds = company.getCompanyTechStacks().stream()
-                    .map(companyTechStack -> companyTechStack.getTechStack().getId())
+            this.companyTechStacks = company.getCompanyTechStacks().stream()
+                    .map(companyTechStack -> new CompanyTechStackResponse.DTO(companyTechStack))
                     .toList();
             this.token = token;
         }

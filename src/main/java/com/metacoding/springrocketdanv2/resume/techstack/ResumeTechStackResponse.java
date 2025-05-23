@@ -16,4 +16,17 @@ public class ResumeTechStackResponse {
             this.techStackName = resumeTechStack.getTechStack().getName();
         }
     }
+
+    @Data
+    public static class DTO {
+        private Integer id;
+        private Integer techStackId;
+        private Integer resumeId;
+
+        public DTO(ResumeTechStack resumeTechStack) {
+            this.id = resumeTechStack.getId();
+            this.techStackId = resumeTechStack.getTechStack().getId();
+            this.resumeId = resumeTechStack.getResume().getId();
+        }
+    }
 }

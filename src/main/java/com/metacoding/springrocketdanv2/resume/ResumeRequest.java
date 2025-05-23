@@ -1,6 +1,8 @@
 package com.metacoding.springrocketdanv2.resume;
 
+import com.metacoding.springrocketdanv2.career.Career;
 import com.metacoding.springrocketdanv2.career.CareerRequest;
+import com.metacoding.springrocketdanv2.certification.Certification;
 import com.metacoding.springrocketdanv2.certification.CertificationRequest;
 import com.metacoding.springrocketdanv2.jobgroup.JobGroup;
 import com.metacoding.springrocketdanv2.resume.techstack.ResumeTechStack;
@@ -192,9 +194,9 @@ public class ResumeRequest {
         @NotEmpty(message = "기술 스택을 하나 이상 선택해 주세요.")
         private List<@NotNull(message = "기술 스택 ID는 null일 수 없습니다.") Integer> techStackIds;
 
-        public Resume toEntity(Integer userId) {
+        public Resume toEntity(User user, SalaryRange salaryRange, JobGroup jobGroup, List<TechStack> techStacks) {
             Resume resume = Resume.builder()
-                    .user(User.builder().id(userId).build())
+                    .user(user)
                     .title(title)
                     .summary(summary)
                     .portfolioUrl(portfolioUrl)
@@ -208,20 +210,33 @@ public class ResumeRequest {
                     .graduationDate(graduationDate)
                     .careerLevel(careerLevel)
                     .isDefault(isDefault)
-                    .salaryRange(SalaryRange.builder().id(salaryRangeId).build())
-                    .jobGroup(JobGroup.builder().id(jobGroupId).build())
+                    .salaryRange(salaryRange)
+                    .jobGroup(jobGroup)
                     .build();
 
-            for (Integer techStackId : techStackIds) {
-                resume.getResumeTechStacks().add(
-                        ResumeTechStack.builder()
-                                .resume(resume)
-                                .techStack(TechStack.builder()
-                                        .id(techStackId)
-                                        .build()
-                                ).build()
-                );
-            }
+            techStacks.forEach(techStack -> resume.getResumeTechStacks()
+                    .add(ResumeTechStack.builder()
+                            .resume(resume)
+                            .techStack(techStack)
+                            .build()));
+
+            careers.forEach(career -> resume.getCareers().add(
+                    Career.builder()
+                            .companyName(career.getCompanyName())
+                            .startDate(career.getStartDate())
+                            .endDate(career.getEndDate())
+                            .resume(resume)
+                            .build()
+            ));
+
+            certifications.forEach(certification -> resume.getCertifications().add(
+                    Certification.builder()
+                            .name(certification.getName())
+                            .issuer(certification.getIssuer())
+                            .issuedDate(certification.getIssuedDate())
+                            .resume(resume)
+                            .build()
+            ));
 
             return resume;
         }

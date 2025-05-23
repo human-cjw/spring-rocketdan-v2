@@ -9,8 +9,9 @@ import org.springframework.stereotype.Repository;
 public class CompanyTechStackRepository {
     private final EntityManager em;
 
-    public void save(CompanyTechStack cts) {
+    public CompanyTechStack save(CompanyTechStack cts) {
         em.persist(cts);
+        return cts;
     }
 
     public void deleteByCompanyId(Integer companyId) {
