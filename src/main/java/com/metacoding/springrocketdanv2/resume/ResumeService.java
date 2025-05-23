@@ -35,6 +35,7 @@ public class ResumeService {
         return new ResumeResponse.DetailDTO(resumePS, certificationsPS, careersPS, sessionUserId);
     }
 
+    // 수정 코드 JPA방식으로 엔티티 조회 -> 엔티티 수정 -> 엔티티 돌려주기
     @Transactional
     public ResumeResponse.UpdateDTO 이력서수정하기(Integer resumeId, ResumeRequest.UpdateDTO reqDTO, Integer sessionUserId) {
         // 이력서 조회하기
