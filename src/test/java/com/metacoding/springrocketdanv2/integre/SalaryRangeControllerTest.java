@@ -43,7 +43,7 @@ public class SalaryRangeControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void List_test() throws Exception {
+    public void salary_range_list_test() throws Exception {
         // given
 
         // when

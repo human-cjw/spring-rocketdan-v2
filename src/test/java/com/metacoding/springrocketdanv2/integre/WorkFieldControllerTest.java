@@ -42,7 +42,7 @@ public class WorkFieldControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void list_test() throws Exception {
+    public void get_work_fields_test() throws Exception {
         // when
         ResultActions actions = mvc.perform(
                 MockMvcRequestBuilders
