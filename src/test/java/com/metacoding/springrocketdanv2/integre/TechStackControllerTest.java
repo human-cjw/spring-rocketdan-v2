@@ -43,7 +43,7 @@ public class TechStackControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void List_test() throws Exception {
+    public void tech_stack_list_test() throws Exception {
         // given
 
         // when

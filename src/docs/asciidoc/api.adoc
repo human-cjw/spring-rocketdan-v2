@@ -7,6 +7,14 @@ endif::[]
 :resume: resume-controller-test
 :job: job-controller-test
 :application: application-controller-test
+:jobBookmark: job-bookmark-controller-test
+:board: board-controller-test
+:jobGroup: job-group-controller-test
+:salaryRange: salary-range-controller-test
+:techStack: tech-stack-controller-test
+:workField: work-field-controller-test
+
+
 
 = REST API
 :toc: left
@@ -189,3 +197,111 @@ include::{snippets}/{application}/update_status_test/http-request.adoc[]
 
 ===== Response Example
 include::{snippets}/{application}/update_status_test/http-response.adoc[]
+
+
+
+== 공고북마크
+
+=== 1. 북마크목록
+===== Request Example
+include::{snippets}/{jobBookmark}/list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{jobBookmark}/list_test/http-response.adoc[]
+
+=== 2. 북마크등록
+===== Request Example
+include::{snippets}/{jobBookmark}/save_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{jobBookmark}/save_test/http-response.adoc[]
+
+=== 3. 북마크삭제
+===== Request Example
+include::{snippets}/{jobBookmark}/delete_status_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{jobBookmark}/delete_status_test/http-response.adoc[]
+
+
+
+== 게시물
+
+=== 1. 게시물목록
+===== Request Example
+include::{snippets}/{board}/list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{board}/list_test/http-response.adoc[]
+
+=== 2. 게시물등록
+===== Request Example
+include::{snippets}/{board}/write_board_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{board}/write_board_test/http-response.adoc[]
+
+=== 3. 게시물수정
+===== Request Example
+include::{snippets}/{board}/update_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{board}/update_test/http-response.adoc[]
+
+=== 4. 게시물삭제
+===== Request Example
+include::{snippets}/{board}/delete_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{board}/delete_test/http-response.adoc[]
+
+=== 5. 게시물비밀번호검증
+===== Request Example
+include::{snippets}/{board}/verify_password_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{board}/verify_password_test/http-response.adoc[]
+
+
+
+== 직군
+
+=== 1. 직군목록
+===== Request Example
+include::{snippets}/{jobGroup}/job_group_list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{jobGroup}/job_group_list_test/http-response.adoc[]
+
+
+
+== 연봉
+
+=== 1. 연봉목록
+===== Request Example
+include::{snippets}/{salaryRange}/salary_range_list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{salaryRange}/salary_range_list_test/http-response.adoc[]
+
+
+
+== 기술스택
+
+=== 1. 기술스택목록
+===== Request Example
+include::{snippets}/{techStack}/tech_stack_list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{techStack}/tech_stack_list_test/http-response.adoc[]
+
+
+
+== 업종
+
+=== 1. 업종목록
+===== Request Example
+include::{snippets}/{workField}/get_work_fields_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{workField}/get_work_fields_test/http-response.adoc[]
