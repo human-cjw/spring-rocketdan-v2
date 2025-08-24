@@ -1,33 +1,84 @@
-# 휴먼클라우드 웹 - 미니 프로젝트 1 : 1조 - Rocketdan
+# Spring Boot 기반 구인구직 플랫폼 → RESTful 자원 서버로 전환
 
-<br/>
+<h2>RocketDan</h2>
 
-- 자바와 스프링부트, HTML/CSS를 활용한 웹 서버 제작 프로젝트입니다.
-- 전체 개발 기간 : 2025.04.11 ~ 2025.05.02
+> 기존에 웹 화면 중심으로 구현된 ‘Spring Boot 기반 구인구직 플랫폼’을 프론트엔드-백엔드 완전 분리 구조의 RESTful API 서버로 재구성한 프로젝트입니다.
+> Spring REST Docs를 통해 API 문서를 자동 생성하여, API 명세 관리와 유지보수 효율성을 높였으며, JWT 기반 인증, 예외 처리 구조 고도화, 테스트 기반 개발까지 적용하여 실제 서비스 수준의
+> 백엔드 아키텍처 설계 및 구현 경험을 목표로 삼았습니다.
 
-<br/>
+## 프로젝트 시연영상
 
-# 휴먼클라우드 웹 - 미니 프로젝트 2 : REST API 전환
+<video src="https://github.com/user-attachments/assets/1b2f0507-0636-4f16-a0e2-48709d407600" controls width="600"></video>
 
-- JSON을 활용해서 데이터만 전송하는 REST 서버 전환 프로젝트입니다.
-- 전체 개발 기간 : 2025.05.12 ~ 2025.05.22
+## 목차
 
-### 변경점 & TODO
+1. [🗓️ 개발 기간 및 참여 인원](#개발기간및참여인원)
+2. [🔚 회고](#회고)
+3. [📄 API 문서](#API문서)
+4. [💡 주요 기능](#주요기능)
+5. [✍️ 개인 기여도 및 역할](#개인기여도)
+6. [👥 팀원](#팀원)
+7. [🛠️ 기술 스택](#기술스택)
+8. [🧩 문제 해결 경험](#문제해결경험)
+9. [📋 ERD](#erd)
 
-- 모든 응답은 ResponseEntity로 반환
-- 모든 예외 처리 진행
-- Unit Test 적극 활용
-- 모든 데이터 전달은 DTO로 수행 : DTO 미흡 부분 수정
-- 화면 삭제
-- 더미 데이터 일치화
-- 필터 설정
-- 유효성 검사
-- 인터셉터 보완
-- enum (범주) 활용해보기
-- JWT : Access Token만 사용
-- BCrypt : 비밀번호 암호화
-- 주소 재설정
-- GET, POST, PUT, DELETE 활용
+<a id="개발기간및참여인원"></a>
+
+## 🗓️ 개발 기간 및 참여 인원
+
+- 기간: 2025.05.12 ~ 2025.05.22
+- 인원: 5인 팀 프로젝트
+
+<a id="회고"></a>
+
+## 🔚 회고
+
+**1️⃣ 협업 규칙을 지키는 것의 어려움**
+
+두 번째 프로젝트는 첫 번째보다 익숙해졌기에 상대적으로 수월할 것이라 예상했지만, 막상 진행해보니 **데이터만 주고받는 구조임에도 불구하고 예상 외의 어려움이 많았습니다.**
+특히 **JSON 기반으로 요청과 응답을 정확하게 주고받는 과정에서 세밀한 조율의 중요성**을 느꼈고, 팀 내에서 정의한 컨벤션을 **끝까지 일관되게 지키는 것이 얼마나 어려운 일인지** 다시금 절감하게 되었습니다.
+이번 경험을 통해 협업은 단순한 역할 분담이 아니라 **약속을 지키고, 서로를 배려하며 맞춰가는 과정**이라는 사실을 깨달았습니다. 마지막 프로젝트에서는 더 나은 협업자이자 개발자로 성장할 수 있도록 **끝까지
+책임감 있게 임하겠습니다.**
+
+<a id="API문서"></a>
+
+## 📄 API 문서
+
+[//]: # (![api1]&#40;docs/images/api1.png&#41;)
+
+[//]: # (![api2]&#40;docs/images/api2.png&#41;)
+
+[//]: # (![api3]&#40;docs/images/api3.png&#41;)
+
+<a id="주요기능"></a>
+
+## 💡 주요 기능
+
+### 👤 개인
+
+- 회원가입 / 로그인 / 로그아웃 / 회원정보 수정 (REST API 설계 및 문서화)
+- 채용공고 상세 조회 및 이력서 지원 API
+- 이력서 등록 / 수정 / 삭제 API
+- 지원 내역 / 스크랩 공고 마이페이지 API
+- 합불 여부 결과 확인 API
+
+### 🏢 기업
+
+- 회원가입 / 로그인 / 로그아웃 / 기업 정보 수정 API
+- 채용공고 등록 / 수정 / 조회 API
+- 지원자 이력서 열람 / 스크랩 / 합격 여부 처리 API
+
+<a id="개인기여도"></a>
+
+## ✍️ 개인 기여도 및 역할
+
+| 구분   | 기능명           | 설명                                                                                      |
+|------|---------------|-----------------------------------------------------------------------------------------|
+| (공통) | 회원 정보         | 회원 정보에 대한 상세보기(READ), 등록(CREATE), 수정(UPDATE) 기능 구현. 응답 DTO 설계 및 매핑                      |
+| (기업) | 기업 회원의 공고 정보  | 기업이 작성한 공고 정보에 대해 상세보기(READ), 등록(CREATE), 수정(UPDATE) 기능 구현. 응답 DTO 설계 및 맵핑              |
+| (개인) | 개인 회원의 공고 북마크 | 공고에 대한 북마크를 상세보기(READ), 등록(CREATE), 삭제(DELETE) 기능 구현. 응답 DTO 설계 및 맵핑                    |
+| (개인) | 개인 회원의 이력서 정보 | 개인이 작성한 이력서 정보에 대해 상세보기(READ), 작성(CREATE), 수정(UPDATE), 삭제(DELETE) 기능 구현. 응답 DTO 설계 및 맵핑 |
+| (개인) | 개인 회원의 공고 지원  | 개인이 공고에 지원하는 것에 대해 상세보기(READ), 등록(CREATE). 응답 DTO 설게 및 맵핑                               |
 
 # 👥 팀 멤버
 
@@ -44,18 +95,14 @@
 ## 🛠️ 사용 기술
 
 <table>
-    <tr>
-        <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="50"/><br/>HTML</td>
-        <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="50"/><br/>CSS</td>
-        <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="50"/><br/>JavaScript</td>
-        <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" width="50"/><br/>Bootstrap</td>
-        <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/handlebars/handlebars-original.svg" width="50"/><br/>Mustache</td>
-        <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" width="50"/><br/>Java</td>
-        <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" width="50"/><br/>Spring Boot</td>
-        <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" width="50"/><br/>H2</td>
-    </tr>
+  <tr>
+    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" width="50"/><br/>Java</td>
+    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" width="50"/><br/>Spring Boot</td>
+    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" width="50"/><br/>H2</td>
+    <td align="center"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" width="50"/><br/>Spring REST Docs</td>
+    <td align="center"><img src="https://jwt.io/img/pic_logo.svg" width="50"/><br/>JWT</td>
+  </tr>
 </table>
-
 
 ## 🧰 개발 환경
 
@@ -76,385 +123,40 @@
     </tr>
 </table>
 
-# 📋 프로젝트 업무 분담
+<a id="문제해결경험"></a>
 
-<table style="width: 100%; text-align: start; font-size: 16px; border-collapse: collapse;">
-    <thead style="background-color: #f2f2f2;">
-        <tr>
-            <th style="padding: 10px; border: 1px solid #ddd;">담당자</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">프로젝트 업무 분담</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td style="padding: 10px; border: 1px solid #ddd;">최재원</td>
-            <td style="padding: 10px; border: 1px solid #ddd;">
-                <ul>
-                    <li>프로젝트 계획 및 관리</li>
-                    <li>팀 리딩 및 커뮤니케이션</li>
-                    <li>헤더 및 네비게이션 개발</li>
-                    <li>이력서 관련 페이지 및 기능 개발</li>
-                    <li>채용공고 관련 페이지 및 기능 개발</li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 10px; border: 1px solid #ddd;">김건우</td>
-            <td style="padding: 10px; border: 1px solid #ddd;">
-                <ul>
-                    <li>기업 관련 페이지 및 기능 개발</li>
-                    <li>채용공고 관련 페이지 및 기능 개발</li>
-                    <li>유저의 공고 북마크 기능 개발</li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 10px; border: 1px solid #ddd;">김세리</td>
-            <td style="padding: 10px; border: 1px solid #ddd;">
-                <ul>
-                    <li>채용공고 관련 페이지 및 기능 개발</li>
-                    <li>게시판 관련 페이지 및 기능 개발</li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 10px; border: 1px solid #ddd;">이연호</td>
-            <td style="padding: 10px; border: 1px solid #ddd;">
-                <ul>
-                    <li>로그인 관련 페이지 및 기능 개발</li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 10px; border: 1px solid #ddd;">조하은</td>
-            <td style="padding: 10px; border: 1px solid #ddd;">
-                <ul>
-                    <li>이력서 관련 페이지 및 기능 개발</li>
-                    <li>더미 데이터 이미지 등록</li>
-                </ul>
-            </td>
-        </tr>
-    </tbody>
-</table>
+## 🧩 문제 해결 경험
 
-# 주요 기능
+### 💬 문제 : 통합 테스트 시 테이블 id 자동 생성 문제
 
-### 공통
-- 회원가입, 로그인
-- 게시판 - 등록, 수정, 삭제
-- 게시판 목록 보기
-- 유효성 검사
-- 인증 체크
+**[공고 등록]**
 
-### 유저
-- 이력서 - 등록, 수정, 삭제
-- 이력서 목록 보기
-- 이력서 상세 보기
-- 이력서 지원 하기
-- 이력서 지원 내역
-- 공고 북마크
+![p1](docs/images/p1.png)
 
-### 기업
-- 기업 - 등록, 수정, 삭제
-- 기업 목록 보기
-- 기업 상세 보기
-- 채용공고 - 등록, 수정, 삭제
-- 채용공고 목록 보기
-- 채용공고 상세 보기
-- 이력서 지원 받기
-- 이력서 지원 응답
+**[공고 수정]**
 
-# 테이블 구조
+![p2](docs/images/p2.png)
+
+- **문제 상황**
+    - h2 db 에 더미를 넣어 놓은 상태에서 공고 등록 테스트, 공고 수정 테스트를 각각 진행하면 문제가 없었다
+    - 공고에 대한 모든 컨트롤러 테스트를 만들고 **통합으로 실행**을 했을 때, **ID 자동 증가(Auto Increment) 문제**가 발생했다
+- **원인 분석**
+    - 공고를 등록하거나 수정할 때 공고의 기술 스택 목록을 전부 삭제하고 다시 등록을 하는데 공고 기술 스택 테이블의 **자동 증가가 롤백 되지 않아서 문제**가 생겼다
+    - 공고 기술 스택 테이블은 계속 삭제되고 생성되는 과정을 반복하는데 **id 자동 증가 시퀀스**가 초기화 되지 않고 다음 테스트 진행에도 영향을 미친 것 같다
+- **해결 방법**:
+    - 테스트 진행 전에 id 자동 증가 시퀀스를 고정하는 방법을 사용하였다
+      ![p3](docs/images/p3.png)
+    - 새로 생성될 때 항상 고정된 id 시퀀스로 시작되기 때문에 문제가 해결되었다
+    - 다음 해결 방법은
+        - @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD) 를 사용하는 것이다
+        - **각 테스트 메서드가 실행되기 전에** 스프링 애플리케이션 컨텍스트를 다시 로드한다
+        - data.sql의 더미 데이터가 처음부터 다시 로드되고, 시퀀스 값도 초기 상태로 완벽하게 리셋 하기 때문에 매번 테스트를 진행할 때 db 를 독립적으로 초기화 할 수 있다
+    - 두 방법 중에서 시퀀스 고정을 사용한 이유는 더미 데이터와 로직 진행이 어떻게 되는지 알고 있는 상황에선 매번 테스트마다 컨텍스트를 초기화 약간 오래 걸리는 작업을 하지 않아도 테스트가 잘 되었다는 것을
+      알 수 있기 때문이다
+    - 만약 더미 데이터와 로직을 잘 모른다면 컨텍스트를 초기화 하는 방법이 더 좋을 수 있다
+
+<a id="erd"></a>
+
+## 📋 ERD
 
 ![table](docs/images/table.png)
-
-# 테이블 생성
-
-### application_tb
-
-```sql
-create table application_tb
-(
-    company_id integer,
-    id         integer generated by default as identity,
-    job_id     integer,
-    resume_id  integer,
-    user_id    integer,
-    created_at timestamp(6),
-    status     varchar(255),
-    primary key (id),
-    constraint uk_user_company unique (user_id, company_id)
-)
-```
-
-### board_tb
-
-```sql
-create table board_tb
-(
-    id         integer generated by default as identity,
-    created_at timestamp(6),
-    content    varchar(255),
-    password   varchar(255),
-    title      varchar(255),
-    primary key (id)
-)
-```
-
-### career_tb
-
-```sql
-create table career_tb
-(
-    id           integer generated by default as identity,
-    resume_id    integer,
-    created_at   timestamp(6),
-    company_name varchar(255),
-    end_date     varchar(255),
-    start_date   varchar(255),
-    primary key (id)
-)
-```
-
-### certification_tb
-
-```sql
-create table certification_tb
-(
-    id          integer generated by default as identity,
-    resume_id   integer,
-    created_at  timestamp(6),
-    issued_date varchar(255),
-    issuer      varchar(255),
-    name        varchar(255),
-    primary key (id)
-)
-```
-
-### company_tb
-
-```sql
-create table company_tb
-(
-    id              integer generated by default as identity,
-    user_id         integer unique,
-    work_field_id   integer,
-    created_at      timestamp(6),
-    address         varchar(255),
-    business_number varchar(255),
-    ceo             varchar(255),
-    contact_manager varchar(255),
-    email           varchar(255),
-    homepage_url    varchar(255),
-    info_image_url  varchar(255),
-    introduction    text,
-    logo_image_url  varchar(255),
-    name_en         varchar(255),
-    name_kr         varchar(255),
-    one_line_intro  varchar(255),
-    phone           varchar(255),
-    start_date      varchar(255),
-    primary key (id)
-)
-```
-
-### company_tech_stack_tb
-
-```sql
-create table company_tech_stack_tb
-(
-    company_id    integer,
-    id            integer generated by default as identity,
-    tech_stack_id integer,
-    primary key (id)
-)
-```
-
-### job_bookmark_tb
-
-```sql
-create table job_bookmark_tb
-(
-    id         integer generated by default as identity,
-    job_id     integer,
-    user_id    integer,
-    created_at timestamp(6),
-    primary key (id),
-    constraint uk_job_user unique (job_id, user_id)
-)
-```
-
-### job_group_tb
-
-```sql
-create table job_group_tb
-(
-    id   integer generated by default as identity,
-    name varchar(255),
-    primary key (id)
-)
-```
-
-### job_tb
-
-```sql
-create table job_tb
-(
-    company_id      integer,
-    id              integer generated by default as identity,
-    job_group_id    integer,
-    salary_range_id integer,
-    work_field_id   integer,
-    created_at      timestamp(6),
-    updated_at      timestamp(6),
-    career_level    varchar(255),
-    deadline        varchar(255),
-    description     text,
-    employment_type varchar(255),
-    location        varchar(255),
-    status          varchar(255),
-    title           varchar(255),
-    primary key (id)
-)
-```
-
-### job_tech_stack_tb
-
-```sql
-create table job_tech_stack_tb
-(
-    id            integer generated by default as identity,
-    job_id        integer,
-    tech_stack_id integer,
-    primary key (id)
-)
-```
-
-### resume_bookmark_tb
-
-```sql
-create table resume_bookmark_tb
-(
-    company_id integer,
-    id         integer generated by default as identity,
-    resume_id  integer,
-    created_at timestamp(6),
-    primary key (id),
-    constraint uk_resume_company unique (resume_id, company_id)
-)
-```
-
-### resume_tb
-
-```sql
-create table resume_tb
-(
-    id              integer generated by default as identity,
-    is_default      boolean,
-    job_group_id    integer,
-    salary_range_id integer,
-    user_id         integer,
-    created_at      timestamp(6),
-    birthdate       varchar(255),
-    career_level    varchar(255),
-    education       varchar(255),
-    enrollment_date varchar(255),
-    gender          varchar(255),
-    graduation_date varchar(255),
-    graduation_type varchar(255),
-    major           varchar(255),
-    phone           varchar(255),
-    portfolio_url   varchar(255),
-    summary         text,
-    title           varchar(255),
-    primary key (id)
-)
-```
-
-### resume_tech_stack_tb
-
-```sql
-create table resume_tech_stack_tb
-(
-    id            integer generated by default as identity,
-    resume_id     integer,
-    tech_stack_id integer,
-    primary key (id)
-)
-```
-
-### salary_range_tb
-
-```sql
-create table salary_range_tb
-(
-    id         integer generated by default as identity,
-    max_salary integer,
-    min_salary integer,
-    label      varchar(255),
-    primary key (id)
-)
-```
-
-### tech_stack_tb
-
-```sql
-create table tech_stack_tb
-(
-    id   integer generated by default as identity,
-    name varchar(255),
-    primary key (id)
-)
-```
-
-### user_tb
-
-```sql
-create table user_tb
-(
-    company_id integer,
-    id         integer generated by default as identity,
-    created_at timestamp(6),
-    email      varchar(255),
-    file_url   varchar(255),
-    password   varchar(255),
-    user_type  varchar(255) not null,
-    username   varchar(255) unique,
-    primary key (id)
-)
-```
-
-### work_field_tb
-
-```sql
-create table work_field_tb
-(
-    id   integer generated by default as identity,
-    name varchar(255),
-    primary key (id)
-)
-```
-
-# 보완할 점
-
-### 알림
-
-- 기업 - 유저가 지원할 경우 기업에게 알림 기능
-- 유저 - 기업이 지원상태를 변경할 경우 유저에게 알림 기능
-
-### 페이징
-
-- 다수의 데이터를 페이지 별로 깔끔하게 만들어 주는 기능
-
-### 검색
-
-- 기업, 공고, 유저를 각각 따로 검색하는 기능
-- 기술스택, 주소, 연봉에 따라 검색하는 기능
-- 통합 검색 기능
-
-# 느낀점
-
-- 개발 시작할 때 팀원들과 함께 전반적인 프로젝트의 전체적인 진행 방향을 같이 확인해서 협업이 좀더 잘 이루어지게 하고 싶다
-- 임무 배정시 좀더 세밀한 임무목록을 작성해서 팀원들이 좀더 신속하게 개발을 할 수 있도록 만들고 싶다
-- 회의를 할때 코드리뷰를 같이 하면서 팀원들이 좀더 코드를 잘 만들어서 수정 보완이 잘 될 수 있도록 만들고 싶다 
-- 프로젝트의 진행에 대한 설계를 좀 더 잘하고 싶다. 설계를 더 잘하면 프로젝트의 진행 속도가 좀 더 나아질 것 같다
